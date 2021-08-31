@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "automerge": true,
+  "automergeType": "branch",
+  "dependencyDashboard": true,
+  "extends": [
+    ":rebaseStalePrs",
+    "config:base"
+  ],
+  "major": {
+    "automerge": false
+  },
+  "rangeStrategy": "bump"
+}
