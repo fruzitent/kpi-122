@@ -1,0 +1,208 @@
+[tool.poetry]
+authors = ["fruzitent <fruzit@gmail.com>"]
+description = ""
+name = "q1_bases@extra01"
+packages = [
+    { include = "src" },
+]
+repository = "https://github.com/fruzitent/kpi"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+
+[tool.poetry.dev-dependencies]
+black = { extras = ["d", "jupyter"], version = "^22.8.0" }
+cohesion = "^1.0.0"
+dlint = "^0.13.0"
+flake8-pytest = "^1.4"
+flake8-pytest-style = "^1.6.0"
+jupyterlab = "^3.4.6"
+jupyterlab-git = "^0.39.2"
+lxml = "^4.9.1"
+mypy = "^0.971"
+nbdime = "^3.1.1"
+poethepoet = "^0.16.2"
+pytest = "^7.1.3"
+pytest-cov = "^3.0.0"
+pytest-xdist = { extras = ["psutil"], version = "^2.5.0" }
+wemake-python-styleguide = "^0.16.1"
+
+[tool.poetry.scripts]
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.black]
+line_length = 88
+quiet = false
+target-version = ["py310"]
+verbose = false
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.:",
+]
+fail_under = 100
+precision = 2
+show_missing = true
+
+[tool.coverage.run]
+branch = true
+context = "test"
+omit = ["*_test.py", "test_*.py"]
+parallel = false
+source = ["src"]
+
+[tool.isort]
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+profile = "black"
+py_version = 310
+quiet = false
+use_parentheses = true
+verbose = false
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_decorated = true
+disallow_any_explicit = true
+disallow_any_expr = false
+disallow_any_generics = true
+disallow_any_unimported = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+explicit_package_bases = true
+files = ["src"]
+incremental = true
+namespace_packages = true
+no_implicit_optional = true
+plugins = []
+pretty = true
+python_version = "3.10"
+raise_exceptions = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+show_traceback = true
+strict = true
+strict_equality = true
+verbosity = 0
+warn_incomplete_stub = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = []
+
+[tool.poe]
+verbosity = 0
+
+[tool.poe.tasks.black]
+cmd = "black ."
+
+[tool.poe.tasks.ci]
+ignore_fail = "return_non_zero"
+sequence = [
+    { ref = "pretty" },
+    { ref = "flake" },
+    { ref = "cov" },
+]
+
+[tool.poe.tasks.cov]
+sequence = [
+    { ref = "mypy_cov" },
+    { ref = "test_cov" },
+]
+
+[tool.poe.tasks.cov_open]
+interpreter = "python"
+shell = """
+import os
+import webbrowser
+root = os.environ.get("POE_ROOT")
+types_path = "coverage/types/index.html"
+tests_path = "coverage/tests/index.html"
+webbrowser.open_new_tab(f"file://{root}/{types_path}")
+webbrowser.open_new_tab(f"file://{root}/{tests_path}")
+"""
+
+[tool.poe.tasks.flake]
+cmd = "flake8"
+
+[tool.poe.tasks.isort]
+cmd = "isort ."
+
+[tool.poe.tasks.lab]
+cmd = "jupyter lab"
+
+[tool.poe.tasks.mypy]
+cmd = "mypy"
+
+[tool.poe.tasks.mypy_cov]
+sequence = [
+    { cmd = """
+    poe mypy
+    --html-report=coverage/types
+    --txt-report=coverage/types
+  """ },
+    { ref = "mypy_cov_txt_report" },
+]
+
+[tool.poe.tasks.mypy_cov_txt_report]
+interpreter = "python"
+shell = """
+import os
+root = os.environ.get("POE_ROOT")
+path = "coverage/types/index.txt"
+with open(f"{root}/{path}", "r") as f:
+    txt = f.read()
+    print(txt)
+"""
+
+[tool.poe.tasks.pretty]
+sequence = [
+    { ref = "isort" },
+    { ref = "black" },
+]
+
+[tool.poe.tasks.test]
+cmd = "pytest"
+
+[tool.poe.tasks.test_cov]
+cmd = """
+poe test
+--cov-report=html:coverage/tests
+--cov-report=term-missing
+--cov=src
+"""
+
+[tool.pytest.ini_options]
+addopts = """
+--dist=load
+--showlocals
+--strict-config
+--strict-markers
+--tb=short
+--verbosity=0
+-n=auto
+-rsxX
+"""
+minversion = "7.0"
+python_classes = ["*Test", "Test*"]
+python_files = ["*_test.py", "test_*.py"]
+python_functions = ["test_*"]
+testpaths = ["src"]
+xfail_strict = true
