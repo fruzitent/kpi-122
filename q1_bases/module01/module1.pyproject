@@ -1,0 +1,7 @@
+{
+    "files": [
+        "src/ui/auth.ui",
+        "src/ui/home.ui",
+        "src/ui/main.ui"
+    ]
+}
