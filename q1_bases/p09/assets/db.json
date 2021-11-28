@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Romana",
+        "surname": "Workman",
+        "patronymic": "Shuaib",
+        "address": "6951 Wolf Estates",
+        "phone": "4766927433"
+    },
+    {
+        "name": "Matylda",
+        "surname": "Fulton",
+        "patronymic": "Federico",
+        "address": "45734 Thompson Throughway Suite 038",
+        "phone": "4012949421"
+    },
+    {
+        "name": "Bea",
+        "surname": "Mcarthur",
+        "patronymic": "Kasper",
+        "address": "893 Rippin Trail",
+        "phone": "5946426744"
+    },
+    {
+        "name": "Fatima",
+        "surname": "O'Reilly",
+        "patronymic": "Ibrahim",
+        "address": "4197 Sawayn Landing Apt. 767",
+        "phone": "12788220403"
+    },
+    {
+        "name": "Konrad",
+        "surname": "Buckley",
+        "patronymic": "Todd",
+        "address": "9459 Gislason Plain",
+        "phone": "8872556761"
+    },
+    {
+        "name": "Mahnoor",
+        "surname": "Whitley",
+        "patronymic": "Billy",
+        "address": "5336 Jamel Street Apt. 925",
+        "phone": "4306989432"
+    },
+    {
+        "name": "Kaiya",
+        "surname": "Patrick",
+        "patronymic": "Jorgie",
+        "address": "3943 Ursula Ports",
+        "phone": "4143021153"
+    },
+    {
+        "name": "Hazel",
+        "surname": "Clements",
+        "patronymic": "Shaun",
+        "address": "71285 Ortiz Courts Suite 611",
+        "phone": "5619441875"
+    },
+    {
+        "name": "Ariyan",
+        "surname": "Magana",
+        "patronymic": "Zayn",
+        "address": "42685 Lang Dam Suite 818",
+        "phone": "7657605789"
+    },
+    {
+        "name": "Marwan",
+        "surname": "Leech",
+        "patronymic": "Arham",
+        "address": "689 Stevie Junction",
+        "phone": "2035766958"
+    }
+]
