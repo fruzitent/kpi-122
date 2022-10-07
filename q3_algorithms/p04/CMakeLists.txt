@@ -14,4 +14,4 @@ if (MSVC)
 endif ()
 
 include_directories(${CMAKE_SOURCE_DIR})
-add_executable(task1 src/task1.cpp)
+add_executable(task1 src/matrix.hpp src/task1.cpp)
