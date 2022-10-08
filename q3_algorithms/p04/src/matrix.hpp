@@ -3,146 +3,161 @@
 
 #include <algorithm>
 #include <iomanip>
-#include <iostream>
-#include <string>  // sprintf, itoa, streams?
-
-bool TRUE() {
-    return true;
-}
+#include <memory>
+#include <string>  // itoa, stream, sprintf?
 
 template<typename T>
-auto product(T* arr, std::size_t size, bool (*predicate)(T value) = TRUE) {
-    struct {
-        std::string view;
-        std::size_t value = 1;
-    } result;
+class Array {
+  protected:
+    T*          _data;
+    std::size_t _size;
 
-    for (T i = 0; i < size; i++) {
-        auto value = arr[i];
-        if (predicate(value)) {
-            result.view += std::to_string(value) + " * ";
-            result.value *= value;
+  public:
+    explicit Array(std::size_t size) {
+        _data = new T[size]();
+        _size = size;
+    }
+
+    ~Array() {
+        delete[] _data;
+    }
+
+    T& operator[](std::size_t index) {
+        if (index >= _size) {
+            throw std::out_of_range("Index out of range");
+        }
+        return _data[index];
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, Array<T>& array) {
+        array.print(os);
+        return os;
+    }
+
+    auto begin() {
+        return _data;
+    }
+
+    auto end() {
+        return _data + _size;
+    }
+
+    auto size() {
+        return _size;
+    }
+
+    void fill(auto gen) {
+        for (auto& value : *this) {
+            value = gen();
         }
     }
 
-    if (!result.view.empty()) {
-        result.view.pop_back();
-        result.view.pop_back();
-        result.view += "= " + std::to_string(result.value);
+    auto filter(bool (*predicate)(T)) {
+        auto result   = std::make_unique<Array<T>>(_size);
+        result->_size = 0;
+
+        for (auto value : *this) {
+            if (predicate(value)) {
+                result->_data[result->_size++] = value;
+            }
+        }
+
+        if (realloc(result->_data, result->_size * sizeof(T)) == nullptr) {
+            throw std::bad_alloc();
+        }
+
+        return result;
     }
 
-    delete[] arr;
-    return result;
-}
+    virtual void print(std::ostream& os) {
+        for (auto value : *this) {
+            os << value << " ";
+        }
+        os << "\n";
+    }
+
+    auto reduce(auto reducer, T initial) {
+        auto result = initial;
+        for (auto value : *this) {
+            result = reducer(result, value);
+        }
+        return result;
+    }
+};
 
 template<typename T>
-class Matrix {
+class Matrix : public Array<T> {
   private:
-    std::size_t _rows {};
-    std::size_t _cols {};
-    T*          _data;
+    std::size_t _rows;
+    std::size_t _cols;
 
   public:
-    Matrix(std::size_t rows, std::size_t cols) {
+    explicit Matrix(std::size_t rows, std::size_t cols) :
+        Array<T>(rows * cols) {
         _rows = rows;
         _cols = cols;
-        _data = new T[_rows * _cols] {};
     }
 
-    ~Matrix() {
-        delete[] _data;
-    }
+    ~Matrix() = default;
 
     friend std::ostream& operator<<(std::ostream& os, Matrix<T>& matrix) {
         matrix.print(os);
         return os;
     }
 
-    T* operator[](std::size_t index) {
-        return &_data[index];
-    }
-
-    std::size_t rows() {
-        return _rows;
-    }
-
-    std::size_t cols() {
-        return _cols;
-    }
-
-    std::size_t items() {
-        return _rows * _cols;
-    }
-
-    T* get_row(std::size_t index) {
+    auto row(std::size_t index) {
         if (index >= _rows) {
             throw std::out_of_range("Row index out of range");
         }
 
-        T* arr = new T[_cols] {};
+        auto arr = std::make_unique<Array<T>>(_cols);
 
-        for (std::size_t i = 0; i < _cols; i++) {
-            arr[i] = _data[index * _cols + i];
+        for (auto i = 0; i < _cols; i++) {
+            (*arr)[i] = this->_data[index * _cols + i];
         }
 
         return arr;
     }
 
-    T* get_col(std::size_t index) {
+    auto col(std::size_t index) {
         if (index >= _cols) {
             throw std::out_of_range("Column index out of range");
         }
 
-        T* arr = new T[_rows] {};
+        auto arr = std::make_unique<Array<T>>(_rows);
 
         for (auto i = 0; i < _rows; i++) {
-            arr[i] = _data[i * _cols + index];
+            (*arr)[i] = this->_data[i * _cols + index];
         }
 
         return arr;
     }
 
-    std::size_t* get_max_widths() {
-        auto* widths = new std::size_t[_cols] {};
+    auto get_max_widths() {
+        auto arr = std::make_unique<Array<std::size_t>>(_cols);
 
         for (auto i = 0; i < _cols; i++) {
             for (auto j = 0; j < _rows; j++) {
-                auto value  = _data[j * _cols + i];
-                auto length = std::to_string(value).length();
-                widths[i]   = std::max(widths[i], length);
+                auto value = this->_data[j * _cols + i];
+                auto width = std::to_string(value).length();
+                (*arr)[i]  = std::max((*arr)[i], width);
             }
         }
 
-        return widths;
+        return arr;
     }
 
     void print(std::ostream& os) {
-        auto* widths = get_max_widths();
+        auto widths = get_max_widths();
 
         for (auto i = 0; i < _rows; i++) {
             for (auto j = 0; j < _cols; j++) {
-                auto pad   = widths[j];
-                auto value = _data[i * _cols + j];
-                os << std::setw(pad) << value << " ";
+                auto value = this->_data[i * _cols + j];
+                auto width = (*widths)[j];
+                os << std::setw(width) << value << " ";
             }
             os << "\n";
         }
-
-        delete[] widths;
-    }
-
-    void fill(auto gen) {
-        for (auto i = 0; i < items(); i++) {
-            _data[i] = gen();
-        }
-    }
-
-    auto row_product(std::size_t index, bool (*predicate)(T value) = TRUE) {
-        return product(get_row(index), _cols, predicate);
-    }
-
-    auto col_product(std::size_t index, bool (*predicate)(T value) = TRUE) {
-        return product(get_col(index), _rows, predicate);
     }
 };
 
