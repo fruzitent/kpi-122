@@ -1,7 +1,7 @@
 [tool.poetry]
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
-name = "q3_signal@p01"
+name = "q3_signal@lab01"
 packages = []
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
