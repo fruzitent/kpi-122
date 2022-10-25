@@ -20,6 +20,12 @@ $ poetry shell
 $ python ./src/task1.py
 ```
 
+### Docs
+```shell
+$ cd ./tex
+$ lualatex --shell-escape -file-line-error -halt-on-error -output-format=pdf -synctex=1 ./main.tex
+```
+
 ### Continuous Integration
 ```shell
 $ poe ci
