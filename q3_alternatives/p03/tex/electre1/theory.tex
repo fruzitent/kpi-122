@@ -1,0 +1,131 @@
+\subsection{Теорія}
+\label{subsec:electre1/theory}
+
+\begin{enumerate}
+    \large
+
+    \item
+    Для усіх пар альтернатив $A_i, A_k (i \neq k)$ з множини $A$ обчислити значення
+    \textit{індексів узгодження} (concordance index) за формулою:
+    \begin{equation}
+        \label{eq:concordance}
+        C(A_i, A_k) =
+        \frac{1}{\sum_{j=1}^m w_j}
+        \sum_{j|x_{ij} \geq x_{kj}} w_j
+    \end{equation}
+
+    \item
+    Якщо порогове значення індексу узгодження $\hat c$ не задане,
+    обчислити його за співвідношенням:
+    \begin{equation}
+        \label{eq:concordance_threshold}
+        \hat c =
+        \frac{1}{n(n-1)}
+        \sum_{i=1}^n
+        \sum_{k=1}^n C(A_i, A_k),
+        \quad i \neq k
+    \end{equation}
+
+    \item
+    Для усіх пар альтернатив $A_i, A_k (i \neq k)$ з множини $A$ обчислити значення
+    \textit{індексів неузгодженості} (discordance index) за формулою:
+    \begin{equation}
+        \label{eq:discordance0}
+        D(A_i, A_k) =
+        \begin{cases}
+            0,
+            & \text{якщо}
+            \; \forall j
+            \; x_{ij} \geq x_{kj} \\
+
+            max_{j|x_{ij} < x_{kj}}
+            [\frac{x_{kj} - x_{ij}}{\delta_j}],
+            & \text{якщо}
+            \; \exists j
+            \; x_{ij} < x_{kj}
+        \end{cases}
+    \end{equation}
+    де $\delta_j = max_i x_{ij}$ (або розмір шкали за критерієм $K_j$), або
+    \begin{equation}
+        \label{eq:discordance1}
+        D(A_i, A_k) =
+        \begin{cases}
+            0,
+            & \text{якщо}
+            \; \forall j
+            \; x_{ij} \geq x_{kj} \\
+
+            \frac{
+                max_{j|x_{ij} < x_{kj}}
+                |v_{ij} - v_{kj}|
+            } {
+                max_{j=\overline{1, m}}
+                |v_{ij} - v_{kj}|
+            },
+            & \text{якщо}
+            \; \exists j
+            \; x_{ij} < x_{kj}
+        \end{cases}
+    \end{equation}
+    де $v_{ij}$ - зважена нормалізована оцінка альтернативи $A_i$ за критерієм $K_j$,
+    визначається за формулою:
+    \begin{equation}
+        \label{eq:weighted_normalized_estimate}
+        v_{ij} = w_j * r_{ij},
+        \quad i = \overline{1, n},
+        \quad j = \overline{1, m}
+    \end{equation}
+    \begin{equation}
+        \label{eq:normalized_estimate}
+        r_{ij} = \frac{x_{ij}}{\sqrt{\sum_{i=1}^n (x_{ij})^2}},
+        \quad i = \overline{1, n},
+        \quad j = \overline{1, m}
+    \end{equation}
+
+    \item
+    Якщо порогове значення індексу неузгодженості $\hat d$ не задане,
+    обчислити його за співвідношенням:
+    \begin{equation}
+        \label{eq:discordance_threshold}
+        \hat d =
+        \frac{1}{n(n-1)}
+        \sum_{i=1}^n
+        \sum_{k=1}^n D(A_i, A_k),
+        \quad i \neq k
+    \end{equation}
+
+    \item
+    \label{itm:dominance}
+    Побудувати на множині альтернатив $A$ відношення переваги $R$ на основі значень
+    індексів узгодження та неузгодженості, використовуючи співвідношення:
+    \begin{equation}
+        \label{eq:dominance}
+        (A_i, A_k) \in R
+        \Leftrightarrow
+        C(A_i, A_k) \geq \hat c
+        \wedge
+        D(A_i, A_k) \leq \hat d
+    \end{equation}
+
+    \item
+    За відношенням переваги $R$, заданим на множині альтернатив $A$,
+    знайти множину $X^*$ - ядро (або розв'язок Неймана-Моргенштерна),
+    для якої виконується умова:
+    \begin{equation}
+        \label{eq:neumann_morgenstern_kernel0}
+        \forall A_k \in A \setminus X^*:
+        \exists A_i \in X^* | (A_i, A_k) \in R
+    \end{equation}
+    \begin{equation}
+        \label{eq:neumann_morgenstern_kernel1}
+        \forall A_i, A_k \in X^*:
+        (A_i, A_k) \notin R
+        \wedge
+        (A_k, A_i) \notin R
+    \end{equation}
+
+    \item
+    Зміна $\hat c, \hat d$ - порогових значень індексів узгодження та неузгодженості
+    дозволяє досягти прийнятної величини та складу множини $X^*$.
+    Після зміни значень $\hat c, \hat d$ необхідно перейти до кроку~\ref{itm:dominance}
+\end{enumerate}

@@ -1,0 +1,61 @@
+\subsection{Завдання}
+\label{subsec:sum/task}
+
+\begin{table}[!ht]
+    \caption{Комбінації домінування альтернатив}
+    \label{tab:binary_pairs}
+    \centering
+
+    \begin{tabular}{|c|c|c|}
+        \toprule
+        src                      & op & dst                   \\
+
+        \midrule
+        AeroVironment RQ-20 Puma & <  & Baykar Bayraktar TB2  \\
+        AeroVironment RQ-20 Puma & >  & UA Dynamics Punisher  \\
+        AeroVironment RQ-20 Puma & <  & UkrSpecSystems PD-2   \\
+        AeroVironment RQ-20 Puma & <  & WB Electronics FlyEye \\
+        Baykar Bayraktar TB2     & >  & UA Dynamics Punisher  \\
+        Baykar Bayraktar TB2     & >  & UkrSpecSystems PD-2   \\
+        Baykar Bayraktar TB2     & >  & WB Electronics FlyEye \\
+        UA Dynamics Punisher     & <  & UkrSpecSystems PD-2   \\
+        UA Dynamics Punisher     & <  & WB Electronics FlyEye \\
+        UkrSpecSystems PD-2      & =  & WB Electronics FlyEye \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \caption{Матриця попарних порівнянь}
+    \label{tab:pairwise_matrix}
+    \centering
+
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|}
+            \toprule
+            \multirow{2}{*}{-}
+            & AeroVironment
+            & Baykar
+            & UA Dynamics
+            & UkrSpecSystems
+            & WB Electronics
+            & \multirow{2}{*}{Ranking} \\
+
+            & RQ-20 Puma
+            & Bayraktar TB2
+            & Punisher
+            & PD-2
+            & FlyEye \\
+
+            \midrule
+            Baykar Bayraktar TB2     & 1.0 & -   & 1.0 & 1.0 & 1.0 & 4.0 \\
+            UkrSpecSystems PD-2      & 1.0 & 0.0 & 1.0 & -   & 0.5 & 2.5 \\
+            WB Electronics FlyEye    & 1.0 & 0.0 & 1.0 & 0.5 & -   & 2.5 \\
+            AeroVironment RQ-20 Puma & -   & 0.0 & 1.0 & 0.0 & 0.0 & 1.0 \\
+            UA Dynamics Punisher     & 0.0 & 0.0 & -   & 0.0 & 0.0 & 0.0 \\
+
+            \bottomrule
+        \end{tabular}
+    }
+\end{table}
