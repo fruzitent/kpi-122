@@ -1,0 +1,365 @@
+\subsection{Завдання}
+\label{subsec:electre1/task}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Data}
+    \label{tab:data}
+
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \toprule
+        Name  & Age  & Education        & Experience & Expertise & Cooperation \\
+
+        \midrule
+        Mary  & $37$ & Bachelor Degree  & $1$        & $81$      & $71$        \\
+        Peter & $31$ & Bachelor Degree  & $5$        & $71$      & $81$        \\
+        Susan & $27$ & Associate Degree & $1$        & $71$      & $81$        \\
+        Paul  & $27$ & Bachelor Degree  & $1$        & $60$      & $71$        \\
+        Lisa  & $37$ & Bachelor Degree  & $1$        & $60$      & $71$        \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Criteria and Value of Each Criterion}
+    \label{tab:criteria}
+
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \toprule
+            \multirow{2.5}{*}{Name}
+            & \multirow{2.5}{*}{Description}
+            & \multirow{2.5}{*}{Weight}
+            & \multicolumn{5}{c|}{Score} \\
+
+            \cmidrule{4-8}
+            & & & 1 & 2 & 3 & 4 & 5 \\
+
+            \midrule
+            C1
+            & Age
+            & $1$
+            & $x \geq 36$
+            & $31 \leq x \leq 35$
+            & $27 \leq x \leq 30$
+            & $24 \leq x \leq 26$
+            & $x \leq 23$ \\
+
+            C2
+            & Education
+            & $1$
+            & None
+            & Secondary School
+            & Associate Degree
+            & Bachelor Degree
+            & Graduate \\
+
+            C3
+            & Experience
+            & $3$
+            & $x = 0$
+            & $x \leq 1$
+            & $1 \leq x \leq 2$
+            & $3 \leq x \leq 4$
+            & $x \geq 4$ \\
+
+            C4
+            & Expertise
+            & $2$
+            & $x \leq 60$
+            & $61 \leq x \leq 70$
+            & $71 \leq x \leq 80$
+            & $81 \leq x \leq 90$
+            & $x \geq 90$ \\
+
+            C5
+            & Cooperation
+            & $3$
+            & $x \leq 60$
+            & $61 \leq x \leq 70$
+            & $71 \leq x \leq 80$
+            & $81 \leq x \leq 90$
+            & $x \geq 90$ \\
+
+            \bottomrule
+        \end{tabular}
+    }
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Employees Alternatives and Each Criterion}
+    \label{tab:alternatives}
+
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \toprule
+        -  & C1  & C2  & C3  & C4  & C5  \\
+
+        \midrule
+        A1 & $1$ & $4$ & $2$ & $4$ & $3$ \\
+        A2 & $2$ & $4$ & $5$ & $3$ & $4$ \\
+        A3 & $3$ & $3$ & $2$ & $3$ & $4$ \\
+        A4 & $3$ & $4$ & $2$ & $1$ & $3$ \\
+        A5 & $1$ & $4$ & $2$ & $1$ & $4$ \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{
+        \hyperref
+        [eq:normalized_estimate]
+        {Normalized Matrix}
+    }
+    \label{tab:normalized}
+
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \toprule
+        -  & C1         & C2         & C3         & C4         & C5         \\
+
+        \midrule
+        A1 & $0.204124$ & $0.468165$ & $0.312348$ & $0.666667$ & $0.390567$ \\
+        A2 & $0.408248$ & $0.468165$ & $0.780869$ & $0.5$      & $0.520756$ \\
+        A3 & $0.612372$ & $0.351123$ & $0.312348$ & $0.5$      & $0.520756$ \\
+        A4 & $0.612372$ & $0.468165$ & $0.312348$ & $0.166667$ & $0.390567$ \\
+        A5 & $0.204124$ & $0.468165$ & $0.312348$ & $0.166667$ & $0.390567$ \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{
+        \hyperref
+        [eq:weighted_normalized_estimate]
+        {Normalized Matrix by Weight}
+    }
+    \label{tab:weighted}
+
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \toprule
+        -  & C1         & C2         & C3         & C4         & C5         \\
+
+        \midrule
+        A1 & $0.204124$ & $0.468165$ & $0.937043$ & $1.333333$ & $1.1717$   \\
+        A2 & $0.408248$ & $0.468165$ & $2.342606$ & $1$        & $1.562267$ \\
+        A3 & $0.612372$ & $0.351123$ & $0.937043$ & $1$        & $1.562267$ \\
+        A4 & $0.612372$ & $0.468165$ & $0.937043$ & $0.333333$ & $1.1717$   \\
+        A5 & $0.204124$ & $0.468165$ & $0.937043$ & $0.333333$ & $1.1717$   \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\newpage
+
+\begin{table}[!ht]
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{Concordance Index Set}
+        \label{tab:cis}
+
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \toprule
+            Permutation & C1  & C2  & C3  & C4  & C5  \\
+
+            \midrule
+            A1A1        &     &     &     &     &     \\
+            A1A2        &     & $2$ &     & $4$ &     \\
+            A1A3        &     & $2$ & $3$ & $4$ &     \\
+            A1A4        &     & $2$ & $3$ & $4$ & $5$ \\
+            A1A5        & $1$ & $2$ & $3$ & $4$ & $5$ \\
+            A2A1        & $1$ & $2$ & $3$ &     & $5$ \\
+            A2A2        &     &     &     &     &     \\
+            A2A3        &     & $2$ & $3$ & $4$ & $5$ \\
+            A2A4        &     & $2$ & $3$ & $4$ & $5$ \\
+            A2A5        & $1$ & $2$ & $3$ & $4$ & $5$ \\
+            A3A1        & $1$ &     & $3$ &     & $5$ \\
+            A3A2        & $1$ &     &     & $4$ & $5$ \\
+            A3A3        &     &     &     &     &     \\
+            A3A4        & $1$ &     & $3$ & $4$ & $5$ \\
+            A3A5        & $1$ &     & $3$ & $4$ & $5$ \\
+            A4A1        & $1$ & $2$ & $3$ &     & $5$ \\
+            A4A2        & $1$ & $2$ &     &     &     \\
+            A4A3        & $1$ & $2$ & $3$ &     &     \\
+            A4A4        &     &     &     &     &     \\
+            A4A5        & $1$ & $2$ & $3$ & $4$ & $5$ \\
+            A5A1        & $1$ & $2$ & $3$ &     & $5$ \\
+            A5A2        &     & $2$ &     &     &     \\
+            A5A3        &     & $2$ & $3$ &     &     \\
+            A5A4        &     & $2$ & $3$ & $4$ & $5$ \\
+            A5A5        &     &     &     &     &     \\
+
+            \bottomrule
+        \end{tabular}
+    }
+    \hfill
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{Discordance Index Set}
+        \label{tab:dis}
+
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \toprule
+            Permutation & C1  & C2  & C3  & C4  & C5  \\
+
+            \midrule
+            A1A1        &     &     &     &     &     \\
+            A1A2        & $1$ &     & $3$ &     & $5$ \\
+            A1A3        & $1$ &     &     &     & $5$ \\
+            A1A4        & $1$ &     &     &     &     \\
+            A1A5        &     &     &     &     &     \\
+            A2A1        &     &     &     & $4$ &     \\
+            A2A2        &     &     &     &     &     \\
+            A2A3        & $1$ &     &     &     &     \\
+            A2A4        & $1$ &     &     &     &     \\
+            A2A5        &     &     &     &     &     \\
+            A3A1        &     & $2$ &     & $4$ &     \\
+            A3A2        &     & $2$ & $3$ &     &     \\
+            A3A3        &     &     &     &     &     \\
+            A3A4        &     & $2$ &     &     &     \\
+            A3A5        &     & $2$ &     &     &     \\
+            A4A1        &     &     &     & $4$ &     \\
+            A4A2        &     &     & $3$ & $4$ & $5$ \\
+            A4A3        &     &     &     & $4$ & $5$ \\
+            A4A4        &     &     &     &     &     \\
+            A4A5        &     &     &     &     &     \\
+            A5A1        &     &     &     & $4$ &     \\
+            A5A2        & $1$ &     & $3$ & $4$ & $5$ \\
+            A5A3        & $1$ &     &     & $4$ & $5$ \\
+            A5A4        & $1$ &     &     &     &     \\
+            A5A5        &     &     &     &     &     \\
+
+            \bottomrule
+        \end{tabular}
+    }
+\end{table}
+
+\begin{table}[!ht]
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{
+            \hyperref
+            [eq:concordance]
+            {Concordance Index Matrix}
+        }
+        \label{tab:cim}
+
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \toprule
+            -  & A1    & A2    & A3    & A4    & A5    \\
+
+            \midrule
+            A1 &       & $0.3$ & $0.6$ & $0.9$ & $1$   \\
+            A2 & $0.8$ &       & $0.9$ & $0.9$ & $1$   \\
+            A3 & $0.7$ & $0.6$ &       & $0.9$ & $0.9$ \\
+            A4 & $0.8$ & $0.2$ & $0.5$ &       & $1$   \\
+            A5 & $0.8$ & $0.1$ & $0.4$ & $0.9$ &       \\
+
+            \bottomrule
+        \end{tabular}
+    }
+    \hfill
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{
+            \hyperref
+            [eq:discordance0]
+            {Discordance Index Matrix}
+        }
+        \label{tab:dim}
+
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \toprule
+            -  & A1     & A2  & A3     & A4     & A5     \\
+
+            \midrule
+            A1 &        & $1$ & $1$    & $0.41$ & $0$    \\
+            A2 & $0.24$ &     & $0.15$ & $0.15$ & $0$    \\
+            A3 & $0.82$ & $1$ &        & $0.18$ & $0.18$ \\
+            A4 & $1$    & $1$ & $1$    &        & $0$    \\
+            A5 & $1$    & $1$ & $1$    & $1$    &        \\
+
+            \bottomrule
+        \end{tabular}
+    }
+\end{table}
+
+\begin{multicols}{2}
+    \centering
+
+    \hyperref
+    [eq:concordance_threshold]
+    {Condordance Threshold Value:}
+    $0.71$ \\
+
+    \hyperref
+    [eq:discordance_threshold]
+    {Discordance Threshold Value:}
+    $0.61$ \\
+\end{multicols}
+
+\begin{table}[!ht]
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{
+            \hyperref
+            [eq:dominance]
+            {Aggregate Dominance Matrix}
+        }
+        \label{tab:adm}
+
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \toprule
+            -  & A1  & A2  & A3  & A4  & A5  \\
+
+            \midrule
+            A1 &     & $0$ & $0$ & $0$ & $0$ \\
+            A2 & $0$ &     & $0$ & $0$ & $0$ \\
+            A3 & $0$ & $0$ &     & $0$ & $0$ \\
+            A4 & $1$ & $0$ & $0$ &     & $0$ \\
+            A5 & $1$ & $0$ & $0$ & $1$ &     \\
+
+            \bottomrule
+        \end{tabular}
+    }
+    \hfill
+    \parbox{0.49\textwidth}{
+        \centering
+        \caption{Ranking}
+        \label{tab:ranking}
+
+        \begin{tabular}{|c|c|}
+            \toprule
+            Alternative & Ranking \\
+
+            \midrule
+            A1          & $0$     \\
+            A2          & $0$     \\
+            A3          & $0$     \\
+            A4          & $1$     \\
+            A5          & $2$     \\
+
+            \bottomrule
+        \end{tabular}
+    }
+\end{table}
+
+\newpage
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/graph}
+    \caption{Граф Бінарних Відношень}
+    \label{fig:graph}
+\end{figure}
+
+\begin{large}
+    На малюнку~\ref{fig:graph} жоден з графів не є транзитивним,
+    бо ребра з рівноцінними альтернативами були видалені.
+\end{large}

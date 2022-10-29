@@ -1,0 +1,139 @@
+\section{Бінарні відношення}
+\label{sec:relationships}
+
+\begin{large}
+    \begin{theorem}
+        Відношення $R$ називається \textbf{рефлексивним},
+        якщо кожен об'єкт знаходиться у відношенні сам з собою
+        \begin{equation}
+            \label{eq:relp_reflexive}
+            \forall a \in X:
+            a R a
+        \end{equation}
+        У матриці рефлексивного відношення
+        на головній діагоналі стоять одиниці
+    \end{theorem}
+
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{антирефлексивним},
+        якщо воно виконується тільки для неспівпадаючих об'єктів
+        \begin{equation}
+            \label{eq:relp_antireflexive}
+            \forall a \in X:
+            a \overline{R} a
+        \end{equation}
+        У матриці антирефлексивного відношення
+        на головній діагоналі стоять нулі
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{симетричним},
+        якщо для будь-яких $a$ та $b$ з того,
+        що $a$ знаходиться у відношенні до $b$
+        випливає, що $b$ знаходиться у відношенні до $a$
+        \begin{equation}
+            \label{eq:relp_symmetric}
+            \forall a, b \in X,
+            \; a R b
+            \Rightarrow
+            b R a
+        \end{equation}
+        Матриця симетричного відношення симетрична
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{асиметричним},
+        коли для будь-яких $a$ та $b$,
+        якщо $a$ перебуває у відношенні з $b$,
+        то $b$ не перебуває у відношенні з $a$
+        \begin{equation}
+            \label{eq:relp_asymmetric}
+            \forall a, b \in X,
+            \; a R b
+            \Rightarrow
+            b \overline{R} a
+        \end{equation}
+        Асиметричне відношення є антирефлексивним
+        та антисиметричним одночасно
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{антисиметричним}, якщо $a = b$,
+        тобто обидва співвідношення виконуються тоді й тільки тоді,
+        коли $a$ і $b$ - один і той же об'єкт
+        \begin{equation}
+            \label{eq:relp_antisymmetric}
+            \forall a, b \in X,
+            \; a R b
+            \wedge
+            a \neq b
+            \Rightarrow
+            b \overline{R} a
+        \end{equation}
+        Матриця антисиметричного відношення немає жодної
+        пари одиниць на місцях симетричних
+        відносно головної діагоналі.
+
+        У графі можуть бути петлі, але зв'язки між вершинами,
+        якщо вони є, також відбуваються тільки однією спрямованою дугою
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{транзитивним},
+        якщо для будь-якої тріади $a, b, c$ виконується умова:
+        кола $a$ відноситься до $b$ і $b$ відноситься до $c$,
+        то $a$ відноситься до $c$
+        \begin{equation}
+            \label{eq:relp_transitive}
+            \forall a, b, c \in X,
+            \; a R b
+            \wedge
+            b R c
+            \Rightarrow
+            a R c
+        \end{equation}
+        Візуально це можна представити як замкнений граф,
+        що містить всі можливі пари альтернатив.
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{нетранзитивним},
+        якщо не для всіх тріад $a, b, c$ дотримується умова транзитивності
+        \begin{equation}
+            \label{eq:intransitive}
+            \exists a, b, c \in X:
+            \; a R b
+            \wedge
+            b R c
+            \wedge
+            a \overline{R} c
+        \end{equation}
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{антитранзитивним},
+        якщо для будь-якої тріади $a, b, c$ відсутня транзитивність
+        \begin{equation}
+            \label{eq:relp_antitransitive}
+            \forall a, b, c \in X,
+            \; a R b
+            \wedge
+            b R c
+            \Rightarrow
+            a \overline{R} c
+        \end{equation}
+    \end{theorem}
+
+    \begin{theorem}
+        Відношення $R$ називається \textbf{повним},
+        якщо воно пов'язує всі невпорядковані пари об'єктів
+        \begin{equation}
+            \label{eq:relp_complete}
+            \forall A, b \in X:
+            a R b
+            \vee
+            b R a
+        \end{equation}
+    \end{theorem}
+\end{large}
