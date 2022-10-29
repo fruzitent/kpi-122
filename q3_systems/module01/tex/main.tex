@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+
+\usepackage[parfill]{parskip}      % https://ctan.org/pkg/parskip   Layout with zero \parindent, non-zero \parskip
+\usepackage[sfdefault]{roboto}     % https://ctan.org/pkg/roboto    Support for the Roboto family of fonts
+\usepackage[ukrainian]{babel}      % https://ctan.org/pkg/babel     Multilingual support for LATEX
+\usepackage{booktabs}              % https://ctan.org/pkg/booktabs  Publication quality tables in LATEX
+\usepackage{fontspec}              % https://ctan.org/pkg/fontspec  Advanced font selection in LUALATEX
+\usepackage{geometry}              % https://ctan.org/pkg/geometry  Flexible and complete interface to document dimensions
+\usepackage{graphicx}              % https://ctan.org/pkg/graphicx  Enhanced support for graphics
+\usepackage{hyperref}              % https://ctan.org/pkg/hyperref  Extensive support for hypertext in LATEX
+\usepackage{microtype}             % https://ctan.org/pkg/microtype Subliminal refinements towards typographical perfection
+\usepackage{multicol}              % https://ctan.org/pkg/multicol  Intermix single and multiple columns
+\usepackage{multirow}              % https://ctan.org/pkg/multirow  Create tabular cells spanning multiple rows
+
+\newcommand{\TITLE}{Модульна Контрольна Робота №1}
+\newcommand{\DISCIPLINE}{Операційні системи}
+\newcommand{\VARIANT}{7}
+\newcommand{\STUDENT}{}
+\newcommand{\TEACHER}{}
+
+\emergencystretch 5em
+\geometry{
+    a4paper,
+    left=1.5cm,
+    right=1.5cm,
+    top=1.5cm,
+    bottom=2cm,
+}
+
+\setmonofont{Roboto}
+
+\begin{document}
+    \include{./title}
+    \tableofcontents
+    \include{./multitasking}
+    \include{./scheme}
+\end{document}
