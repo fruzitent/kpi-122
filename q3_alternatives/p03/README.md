@@ -18,6 +18,7 @@ $ poetry shell
 ### Build
 ```shell
 $ python ./src/task1.py
+$ python ./src/task2.py
 ```
 
 ### Docs
