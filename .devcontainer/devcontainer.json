@@ -17,5 +17,5 @@
   ],
   "service": "app",
   "remoteUser": "user",
-  "workspaceFolder": "/workspace"
+  "workspaceFolder": "/workspaces"
 }

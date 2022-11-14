@@ -13,7 +13,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - app_volume:/workspace
+      - app_volume:/workspaces
 
 volumes:
   app_volume:
