@@ -3,6 +3,7 @@
   "extensions": [
     "2gua.rainbow-brackets",
     "cheshirekow.cmake-format",
+    "chrisdias.vscode-opennewinstance",
     "christian-kohler.path-intellisense",
     "eamodio.gitlens",
     "EditorConfig.EditorConfig",
