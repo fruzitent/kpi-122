@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  app:
+    cap_add:
+      - SYS_PTRACE
+    image: ghcr.io/fruzitent/universal
+    init: true
+    ports:
+      - "22:22"
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - app_volume:/workspace
+
+volumes:
+  app_volume:

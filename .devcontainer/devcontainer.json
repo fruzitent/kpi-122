@@ -1,0 +1,20 @@
+{
+  "dockerComposeFile": "../docker-compose.yml",
+  "extensions": [
+    "2gua.rainbow-brackets",
+    "cheshirekow.cmake-format",
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
+    "EditorConfig.EditorConfig",
+    "ms-azuretools.vscode-docker",
+    "ms-python.python",
+    "ms-vscode.cpptools-extension-pack",
+    "mutantdino.resourcemonitor",
+    "oderwat.indent-rainbow",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "vittorioromeo.expand-selection-to-scope"
+  ],
+  "service": "app",
+  "remoteUser": "user",
+  "workspaceFolder": "/workspace"
+}
