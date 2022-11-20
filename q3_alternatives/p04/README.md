@@ -1,0 +1,32 @@
+### Checkout
+```shell
+$ git clone -n https://github.com/fruzitent/kpi
+$ cd ./kpi
+
+$ git sparse-checkout set q3_alternatives/p04
+$ git checkout
+
+$ cd ./q3_alternatives/p04
+```
+
+### Install
+```shell
+$ poetry install --only main
+$ poetry shell
+```
+
+### Build
+```shell
+$ python ./src/task1.py
+```
+
+### Docs
+```shell
+$ cd ./tex
+$ lualatex --shell-escape -file-line-error -halt-on-error -output-format=pdf -synctex=1 ./main.tex
+```
+
+### Continuous Integration
+```shell
+$ poe ci
+```
