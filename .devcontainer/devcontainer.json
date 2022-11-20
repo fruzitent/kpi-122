@@ -2,7 +2,6 @@
   "dockerComposeFile": "../docker-compose.yml",
   "extensions": [
     "2gua.rainbow-brackets",
-    "bungcip.better-toml",
     "cheshirekow.cmake-format",
     "christian-kohler.path-intellisense",
     "eamodio.gitlens",
@@ -13,6 +12,7 @@
     "ms-vscode.cpptools-extension-pack",
     "mutantdino.resourcemonitor",
     "oderwat.indent-rainbow",
+    "tamasfe.even-better-toml",
     "VisualStudioExptTeam.vscodeintellicode",
     "vittorioromeo.expand-selection-to-scope"
   ],
