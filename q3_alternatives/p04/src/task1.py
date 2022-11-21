@@ -1,8 +1,8 @@
-from itertools import product
 from types import MappingProxyType
 
 import numpy as np
 import pandas as pd
+from numpy import typing as npt
 
 RANDOM_CONSISTENCY_INDEX: MappingProxyType[int, float] = MappingProxyType(
     mapping={
@@ -17,31 +17,17 @@ RANDOM_CONSISTENCY_INDEX: MappingProxyType[int, float] = MappingProxyType(
         9: 1.45,
         10: 1.49,
         11: 1.51,
-        12: 1.48,
+        12: 1.54,
         13: 1.56,
         14: 1.57,
-        15: 1.59,
+        15: 1.58,
     },
 )
 
 
-def make_pairwise_matrix(alternatives: list[str]) -> pd.DataFrame:
-    df: pd.DataFrame = pd.DataFrame(
-        columns=alternatives,
-        index=alternatives,
-        data=[],
-        dtype=np.float64,
-    )
-
-    for idx, jdx in product(range(df.index.size), repeat=2):
-        if idx < jdx:
-            prompt: str = f"{df.index[idx]} is greater over {df.columns[jdx]} by: "
-            cell_value: float = pd.eval(input(prompt))
-            df.iloc[idx, jdx] = cell_value
-            df.iloc[jdx, idx] = 1 / cell_value
-
-    np.fill_diagonal(df.values, 1)
-    return df
+def geometric_mean(array: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
+    # np.prod(array) ** (1 / array.size) may overflow
+    return np.exp(np.log(array).mean())
 
 
 def is_consistent(df: pd.DataFrame) -> bool:
@@ -53,75 +39,75 @@ def is_consistent(df: pd.DataFrame) -> bool:
     return np.abs(consistency_ratio) < 0.1
 
 
-PREFERENCE_CRITERIA_RATIO: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 3, 1.5, 3, 2.1],
-        [0.33, 1, 0.5, 1, 0.7],
-        [0.67, 2, 1, 2, 1.4],
-        [0.33, 1, 0.5, 1, 0.7],
-        [0.48, 1.43, 0.71, 1.43, 1],
-    ],
-    dtype=np.float64,
-)
+def vector_component(df: pd.DataFrame) -> pd.Series:
+    if not is_consistent(df):
+        print("WARNING: Inconsistent matrix")
 
-PREFERENCE_BY_CRITERION1: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 0.5, 1.5, 1.05],
-        [2, 1, 3, 2.1],
-        [0.67, 0.33, 1, 0.7],
-        [0.95, 0.48, 1.43, 1],
-    ],
-    dtype=np.float64,
-)
-
-PREFERENCE_BY_CRITERION2: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 2, 1, 3],
-        [0.5, 1, 0.5, 1.5],
-        [1, 2, 1, 3],
-        [0.33, 0.67, 0.33, 1],
-    ],
-    dtype=np.float64,
-)
-
-PREFERENCE_BY_CRITERION3: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 2, 6, 12],
-        [0.5, 1, 3, 6],
-        [0.17, 0.33, 1, 2],
-        [0.08, 0.17, 0.5, 1],
-    ],
-    dtype=np.float64,
-)
-
-PREFERENCE_BY_CRITERION4: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 3, 6, 9],
-        [0.33, 1, 2, 3],
-        [0.17, 0.5, 1, 1.5],
-        [0.11, 0.33, 0.67, 1],
-    ],
-    dtype=np.float64,
-)
-
-PREFERENCE_BY_CRITERION5: pd.DataFrame = pd.DataFrame(
-    data=[
-        [1, 0.2, 0.8, 1.6],
-        [5, 1, 4, 8],
-        [1.25, 0.25, 1, 2],
-        [0.63, 0.13, 0.5, 1],
-    ],
-    dtype=np.float64,
-)
+    series: pd.Series = df.apply(geometric_mean, axis=1)
+    return series / series.sum()
 
 
 def main() -> None:
-    print(PREFERENCE_CRITERIA_RATIO, is_consistent(PREFERENCE_CRITERIA_RATIO))
-    print(PREFERENCE_BY_CRITERION1, is_consistent(PREFERENCE_BY_CRITERION1))
-    print(PREFERENCE_BY_CRITERION2, is_consistent(PREFERENCE_BY_CRITERION2))
-    print(PREFERENCE_BY_CRITERION3, is_consistent(PREFERENCE_BY_CRITERION3))
-    print(PREFERENCE_BY_CRITERION4, is_consistent(PREFERENCE_BY_CRITERION4))
-    print(PREFERENCE_BY_CRITERION5, is_consistent(PREFERENCE_BY_CRITERION5))
+    alternatives: list[str] = ["d1", "d2", "d3"]
+    criteria: list[str] = ["q1", "q2", "q3"]
+
+    significance: pd.DataFrame = pd.DataFrame(
+        columns=criteria,
+        index=criteria,
+        data=[
+            [1, 2, 3],
+            [0.5, 1, 0.5],
+            [0.33, 2, 1],
+        ],
+        dtype=np.float64,
+    )
+
+    vectors: list[pd.DataFrame] = [
+        pd.DataFrame(
+            columns=alternatives,
+            index=alternatives,
+            data=[
+                [1, 4, 3],
+                [1 / 4, 1, 2],
+                [1 / 3, 1 / 2, 1],
+            ],
+            dtype=np.float64,
+        ),
+        pd.DataFrame(
+            columns=alternatives,
+            index=alternatives,
+            data=[
+                [1, 1 / 4, 6],
+                [4, 1, 1 / 2],
+                [1 / 6, 2, 1],
+            ],
+            dtype=np.float64,
+        ),
+        pd.DataFrame(
+            columns=alternatives,
+            index=alternatives,
+            data=[
+                [1, 3, 1 / 5],
+                [1 / 3, 1, 1 / 3],
+                [5, 3, 1],
+            ],
+            dtype=np.float64,
+        ),
+    ]
+
+    by_criteria: pd.DataFrame = pd.DataFrame(
+        columns=alternatives,
+        index=alternatives,
+        data=map(vector_component, vectors),
+        dtype=np.float64,
+    )
+
+    ranking: pd.Series = pd.Series(
+        index=alternatives,
+        data=np.dot(vector_component(significance), by_criteria),
+        dtype=np.float64,
+    ).sort_values(ascending=False)
+    print(ranking)
 
 
 if __name__ == "__main__":
