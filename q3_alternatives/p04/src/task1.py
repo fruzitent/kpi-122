@@ -48,28 +48,31 @@ def vector_component(df: pd.DataFrame) -> pd.Series:
 
 
 def main() -> None:
-    alternatives: list[str] = ["d1", "d2", "d3"]
-    criteria: list[str] = ["q1", "q2", "q3"]
+    alternatives: list[str] = ["d1", "d2", "d3", "d4"]
+    criteria: list[str] = ["c1", "c2", "c3", "c4", "c5"]
 
-    significance: pd.DataFrame = pd.DataFrame(
+    criterion_priorities: pd.DataFrame = pd.DataFrame(
         columns=criteria,
         index=criteria,
         data=[
-            [1, 2, 3],
-            [0.5, 1, 0.5],
-            [0.33, 2, 1],
+            [1, 3, 1.5, 3, 2.1],
+            [0.33, 1, 0.5, 1, 0.7],
+            [0.67, 2, 1, 2, 1.4],
+            [0.33, 1, 0.5, 1, 0.7],
+            [0.48, 1.43, 0.71, 1.43, 1],
         ],
         dtype=np.float64,
     )
 
-    vectors: list[pd.DataFrame] = [
+    alternative_priorities: list[pd.DataFrame] = [
         pd.DataFrame(
             columns=alternatives,
             index=alternatives,
             data=[
-                [1, 4, 3],
-                [1 / 4, 1, 2],
-                [1 / 3, 1 / 2, 1],
+                [1, 0.5, 1.5, 1.05],
+                [2, 1, 3, 2.1],
+                [0.67, 0.33, 1, 0.7],
+                [0.95, 0.48, 1.43, 1],
             ],
             dtype=np.float64,
         ),
@@ -77,9 +80,10 @@ def main() -> None:
             columns=alternatives,
             index=alternatives,
             data=[
-                [1, 1 / 4, 6],
-                [4, 1, 1 / 2],
-                [1 / 6, 2, 1],
+                [1, 2, 1, 3],
+                [0.5, 1, 0.5, 1.5],
+                [1, 2, 1, 3],
+                [0.33, 0.67, 0.33, 1],
             ],
             dtype=np.float64,
         ),
@@ -87,24 +91,47 @@ def main() -> None:
             columns=alternatives,
             index=alternatives,
             data=[
-                [1, 3, 1 / 5],
-                [1 / 3, 1, 1 / 3],
-                [5, 3, 1],
+                [1, 2, 6, 12],
+                [0.5, 1, 3, 6],
+                [0.17, 0.33, 1, 2],
+                [0.08, 0.17, 0.5, 1],
+            ],
+            dtype=np.float64,
+        ),
+        pd.DataFrame(
+            columns=alternatives,
+            index=alternatives,
+            data=[
+                [1, 3, 6, 9],
+                [0.33, 1, 2, 3],
+                [0.17, 0.5, 1, 1.5],
+                [0.11, 0.33, 0.67, 1],
+            ],
+            dtype=np.float64,
+        ),
+        pd.DataFrame(
+            columns=alternatives,
+            index=alternatives,
+            data=[
+                [1, 0.2, 0.8, 1.6],
+                [5, 1, 4, 8],
+                [1.25, 0.25, 1, 2],
+                [0.63, 0.13, 0.5, 1],
             ],
             dtype=np.float64,
         ),
     ]
 
-    by_criteria: pd.DataFrame = pd.DataFrame(
+    eigen_vectors: pd.DataFrame = pd.DataFrame(
         columns=alternatives,
-        index=alternatives,
-        data=map(vector_component, vectors),
+        index=criteria,
+        data=map(vector_component, alternative_priorities),
         dtype=np.float64,
     )
 
     ranking: pd.Series = pd.Series(
         index=alternatives,
-        data=np.dot(vector_component(significance), by_criteria),
+        data=np.dot(vector_component(criterion_priorities), eigen_vectors),
         dtype=np.float64,
     ).sort_values(ascending=False)
     print(ranking)
