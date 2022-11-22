@@ -22,8 +22,7 @@ $ python ./src/task1.py
 
 ### Docs
 ```shell
-$ cd ./tex
-$ lualatex --shell-escape -file-line-error -halt-on-error -output-format=pdf -synctex=1 ./main.tex
+$ latexmk -pdflua -shell-escape -outdir=../out -cd tex/main.tex
 ```
 
 ### Continuous Integration
