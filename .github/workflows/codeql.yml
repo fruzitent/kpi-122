@@ -18,6 +18,7 @@ jobs:
 
     container:
       image: ghcr.io/fruzitent/universal
+      options: --user 1001
 
     permissions:
       actions: read
