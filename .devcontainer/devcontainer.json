@@ -17,6 +17,41 @@
     "VisualStudioExptTeam.vscodeintellicode",
     "vittorioromeo.expand-selection-to-scope"
   ],
+  "settings": {
+    "docker.languageserver.formatter.ignoreMultilineInstructions": true,
+    "editor.formatOnSave": true,
+    "editor.inlayHints.enabled": "on",
+    "editor.inlineSuggest.enabled": true,
+    "files.autoSave": "onFocusChange",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/out",
+    "latex-workshop.latex.recipes": [
+      {
+        "name": "latexmk",
+        "tools": [
+          "latexmk"
+        ]
+      }
+    ],
+    "latex-workshop.latex.tools": [
+      {
+        "args": [
+          "-pdflua",
+          "-shell-escape",
+          "-outdir=%OUTDIR%",
+          "-cd",
+          "%DOC%"
+        ],
+        "command": "latexmk",
+        "name": "latexmk"
+      }
+    ],
+    "python.formatting.provider": "black",
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "terminal.integrated.fontFamily": "MesloLGM NFM",
+    "workbench.startupEditor": "none"
+  },
   "service": "app",
   "remoteUser": "user",
   "workspaceFolder": "/workspaces"
