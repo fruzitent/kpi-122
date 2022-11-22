@@ -1,21 +1,23 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches:
-      - main
-
   pull_request:
     branches:
       - main
 
+  push:
+    branches:
+      - main
+
   schedule:
-    - cron: '00 18 * * 5'
+    - cron: '00 18 * * *'
 
 jobs:
   analyze:
-    name: Analyze
     runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/fruzitent/universal
 
     permissions:
       actions: read
