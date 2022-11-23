@@ -22,7 +22,7 @@ $ python ./src/task1.py
 
 ### Docs
 ```shell
-$ latexmk -pdflua -shell-escape -outdir=../out -cd tex/main.tex
+$ latexmk -pdflua -file-line-error -halt-on-error -shell-escape -outdir=../out -cd tex/main.tex
 ```
 
 ### Continuous Integration
