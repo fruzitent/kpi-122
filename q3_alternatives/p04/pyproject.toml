@@ -6,17 +6,15 @@ repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-matplotlib = "^3.6.2"
-networkx = "^2.8.8"
 numpy = "^1.23.5"
-pandas = "^1.5.1"
-python = "^3.11"
+pandas = "^1.5.2"
+python = ">=3.11,<3.12"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
-flake8-pyproject = "^1.2.0"
+flake8-pyproject = "^1.2.1"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
@@ -42,9 +40,9 @@ pytest-cov = "^4.0.0"
 pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 
 [tool.poetry.group.typing.dependencies]
-lxml = { python = "<3.11", version = "^4.9.1" }
+lxml = "^4.9.1"
 mypy = "^0.991"
-pandas-stubs = { python = "<3.11", version = "^1.51.1" }
+pandas-stubs = "^1.5.2.221124"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
@@ -232,7 +230,7 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ["matplotlib.*", "networkx.*", "pandas.*"]
+module = ["pandas.*"]
 
 [tool.pytest.ini_options]
 addopts = "--dist=load --showlocals --strict-config --strict-markers --tb=short --verbosity=0 -n=auto -rsxX"
