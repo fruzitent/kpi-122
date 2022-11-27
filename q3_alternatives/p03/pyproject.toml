@@ -1,7 +1,7 @@
 [tool.poetry]
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
-name = "q3_alternatives@p04"
+name = "q3_alternatives@p03"
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
