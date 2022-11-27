@@ -6,8 +6,6 @@ repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-numpy = "^1.23.5"
-pandas = "^1.5.2"
 python = ">=3.11,<3.12"
 
 [tool.poetry.group.codestyle.dependencies]
@@ -210,7 +208,7 @@ files = ["src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = ["numpy.typing.mypy_plugin"]
+plugins = []
 pretty = true
 python_version = "3.11"
 raise_exceptions = true
@@ -230,7 +228,7 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ["pandas.*"]
+module = []
 
 [tool.pytest.ini_options]
 addopts = "--dist=load --showlocals --strict-config --strict-markers --tb=short --verbosity=0 -n=auto -rsxX"
