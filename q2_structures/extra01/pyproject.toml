@@ -116,7 +116,7 @@ sequence = [{ ref = "isort" }, { ref = "black" }]
 cmd = "pytest"
 
 [tool.poe.tasks.test_cov]
-cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=src"
+cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=examples --cov=src"
 
 [tool.black]
 line_length = 120
@@ -138,7 +138,7 @@ branch = true
 context = "test"
 omit = ["*_test.py", "test_*.py"]
 parallel = false
-source = ["src"]
+source = ["examples", "src"]
 
 [tool.flake8]
 # https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html
@@ -203,7 +203,7 @@ disallow_untyped_calls = true
 disallow_untyped_decorators = true
 disallow_untyped_defs = true
 explicit_package_bases = true
-files = ["src"]
+files = ["examples", "src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
@@ -235,5 +235,5 @@ minversion = "7.0"
 python_classes = ["*Test", "Test*"]
 python_files = ["*_test.py", "test_*.py"]
 python_functions = ["test_*"]
-testpaths = ["src"]
+testpaths = ["examples", "src"]
 xfail_strict = true

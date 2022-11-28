@@ -6,7 +6,11 @@ repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
+matplotlib = "^3.5.3"
+numpy = "^1.23.2"
+pandas = "^1.4.4"
 python = ">=3.11,<3.12"
+xlrd = "^2.0.1"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
@@ -40,6 +44,7 @@ pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 [tool.poetry.group.typing.dependencies]
 lxml = "^4.9.1"
 mypy = "^0.991"
+pandas-stubs = "^1.4.4"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
@@ -207,7 +212,7 @@ files = ["src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = []
+plugins = ["numpy.typing.mypy_plugin"]
 pretty = true
 python_version = "3.11"
 raise_exceptions = true

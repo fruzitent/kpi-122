@@ -6,7 +6,10 @@ repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
+matplotlib = "^3.5.3"
+numpy = "^1.23.2"
 python = ">=3.11,<3.12"
+scikit-fuzzy = "^0.4.2"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
@@ -207,7 +210,7 @@ files = ["src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = []
+plugins = ["numpy.typing.mypy_plugin"]
 pretty = true
 python_version = "3.11"
 raise_exceptions = true

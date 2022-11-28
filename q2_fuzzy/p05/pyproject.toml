@@ -6,7 +6,11 @@ repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
+matplotlib = "^3.5.3"
+numpy = "^1.23.2"
 python = ">=3.11,<3.12"
+scikit-fuzzy = "^0.4.2"
+scikit-learn = "^1.1.2"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
@@ -116,7 +120,7 @@ sequence = [{ ref = "isort" }, { ref = "black" }]
 cmd = "pytest"
 
 [tool.poe.tasks.test_cov]
-cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=src"
+cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=examples --cov=src"
 
 [tool.black]
 line_length = 120
@@ -138,7 +142,7 @@ branch = true
 context = "test"
 omit = ["*_test.py", "test_*.py"]
 parallel = false
-source = ["src"]
+source = ["examples", "src"]
 
 [tool.flake8]
 # https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html
@@ -203,11 +207,11 @@ disallow_untyped_calls = true
 disallow_untyped_decorators = true
 disallow_untyped_defs = true
 explicit_package_bases = true
-files = ["src"]
+files = ["examples", "src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = []
+plugins = ["numpy.typing.mypy_plugin"]
 pretty = true
 python_version = "3.11"
 raise_exceptions = true
@@ -235,5 +239,5 @@ minversion = "7.0"
 python_classes = ["*Test", "Test*"]
 python_files = ["*_test.py", "test_*.py"]
 python_functions = ["test_*"]
-testpaths = ["src"]
+testpaths = ["examples", "src"]
 xfail_strict = true
