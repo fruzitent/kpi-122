@@ -2,28 +2,26 @@
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
 name = "q3_alternatives@p03"
-packages = [
-    { include = "src" },
-]
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-matplotlib = "^3.6.1"
-networkx = "^2.8.7"
-numpy = "^1.23.4"
-pandas = "^1.5.1"
-python = "^3.11"
+matplotlib = "^3.6.2"
+networkx = "^2.8.8"
+numpy = "^1.23.5"
+pandas = "^1.5.2"
+python = ">=3.11,<3.12"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
-wemake-python-styleguide = "^0.17.0"
+flake8-pyproject = "^1.2.1"
+wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.16.4"
-poetryup = "^0.12.3"
+poethepoet = "^0.16.5"
+poetryup = "^0.12.5"
 
 [tool.poetry.group.jupyter]
 optional = true
@@ -44,13 +42,13 @@ pytest-cov = "^4.0.0"
 pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 
 [tool.poetry.group.typing.dependencies]
-lxml = { python = "<3.11", version = "^4.9.1" }
-mypy = "^0.982"
-pandas-stubs = { python = "<3.11", version = "^1.51.1" }
+lxml = "^4.9.1"
+mypy = "^0.991"
+pandas-stubs = "^1.5.2.221124"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
 
 [tool.poetry.scripts]
 
@@ -58,7 +56,10 @@ build-backend = "poetry.core.masonry.api"
 verbosity = 0
 
 [tool.poe.tasks.black]
-cmd = "black ."
+cmd = "black --preview ."
+
+[tool.poe.tasks.bump]
+cmd = "poetryup --latest"
 
 [tool.poe.tasks.ci]
 ignore_fail = "return_non_zero"
@@ -70,10 +71,7 @@ sequence = [
 ]
 
 [tool.poe.tasks.cov]
-sequence = [
-    { ref = "mypy_cov" },
-    { ref = "test_cov" },
-]
+sequence = [{ ref = "mypy_cov" }, { ref = "test_cov" }]
 
 [tool.poe.tasks.cov_open]
 interpreter = "python"
@@ -101,11 +99,7 @@ cmd = "mypy"
 
 [tool.poe.tasks.mypy_cov]
 sequence = [
-    { cmd = """
-    poe mypy
-    --html-report=coverage/types
-    --txt-report=coverage/types
-    """ },
+    { cmd = "poe mypy --html-report=coverage/types --txt-report=coverage/types" },
     { ref = "mypy_cov_txt_report" },
 ]
 
@@ -121,24 +115,16 @@ with open(f"{root}/{path}", "r") as f:
 """
 
 [tool.poe.tasks.pretty]
-sequence = [
-    { ref = "isort" },
-    { ref = "black" },
-]
+sequence = [{ ref = "isort" }, { ref = "black" }]
 
 [tool.poe.tasks.test]
 cmd = "pytest"
 
 [tool.poe.tasks.test_cov]
-cmd = """
-poe test
---cov-report=html:coverage/tests
---cov-report=term-missing
---cov=src
-"""
+cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=src"
 
 [tool.black]
-line_length = 88
+line_length = 120
 quiet = false
 target-version = ["py311"]
 verbose = false
@@ -147,9 +133,7 @@ verbose = false
 show_contexts = true
 
 [tool.coverage.report]
-exclude_lines = [
-    "if __name__ == .__main__.:",
-]
+exclude_lines = ["if __name__ == .__main__.:"]
 fail_under = 100
 precision = 2
 show_missing = true
@@ -161,9 +145,49 @@ omit = ["*_test.py", "test_*.py"]
 parallel = false
 source = ["src"]
 
+[tool.flake8]
+# https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html
+doctests = true
+exclude = [
+    ".idea",
+    ".vs",
+    ".vscode",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".coverage",
+    "coverage",
+]
+format = "default"
+ignore = [
+    "D100",   # D100 Missing docstring in public module
+    "D101",   # D101 Missing docstring in public class
+    "D102",   # D102 Missing docstring in public method
+    "D103",   # D103 Missing docstring in public function
+    "D105",   # D105 Missing docstring in magic method
+    "D107",   # D107 Missing docstring in __init__
+    "E203",   # E203 Whitespace before ","
+    "W503",   # W503 Line break before binary operator
+    "WPS305", # WPS305 Found `f` string
+    "WPS421", # WPS421 Found wrong function call: print
+    "WPS430", # WPS430 Found nested function
+]
+inline-quotes = "double"
+max-complexity = 6
+max-line-length = 120
+per-file-ignores = [
+    "*_test.py:S101",   # S101 Use of assert detected. The enclosed code will be removed when compiling to optimised byte code
+    "*_test.py:WPS432", # WPS432 Found magic number
+]
+show-source = true
+statistics = true
+
 [tool.isort]
 include_trailing_comma = true
-line_length = 88
+line_length = 120
 multi_line_output = 3
 profile = "black"
 py_version = 310
@@ -188,9 +212,7 @@ files = ["src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = [
-    "numpy.typing.mypy_plugin",
-]
+plugins = ["numpy.typing.mypy_plugin"]
 pretty = true
 python_version = "3.11"
 raise_exceptions = true
@@ -210,23 +232,10 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = [
-    "matplotlib.*",
-    "networkx.*",
-    "pandas.*",
-]
+module = []
 
 [tool.pytest.ini_options]
-addopts = """
---dist=load
---showlocals
---strict-config
---strict-markers
---tb=short
---verbosity=0
--n=auto
--rsxX
-"""
+addopts = "--dist=load --showlocals --strict-config --strict-markers --tb=short --verbosity=0 -n=auto -rsxX"
 minversion = "7.0"
 python_classes = ["*Test", "Test*"]
 python_files = ["*_test.py", "test_*.py"]

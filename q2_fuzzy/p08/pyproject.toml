@@ -2,53 +2,135 @@
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
 name = "q2_fuzzy@p08"
-packages = [
-    { include = "src" },
-]
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-matplotlib = "^3.5.3"
-numpy = "^1.23.2"
-python = ">=3.10,<3.11"
+matplotlib = "^3.6.2"
+numpy = "^1.23.5"
+python = ">=3.11,<3.12"
 
-[tool.poetry.dev-dependencies]
-black = { extras = ["d", "jupyter"], version = "^22.8.0" }
+[tool.poetry.group.codestyle.dependencies]
+black = { extras = ["d", "jupyter"], version = "^22.10.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
+flake8-pyproject = "^1.2.1"
+wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.16.5"
+poetryup = "^0.12.5"
+
+[tool.poetry.group.jupyter]
+optional = true
+
+[tool.poetry.group.jupyter.dependencies]
+jupyterlab = "^3.5.0"
+jupyterlab-git = "^0.39.3"
+nbdime = "^3.1.1"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
 flake8-pytest = "^1.4"
 flake8-pytest-style = "^1.6.0"
-jupyterlab = "^3.4.6"
-jupyterlab-git = "^0.39.2"
-lxml = "^4.9.1"
-mypy = "^0.971"
-nbdime = "^3.1.1"
-poethepoet = "^0.16.2"
-pytest = "^7.1.3"
-pytest-cov = "^3.0.0"
-pytest-xdist = { extras = ["psutil"], version = "^2.5.0" }
-wemake-python-styleguide = "^0.16.1"
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 
-[tool.poetry.scripts]
+[tool.poetry.group.typing.dependencies]
+lxml = "^4.9.1"
+mypy = "^0.991"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
+[tool.poetry.scripts]
+
+[tool.poe]
+verbosity = 0
+
+[tool.poe.tasks.black]
+cmd = "black --preview ."
+
+[tool.poe.tasks.bump]
+cmd = "poetryup --latest"
+
+[tool.poe.tasks.ci]
+ignore_fail = "return_non_zero"
+sequence = [
+    { ref = "pretty" },
+    { ref = "mypy" },
+    { ref = "flake" },
+    { ref = "cov" },
+]
+
+[tool.poe.tasks.cov]
+sequence = [{ ref = "mypy_cov" }, { ref = "test_cov" }]
+
+[tool.poe.tasks.cov_open]
+interpreter = "python"
+shell = """
+import os
+import webbrowser
+root: str = os.environ.get("POE_ROOT")
+types_path: str = "coverage/types/index.html"
+tests_path: str = "coverage/tests/index.html"
+webbrowser.open_new_tab(f"file://{root}/{types_path}")
+webbrowser.open_new_tab(f"file://{root}/{tests_path}")
+"""
+
+[tool.poe.tasks.flake]
+cmd = "flake8"
+
+[tool.poe.tasks.isort]
+cmd = "isort ."
+
+[tool.poe.tasks.lab]
+cmd = "jupyter lab"
+
+[tool.poe.tasks.mypy]
+cmd = "mypy"
+
+[tool.poe.tasks.mypy_cov]
+sequence = [
+    { cmd = "poe mypy --html-report=coverage/types --txt-report=coverage/types" },
+    { ref = "mypy_cov_txt_report" },
+]
+
+[tool.poe.tasks.mypy_cov_txt_report]
+interpreter = "python"
+shell = """
+import os
+root: str = os.environ.get("POE_ROOT")
+path: str = "coverage/types/index.txt"
+with open(f"{root}/{path}", "r") as f:
+    report: str = f.read()
+    print(report)
+"""
+
+[tool.poe.tasks.pretty]
+sequence = [{ ref = "isort" }, { ref = "black" }]
+
+[tool.poe.tasks.test]
+cmd = "pytest"
+
+[tool.poe.tasks.test_cov]
+cmd = "poe test --cov-report=html:coverage/tests --cov-report=term-missing --cov=src"
+
 [tool.black]
-line_length = 88
+line_length = 120
 quiet = false
-target-version = ["py310"]
+target-version = ["py311"]
 verbose = false
 
 [tool.coverage.html]
 show_contexts = true
 
 [tool.coverage.report]
-exclude_lines = [
-    "if __name__ == .__main__.:",
-]
+exclude_lines = ["if __name__ == .__main__.:"]
 fail_under = 100
 precision = 2
 show_missing = true
@@ -60,9 +142,49 @@ omit = ["*_test.py", "test_*.py"]
 parallel = false
 source = ["src"]
 
+[tool.flake8]
+# https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html
+doctests = true
+exclude = [
+    ".idea",
+    ".vs",
+    ".vscode",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".coverage",
+    "coverage",
+]
+format = "default"
+ignore = [
+    "D100",   # D100 Missing docstring in public module
+    "D101",   # D101 Missing docstring in public class
+    "D102",   # D102 Missing docstring in public method
+    "D103",   # D103 Missing docstring in public function
+    "D105",   # D105 Missing docstring in magic method
+    "D107",   # D107 Missing docstring in __init__
+    "E203",   # E203 Whitespace before ","
+    "W503",   # W503 Line break before binary operator
+    "WPS305", # WPS305 Found `f` string
+    "WPS421", # WPS421 Found wrong function call: print
+    "WPS430", # WPS430 Found nested function
+]
+inline-quotes = "double"
+max-complexity = 6
+max-line-length = 120
+per-file-ignores = [
+    "*_test.py:S101",   # S101 Use of assert detected. The enclosed code will be removed when compiling to optimised byte code
+    "*_test.py:WPS432", # WPS432 Found magic number
+]
+show-source = true
+statistics = true
+
 [tool.isort]
 include_trailing_comma = true
-line_length = 88
+line_length = 120
 multi_line_output = 3
 profile = "black"
 py_version = 310
@@ -87,11 +209,9 @@ files = ["src"]
 incremental = true
 namespace_packages = true
 no_implicit_optional = true
-plugins = [
-    "numpy.typing.mypy_plugin",
-]
+plugins = ["numpy.typing.mypy_plugin"]
 pretty = true
-python_version = "3.10"
+python_version = "3.11"
 raise_exceptions = true
 show_column_numbers = true
 show_error_codes = true
@@ -109,103 +229,10 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = [
-    "matplotlib.*",
-]
-
-[tool.poe]
-verbosity = 0
-
-[tool.poe.tasks.black]
-cmd = "black ."
-
-[tool.poe.tasks.ci]
-ignore_fail = "return_non_zero"
-sequence = [
-    { ref = "pretty" },
-    { ref = "flake" },
-    { ref = "cov" },
-]
-
-[tool.poe.tasks.cov]
-sequence = [
-    { ref = "mypy_cov" },
-    { ref = "test_cov" },
-]
-
-[tool.poe.tasks.cov_open]
-interpreter = "python"
-shell = """
-import os
-import webbrowser
-root = os.environ.get("POE_ROOT")
-types_path = "coverage/types/index.html"
-tests_path = "coverage/tests/index.html"
-webbrowser.open_new_tab(f"file://{root}/{types_path}")
-webbrowser.open_new_tab(f"file://{root}/{tests_path}")
-"""
-
-[tool.poe.tasks.flake]
-cmd = "flake8"
-
-[tool.poe.tasks.isort]
-cmd = "isort ."
-
-[tool.poe.tasks.lab]
-cmd = "jupyter lab"
-
-[tool.poe.tasks.mypy]
-cmd = "mypy"
-
-[tool.poe.tasks.mypy_cov]
-sequence = [
-    { cmd = """
-    poe mypy
-    --html-report=coverage/types
-    --txt-report=coverage/types
-    """ },
-    { ref = "mypy_cov_txt_report" },
-]
-
-[tool.poe.tasks.mypy_cov_txt_report]
-interpreter = "python"
-shell = """
-import os
-root = os.environ.get("POE_ROOT")
-path = "coverage/types/index.txt"
-with open(f"{root}/{path}", "r") as f:
-    txt = f.read()
-    print(txt)
-"""
-
-[tool.poe.tasks.pretty]
-sequence = [
-    { ref = "isort" },
-    { ref = "black" },
-]
-
-[tool.poe.tasks.test]
-cmd = "pytest"
-
-[tool.poe.tasks.test_cov]
-cmd = """
-poe test
---cov-report=html:coverage/tests
---cov-report=term-missing
---cov=src
-"""
+module = []
 
 [tool.pytest.ini_options]
-addopts = """
---dist=load
---showlocals
---strict-config
---strict-markers
---tb=short
---verbosity=0
--n=auto
--rsxX
-"""
+addopts = "--dist=load --showlocals --strict-config --strict-markers --tb=short --verbosity=0 -n=auto -rsxX"
 minversion = "7.0"
 python_classes = ["*Test", "Test*"]
 python_files = ["*_test.py", "test_*.py"]

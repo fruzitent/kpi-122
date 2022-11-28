@@ -18,8 +18,8 @@ flake8-pyproject = "^1.2.1"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.16.4"
-poetryup = "^0.12.3"
+poethepoet = "^0.16.5"
+poetryup = "^0.12.5"
 
 [tool.poetry.group.jupyter]
 optional = true
@@ -230,7 +230,7 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ["pandas.*"]
+module = []
 
 [tool.pytest.ini_options]
 addopts = "--dist=load --showlocals --strict-config --strict-markers --tb=short --verbosity=0 -n=auto -rsxX"

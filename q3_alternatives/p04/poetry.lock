@@ -1344,7 +1344,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "poethepoet"
-version = "0.16.4"
+version = "0.16.5"
 description = "A task runner that works well with poetry."
 category = "dev"
 optional = false
@@ -1359,7 +1359,7 @@ poetry-plugin = ["poetry (>=1.0,<2.0)"]
 
 [[package]]
 name = "poetryup"
-version = "0.12.3"
+version = "0.12.5"
 description = "Update dependencies and bump their version in the pyproject.toml file"
 category = "dev"
 optional = false
@@ -1915,7 +1915,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.11,<3.12"
-content-hash = "df69c9645ad1593e2a799697e1ee73f30ce1e0fc86d77688280d8a9749a3a135"
+content-hash = "89de2be46ace4faecf0e38494e8580991ad3e10c1fa8fd5af33bc1db6dc1ad77"
 
 [metadata.files]
 aiohttp = [
@@ -2886,12 +2886,12 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 poethepoet = [
-    {file = "poethepoet-0.16.4-py3-none-any.whl", hash = "sha256:1f05dce92ca6457d018696b614ba2149261380f30ceb21c196daf19c0c2e1fcd"},
-    {file = "poethepoet-0.16.4.tar.gz", hash = "sha256:a80f6bba64812515c406ffc218aff833951b17854eb111f724b48c44f9759af5"},
+    {file = "poethepoet-0.16.5-py3-none-any.whl", hash = "sha256:493d5d47b4cb0894dde6a69d14129ba39ef3f124fabda1f83ebb39bbf737a40e"},
+    {file = "poethepoet-0.16.5.tar.gz", hash = "sha256:3c958792ce488661ba09df67ba832a1b3141aa640236505ee60c23f4b1db4dbc"},
 ]
 poetryup = [
-    {file = "poetryup-0.12.3-py3-none-any.whl", hash = "sha256:fb8349a18ac6498e65654129a421248e9577f157e89bae592cf7e95dfddd1ba9"},
-    {file = "poetryup-0.12.3.tar.gz", hash = "sha256:772eb5d625193630637f927cd5982b9d1393aecd5ffd7b8b2a3a7b9066160009"},
+    {file = "poetryup-0.12.5-py3-none-any.whl", hash = "sha256:9ce84895acb665e3711e9ede8d06f7f18c6ac013e9387079ed0fefdfd29cd525"},
+    {file = "poetryup-0.12.5.tar.gz", hash = "sha256:fcf601d29200b2c7724e504deccebbb6ec005bf49711a880199fe22219968483"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.15.0-py3-none-any.whl", hash = "sha256:db7c05cbd13a0f79975592d112320f2605a325969b270a94b71dcabc47b931d2"},
