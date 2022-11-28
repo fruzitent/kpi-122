@@ -40,7 +40,6 @@ pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 [tool.poetry.group.typing.dependencies]
 lxml = "^4.9.1"
 mypy = "^0.991"
-pandas-stubs = "^1.5.2.221124"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
