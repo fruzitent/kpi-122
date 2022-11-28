@@ -8,9 +8,9 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 argon2-cffi = "^21.3.0"
 darkdetect = "^0.7.1"
-PySide6 = "^6.3.2"
+PySide6 = "^6.4.1"
 python = ">=3.11,<3.12"
-qt-material = "^2.8.13"
+qt-material = "^2.12"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.codestyle.dependencies]
@@ -21,8 +21,8 @@ flake8-pyproject = "^1.2.1"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.16.4"
-poetryup = "^0.12.3"
+poethepoet = "^0.16.5"
+poetryup = "^0.12.5"
 
 [tool.poetry.group.jupyter]
 optional = true
