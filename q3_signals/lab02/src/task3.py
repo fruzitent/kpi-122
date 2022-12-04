@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import Self
 
 from matplotlib import pyplot as plt
 from scipy.io import loadmat
@@ -13,19 +12,9 @@ class EEG(Signal):
     """Electroencephalogram."""
 
     @classmethod
-    def from_mat(
-        cls,
-        filepath: str,
-        sample_rate: int,
-        units: str,
-        key: str = "sig",
-    ) -> EEG:
-        with open(filepath, "rb") as mat_file:
-            return EEG(
-                sample_rate=sample_rate,
-                samples=loadmat(mat_file)[key][0],
-                units=units,
-            )
+    def from_mat(cls, filename: str, key: str, *args, **kwargs) -> Self:
+        kwargs["samples"] = loadmat(filename)[key][0]
+        return cls(*args, **kwargs)
 
 
 def main() -> None:
@@ -34,7 +23,8 @@ def main() -> None:
     fig_cols: int = 1
 
     eeg_healthy: EEG = EEG.from_mat(
-        filepath="./assets/eeg_healthy_7.mat",
+        filename="./assets/eeg_healthy_7.mat",
+        key="sig",
         sample_rate=2**8,
         units="μV",
     )
@@ -44,7 +34,8 @@ def main() -> None:
     )
 
     eeg_epilepsy: EEG = EEG.from_mat(
-        filepath="./assets/eeg_sick_7.mat",
+        filename="./assets/eeg_sick_7.mat",
+        key="sig",
         sample_rate=2**8,
         units="μV",
     )

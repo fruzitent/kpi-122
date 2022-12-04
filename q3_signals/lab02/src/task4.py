@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import Self
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -21,9 +20,9 @@ class ECG(Signal):
     t1: np.int64
 
     @classmethod
-    def from_npz(cls, filepath: str) -> ECG:
+    def from_npz(cls, filepath: str) -> Self:
         with np.load(filepath) as npz_file:
-            return ECG(
+            return cls(
                 description=np.take(npz_file["description"], 0),
                 label_indices=npz_file["labels_indexes"],
                 labels=npz_file["labels"],
@@ -60,14 +59,14 @@ def main() -> None:
     fig_rows: int = 2
     fig_cols: int = 1
 
-    healthy: ECG = ECG.from_npz("./assets/1600717145.npz")
-    healthy.plot(
+    ecg_healthy: ECG = ECG.from_npz("./assets/1600717145.npz")
+    ecg_healthy.plot(
         ax=fig.add_subplot(fig_rows, fig_cols, 1),
         title="ECG Healthy",
     )
 
-    anomalies: ECG = ECG.from_npz("./assets/1600715712.npz")
-    anomalies.plot(
+    ecg_anomalies: ECG = ECG.from_npz("./assets/1600715712.npz")
+    ecg_anomalies.plot(
         ax=fig.add_subplot(fig_rows, fig_cols, 2),
         title="ECG Anomalies",
     )
