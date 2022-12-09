@@ -59,14 +59,14 @@ def main() -> None:
     fig_rows: int = 2
     fig_cols: int = 1
 
-    ecg_healthy: ECG = ECG.from_npz("./assets/1600717145.npz")
+    ecg_healthy: ECG = ECG.from_npz("./assets/ecg_healthy_7.npz")
     ecg_healthy.plot(
         ax=fig.add_subplot(fig_rows, fig_cols, 1),
         title="ECG Healthy",
     )
 
-    ecg_anomalies: ECG = ECG.from_npz("./assets/1600715712.npz")
-    ecg_anomalies.plot(
+    ecg_anomaly: ECG = ECG.from_npz("./assets/ecg_anomaly_7.npz")
+    ecg_anomaly.plot(
         ax=fig.add_subplot(fig_rows, fig_cols, 2),
         title="ECG Anomalies",
     )

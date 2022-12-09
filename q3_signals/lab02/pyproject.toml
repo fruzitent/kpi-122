@@ -8,6 +8,7 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 matplotlib = "^3.6.2"
 numpy = "^1.23.5"
+pandas = "^1.5.2"
 python = ">=3.11,<3.12"
 scipy = "^1.9.3"
 
@@ -15,7 +16,7 @@ scipy = "^1.9.3"
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
-flake8-pyproject = "^1.2.1"
+flake8-pyproject = "^1.2.2"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
@@ -44,6 +45,7 @@ pytest-xdist = { extras = ["psutil"], version = "^3.0.2" }
 [tool.poetry.group.typing.dependencies]
 lxml = "^4.9.1"
 mypy = { git = "https://github.com/python/mypy.git" }
+pandas-stubs = "^1.5.2.221124"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
