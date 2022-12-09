@@ -12,8 +12,8 @@ class EEG(Signal):
     """Electroencephalogram."""
 
     @classmethod
-    def from_mat(cls, filename: str, key: str, *args, **kwargs) -> Self:
-        kwargs["samples"] = loadmat(filename)[key][0]
+    def from_mat(cls, filepath: str, key: str, *args, **kwargs) -> Self:
+        kwargs["samples"] = loadmat(filepath)[key][0]
         return cls(*args, **kwargs)
 
 
@@ -23,7 +23,7 @@ def main() -> None:
     fig_cols: int = 1
 
     eeg_healthy: EEG = EEG.from_mat(
-        filename="./assets/eeg_healthy_7.mat",
+        filepath="./assets/eeg_healthy_7.mat",
         key="sig",
         sample_rate=2**8,
         units="μV",
@@ -34,7 +34,7 @@ def main() -> None:
     )
 
     eeg_epilepsy: EEG = EEG.from_mat(
-        filename="./assets/eeg_sick_7.mat",
+        filepath="./assets/eeg_epilepsy_7.mat",
         key="sig",
         sample_rate=2**8,
         units="μV",
