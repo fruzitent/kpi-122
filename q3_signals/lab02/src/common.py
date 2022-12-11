@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Self
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -29,7 +30,7 @@ class Signal(object):
                 dtype=np.float64,
             )
 
-    def interpolate(self, sample_rate: int, kind: str) -> Signal:
+    def interpolate(self, sample_rate: int, kind: str) -> Self:
         interpolator: interp1d = interp1d(  # type: ignore
             kind=kind,
             x=self.xaxis.samples,
@@ -44,17 +45,9 @@ class Signal(object):
             dtype=np.float64,
         )
 
-        return Signal(
-            title=self.title,
-            xaxis=Axis(
-                label=self.xaxis.label,
-                samples=timespan,
-            ),
-            yaxis=Axis(
-                label=self.yaxis.label,
-                samples=interpolator(timespan),
-            ),
-        )
+        self.xaxis.samples = timespan
+        self.yaxis.samples = interpolator(timespan)
+        return self
 
     def plot(self, ax: plt.Axes) -> plt.Axes:  # type: ignore
         ax.plot(self.xaxis.samples, self.yaxis.samples, zorder=0)
@@ -63,3 +56,8 @@ class Signal(object):
         ax.set_xlabel(self.xaxis.label)
         ax.set_ylabel(self.yaxis.label)
         return ax
+
+    def slice(self, t0: int, t1: int) -> Self:
+        self.xaxis.samples = self.xaxis.samples[t0:t1]
+        self.yaxis.samples = self.yaxis.samples[t0:t1]
+        return self
