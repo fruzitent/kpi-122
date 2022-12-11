@@ -1,17 +1,17 @@
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from typing import Self
 
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.ticker import FuncFormatter
 from numpy import typing as npt
 from scipy.interpolate import interp1d
 
 
 @dataclass(kw_only=True)
-class Axis(object):  # noqa: H601 class has low (0.00%) cohesion
+class Axis(object):
     label: str = ""
+    sample_rate: int = 1
     samples: npt.NDArray[np.float64] = field(default_factory=lambda: np.array([], dtype=np.float64))
 
 
@@ -51,6 +51,8 @@ class Signal(object):
 
     def plot(self, ax: plt.Axes) -> plt.Axes:  # type: ignore
         ax.plot(self.xaxis.samples, self.yaxis.samples, zorder=0)
+        ax.xaxis.set_major_formatter(FuncFormatter(self.xtick_format))
+        ax.yaxis.set_major_formatter(FuncFormatter(self.ytick_format))
         ax.grid(True)
         ax.set_title(self.title)
         ax.set_xlabel(self.xaxis.label)
@@ -61,3 +63,11 @@ class Signal(object):
         self.xaxis.samples = self.xaxis.samples[t0:t1]
         self.yaxis.samples = self.yaxis.samples[t0:t1]
         return self
+
+    def xtick_format(self, tick: np.float64, position: int) -> str:
+        label: np.float64 = tick / self.xaxis.sample_rate
+        return f"{label:.2e}"
+
+    def ytick_format(self, tick: np.float64, position: int) -> str:
+        label: np.float64 = tick / self.yaxis.sample_rate
+        return f"{label:.2e}"

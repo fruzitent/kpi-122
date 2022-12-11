@@ -145,7 +145,7 @@ class BalanceBoard(object):
 
 
 def main() -> None:
-    fig: Figure = plt.figure(figsize=(80, 96)).add_subfigure  # type: ignore
+    fig: Figure = plt.figure(figsize=(80, 96))  # type: ignore
     gs: GridSpec = GridSpec(figure=fig, ncols=2, nrows=1)  # type: ignore
     sfig0: SubFigure = fig.add_subfigure(gs[0])  # type: ignore
     sfig1: SubFigure = fig.add_subfigure(gs[1])  # type: ignore
