@@ -1,50 +1,79 @@
-import numpy as npt
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
+from numpy import typing as npt
 
-from src.task6 import Signal
+from src.common import Axis, Signal
 
 
 def main() -> None:
-    df: pd.DataFrame = pd.read_csv("./assets/Subject7_SpO2Hr.csv")
-    df.drop(columns=["Unnamed: 0"], inplace=True)
-    # print(df)
-
-    interval: int = 30
-
-    fig: plt.Figure = plt.figure(figsize=(16, 10))
+    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
     fig_rows: int = 2
     fig_cols: int = 2
 
-    spo2: Signal = Signal(df["Elapsed time(seconds)"], df["SpO2(%)"])
-    spo2.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 1),
+    ax0: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 1)  # type: ignore
+    ax1: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 2)  # type: ignore
+    ax2: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 3)  # type: ignore
+    ax3: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 4)  # type: ignore
+
+    window: int = 30
+
+    df: pd.DataFrame = pd.read_csv("./assets/Subject7_SpO2Hr.csv")
+    df.drop(columns=["Unnamed: 0"], inplace=True)
+    elapsed_time: npt.NDArray[np.float64] = df["Elapsed time(seconds)"].to_numpy()
+
+    spo2: Signal = Signal(
         title="Arterial blood saturation with oxygen",
+        xaxis=Axis(
+            label="Time, s",
+            samples=elapsed_time,
+        ),
+        yaxis=Axis(
+            label="SpO2, %",
+            samples=df["SpO2(%)"].to_numpy(),
+        ),
     )
+    spo2.plot(ax0)
 
     spo2_avg: Signal = Signal(
-        df["Elapsed time(seconds)"],
-        spo2.samples.rolling(window=interval).mean(),
+        title=f"{spo2.title} [{window} sec. avg.]",
+        xaxis=Axis(
+            label=spo2.xaxis.label,
+            samples=elapsed_time,
+        ),
+        yaxis=Axis(
+            label=spo2.yaxis.label,
+            samples=pd.Series(spo2.yaxis.samples).rolling(window).mean().to_numpy(),
+        ),
     )
-    spo2_avg.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 3),
-        title="Arterial blood saturation with oxygen interval",
-    )
+    spo2_avg.plot(ax2)
 
-    hr: Signal = Signal(df["Elapsed time(seconds)"], df["hr (bpm)"])
-    hr.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 2),
+    hr: Signal = Signal(
         title="Heart Rate",
+        xaxis=Axis(
+            label="Time, s",
+            samples=elapsed_time,
+        ),
+        yaxis=Axis(
+            label="Rate, bpm",
+            samples=df["hr (bpm)"].to_numpy(),
+        ),
     )
+    hr.plot(ax1)
 
     hr_avg: Signal = Signal(
-        df["Elapsed time(seconds)"],
-        hr.samples.rolling(window=interval).mean(),
+        title=f"{hr.title} [{window} sec. avg.]",
+        xaxis=Axis(
+            label=hr.xaxis.label,
+            samples=elapsed_time,
+        ),
+        yaxis=Axis(
+            label=hr.yaxis.label,
+            samples=pd.Series(hr.yaxis.samples).rolling(window).mean().to_numpy(),
+        ),
     )
-    hr_avg.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 4),
-        title="Heart Rate interval",
-    )
+    hr_avg.plot(ax3)
 
     plt.show()
 

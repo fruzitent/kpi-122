@@ -13,7 +13,7 @@ python = ">=3.11,<3.12"
 scipy = "^1.9.3"
 
 [tool.poetry.group.codestyle.dependencies]
-black = { extras = ["d", "jupyter"], version = "^22.10.0" }
+black = { extras = ["d", "jupyter"], version = "^22.12.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
 flake8-pyproject = "^1.2.2"
