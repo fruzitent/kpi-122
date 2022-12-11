@@ -1,48 +1,37 @@
-from dataclasses import dataclass
-from typing import Self
-
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 from scipy.io import loadmat
 
-from src.common import Signal
-
-
-@dataclass(frozen=True)
-class EEG(Signal):
-    """Electroencephalogram."""
-
-    @classmethod
-    def from_mat(cls, filepath: str, key: str, *args, **kwargs) -> Self:
-        kwargs["samples"] = loadmat(filepath)[key][0]
-        return cls(*args, **kwargs)
+from src.common import Axis, Signal
 
 
 def main() -> None:
-    fig: plt.Figure = plt.figure(figsize=(16, 10))
+    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
     fig_rows: int = 2
     fig_cols: int = 1
 
-    eeg_healthy: EEG = EEG.from_mat(
-        filepath="./assets/eeg_healthy_7.mat",
-        key="sig",
-        sample_rate=2**8,
-        units="μV",
-    )
-    eeg_healthy.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 1),
-        title="EEG Healthy",
-    )
+    ax0: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 1)  # type: ignore
+    ax1: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 2)  # type: ignore
 
-    eeg_epilepsy: EEG = EEG.from_mat(
-        filepath="./assets/eeg_epilepsy_7.mat",
-        key="sig",
-        sample_rate=2**8,
-        units="μV",
+    eeg_healthy: Signal = Signal(
+        title="Electroencephalogram [Healthy]",
+        xaxis=Axis(label="Time, s"),
+        yaxis=Axis(
+            label="Voltage, μV",
+            samples=loadmat("./assets/eeg_healthy_7.mat")["sig"][0],
+        ),
     )
-    eeg_epilepsy.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 2),
-        title="EEG Epilepsy",
+    eeg_healthy.plot(ax0)
+
+    eeg_epilepsy: Signal = Signal(
+        title="Electroencephalogram [Epilepsy]",
+        xaxis=Axis(label="Time, s"),
+        yaxis=Axis(
+            label="Voltage, μV",
+            samples=loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0],
+        ),
     )
+    eeg_epilepsy.plot(ax1)
 
     plt.show()
 

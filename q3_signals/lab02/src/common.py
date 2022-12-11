@@ -1,46 +1,65 @@
-from dataclasses import dataclass
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 
 import numpy as np
 from matplotlib import pyplot as plt
 from numpy import typing as npt
+from scipy.interpolate import interp1d
 
 
-def strip_left(array: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
-    zero_index: int = int(np.take(np.where(array == 0), 0))
-    return array[zero_index:]
+@dataclass(kw_only=True)
+class Axis(object):  # noqa: H601 class has low (0.00%) cohesion
+    label: str = ""
+    samples: npt.NDArray[np.float64] = field(default_factory=lambda: np.array([], dtype=np.float64))
 
 
-@dataclass(frozen=True)
+@dataclass(kw_only=True)
 class Signal(object):
-    sample_rate: int
-    samples: npt.NDArray[np.float64]
-    units: str
+    title: str = ""
+    xaxis: Axis = field(default_factory=Axis)
+    yaxis: Axis
 
-    @property
-    def timespan(self) -> npt.NDArray[np.float64]:
-        return np.arange(
+    def __post_init__(self) -> None:
+        if self.xaxis.samples.size == 0:
+            self.xaxis.samples = np.arange(
+                start=0,
+                stop=self.yaxis.samples.size,
+                step=1,
+                dtype=np.float64,
+            )
+
+    def interpolate(self, sample_rate: int, kind: str) -> Signal:
+        interpolator: interp1d = interp1d(  # type: ignore
+            kind=kind,
+            x=self.xaxis.samples,
+            y=self.yaxis.samples,
+        )
+
+        # TODO: possibly wrong?
+        timespan: npt.NDArray[np.float64] = np.arange(
             start=0,
-            stop=len(self.samples),
-            step=1,
+            stop=1 / sample_rate * self.xaxis.samples.size,
+            step=1 / sample_rate,
             dtype=np.float64,
         )
 
-    def plot(self, ax: plt.Axes, title: str = "") -> plt.Axes:
-        ax.plot(self.timespan, self.samples, zorder=0)
+        return Signal(
+            title=self.title,
+            xaxis=Axis(
+                label=self.xaxis.label,
+                samples=timespan,
+            ),
+            yaxis=Axis(
+                label=self.yaxis.label,
+                samples=interpolator(timespan),
+            ),
+        )
 
+    def plot(self, ax: plt.Axes) -> plt.Axes:  # type: ignore
+        ax.plot(self.xaxis.samples, self.yaxis.samples, zorder=0)
         ax.grid(True)
-        ax.set_title(title)
-        ax.set_xlabel("t, s")
-        ax.set_ylabel(f"U, {self.units}")
-
-        rate_indices, time_labels = self.xticks(ax)
-        ax.set_xticks(rate_indices)
-        ax.set_xticklabels(np.round(time_labels, 2))
-
+        ax.set_title(self.title)
+        ax.set_xlabel(self.xaxis.label)
+        ax.set_ylabel(self.yaxis.label)
         return ax
-
-    def xticks(self, ax: plt.Axes) -> tuple[npt.NDArray[np.int64], npt.NDArray[np.float64]]:
-        filtered: npt.NDArray[np.bool_] = ax.get_xticks() < len(self.timespan)
-        rate_indices: npt.NDArray[np.int64] = strip_left(ax.get_xticks()[filtered]).astype(np.int64)
-        time_labels: npt.NDArray[np.float64] = self.timespan[rate_indices] / self.sample_rate
-        return rate_indices, time_labels

@@ -1,75 +1,57 @@
-from dataclasses import dataclass
-from typing import Self
-
 import numpy as np
 from matplotlib import pyplot as plt
-from numpy import typing as npt
+from matplotlib.figure import Figure
 
-from src.common import Signal
-
-
-@dataclass(frozen=True)
-class ECG(Signal):
-    """Electrocardiogram."""
-
-    description: np.str_
-    label_indices: npt.NDArray[np.int64]
-    labels: npt.NDArray[np.str_]
-    source: np.str_
-    t0: np.int64
-    t1: np.int64
-
-    @classmethod
-    def from_npz(cls, filepath: str) -> Self:
-        with np.load(filepath) as npz_file:
-            return cls(
-                description=np.take(npz_file["description"], 0),
-                label_indices=npz_file["labels_indexes"],
-                labels=npz_file["labels"],
-                sample_rate=np.take(npz_file["fs"], 0),
-                samples=npz_file["signal"],
-                source=np.take(npz_file["source"], 0),
-                t0=np.take(npz_file["source_start"], 0),
-                t1=np.take(npz_file["source_end"], 0),
-                units=np.take(npz_file["units"], 0),
-            )
-
-    def plot(self, ax: plt.Axes, title: str = "") -> plt.Axes:
-        ax = super().plot(ax, title)
-
-        label_offset: int = 50
-        for label_x, label_text in zip(self.label_indices, self.labels):
-            label_y: np.float64 = self.samples[label_x]
-            ax.annotate(
-                text=label_text,
-                xy=(label_x, label_y),
-                xytext=(label_x + label_offset, label_y),
-            )
-            ax.stem(label_x, label_y)
-
-        _, time_labels = self.xticks(ax)
-        timespan_offset: np.float64 = np.abs(self.t1 - self.t0) / self.sample_rate
-        ax.set_xticklabels(time_labels + timespan_offset)
-
-        return ax
+from src.common import Axis, Signal
 
 
 def main() -> None:
-    fig: plt.Figure = plt.figure(figsize=(16, 10))
+    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
     fig_rows: int = 2
     fig_cols: int = 1
 
-    ecg_healthy: ECG = ECG.from_npz("./assets/ecg_healthy_7.npz")
-    ecg_healthy.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 1),
-        title="ECG Healthy",
-    )
+    ax0: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 1)  # type: ignore
+    ax1: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 2)  # type: ignore
 
-    ecg_anomaly: ECG = ECG.from_npz("./assets/ecg_anomaly_7.npz")
-    ecg_anomaly.plot(
-        ax=fig.add_subplot(fig_rows, fig_cols, 2),
-        title="ECG Anomalies",
-    )
+    label_offset: int = 50
+
+    with np.load("./assets/ecg_healthy_7.npz") as healthy_npz:
+        ecg_healthy: Signal = Signal(
+            title="Electrocardiogram [Healthy]",
+            xaxis=Axis(label="Time, s"),
+            yaxis=Axis(
+                label=f"Voltage, {healthy_npz['units']}",
+                samples=healthy_npz["signal"],
+            ),
+        )
+        ax0 = ecg_healthy.plot(ax0)
+        for healthy_x, healthy_text in zip(healthy_npz["labels_indexes"], healthy_npz["labels"]):
+            healthy_y: np.float64 = ecg_healthy.yaxis.samples[healthy_x]
+            ax0.scatter(healthy_x, healthy_y, color="#ff1818")
+            ax0.annotate(
+                text=healthy_text,
+                xy=(healthy_x, healthy_y),
+                xytext=(healthy_x + label_offset, healthy_y),
+            )
+
+    with np.load("./assets/ecg_anomaly_7.npz") as anomaly_npz:
+        ecg_anomaly: Signal = Signal(
+            title="Electrocardiogram [Anomaly]",
+            xaxis=Axis(label="Time, s"),
+            yaxis=Axis(
+                label=f"Voltage, {anomaly_npz['units']}",
+                samples=anomaly_npz["signal"],
+            ),
+        )
+        ax1 = ecg_anomaly.plot(ax1)
+        for anomaly_x, anomaly_text in zip(anomaly_npz["labels_indexes"], anomaly_npz["labels"]):
+            anomaly_y: np.float64 = ecg_anomaly.yaxis.samples[anomaly_x]
+            ax0.scatter(anomaly_x, anomaly_y, color="#ff1818")
+            ax0.annotate(
+                text=anomaly_text,
+                xy=(anomaly_x, anomaly_y),
+                xytext=(anomaly_x + label_offset, anomaly_y),
+            )
 
     plt.show()
 
