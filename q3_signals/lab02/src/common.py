@@ -21,6 +21,9 @@ class Signal(object):
     xaxis: Axis = field(default_factory=Axis)
     yaxis: Axis
 
+    def __getitem__(self, index: str) -> Axis:
+        return self.__dict__[index]  # type: ignore
+
     def __post_init__(self) -> None:
         if self.xaxis.samples.size == 0:
             self.xaxis.samples = np.arange(
