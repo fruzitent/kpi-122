@@ -9,10 +9,12 @@ def main() -> None:
     fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
     ax: plt.Axes = fig.add_subplot()  # type: ignore
 
-    # TODO: resample at 125 Hz
     tbi: Signal = Signal(
         title="Traumatic Brain Injury",
-        xaxis=Axis(label="Time, s"),
+        xaxis=Axis(
+            label="Time, s",
+            sample_rate=125,
+        ),
         yaxis=Axis(
             label="Intracranial Pressure, mmHg",
             samples=np.loadtxt("./assets/intracranial_pressure.txt"),

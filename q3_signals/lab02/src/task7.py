@@ -17,8 +17,6 @@ def main() -> None:
     ax2: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 3)  # type: ignore
     ax3: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 4)  # type: ignore
 
-    window: int = 30
-
     df: pd.DataFrame = pd.read_csv("./assets/Subject7_SpO2Hr.csv")
     df.drop(columns=["Unnamed: 0"], inplace=True)
     elapsed_time: npt.NDArray[np.float64] = df["Elapsed time(seconds)"].to_numpy()
@@ -36,17 +34,10 @@ def main() -> None:
     )
     spo2.plot(ax0)
 
-    spo2_avg: Signal = Signal(
-        title=f"{spo2.title} [{window} sec. avg.]",
-        xaxis=Axis(
-            label=spo2.xaxis.label,
-            samples=elapsed_time,
-        ),
-        yaxis=Axis(
-            label=spo2.yaxis.label,
-            samples=pd.Series(spo2.yaxis.samples).rolling(window).mean().to_numpy(),
-        ),
-    )
+    spo2_avg = spo2
+    spo2_avg.title = f"{spo2.title} [Rolling Average]"
+    spo2_avg.xaxis.samples = elapsed_time
+    spo2_avg.yaxis.samples = pd.Series(spo2.yaxis.samples).rolling(window=30).mean().to_numpy()
     spo2_avg.plot(ax2)
 
     hr: Signal = Signal(
@@ -62,17 +53,10 @@ def main() -> None:
     )
     hr.plot(ax1)
 
-    hr_avg: Signal = Signal(
-        title=f"{hr.title} [{window} sec. avg.]",
-        xaxis=Axis(
-            label=hr.xaxis.label,
-            samples=elapsed_time,
-        ),
-        yaxis=Axis(
-            label=hr.yaxis.label,
-            samples=pd.Series(hr.yaxis.samples).rolling(window).mean().to_numpy(),
-        ),
-    )
+    hr_avg = hr
+    hr_avg.title = f"{hr.title} [Rolling Average]"
+    hr_avg.xaxis.samples = elapsed_time
+    hr_avg.yaxis.samples = pd.Series(hr.yaxis.samples).rolling(window=30).mean().to_numpy()
     hr_avg.plot(ax3)
 
     plt.show()

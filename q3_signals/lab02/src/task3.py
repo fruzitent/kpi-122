@@ -15,7 +15,10 @@ def main() -> None:
 
     eeg_healthy: Signal = Signal(
         title="Electroencephalogram [Healthy]",
-        xaxis=Axis(label="Time, s"),
+        xaxis=Axis(
+            label="Time, s",
+            sample_rate=256,
+        ),
         yaxis=Axis(
             label="Voltage, μV",
             samples=loadmat("./assets/eeg_healthy_7.mat")["sig"][0],
@@ -25,7 +28,10 @@ def main() -> None:
 
     eeg_epilepsy: Signal = Signal(
         title="Electroencephalogram [Epilepsy]",
-        xaxis=Axis(label="Time, s"),
+        xaxis=Axis(
+            label="Time, s",
+            sample_rate=256,
+        ),
         yaxis=Axis(
             label="Voltage, μV",
             samples=loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0],
