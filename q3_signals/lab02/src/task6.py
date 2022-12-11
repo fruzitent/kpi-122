@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Self
+from itertools import product
+from typing import Callable, Self
 
 import numpy as np
 import pandas as pd
@@ -27,6 +28,9 @@ class COP(object):
     total: Signal
 
     cop: Signal
+
+    def __getitem__(self, index: str) -> Signal:
+        return self.__dict__[index]  # type: ignore
 
     @classmethod
     def from_csv(cls, filepath: str, title: str = "") -> Self:
@@ -135,6 +139,25 @@ class BalanceBoard(object):
     title: str = ""
     states: dict[str, COP]
 
+    def describe(self) -> pd.DataFrame:
+        methods: list[Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]]] = [
+            np.mean,
+            np.median,
+            np.std,
+        ]
+        paths: list[str] = [
+            "cop.xaxis",
+            "cop.yaxis",
+            "total.yaxis",
+        ]
+        df: pd.DataFrame = pd.DataFrame()
+        for state, method, path in product(self.states, methods, paths):
+            signal_name, axis_name = path.split(".")
+            cell: tuple[str, str] = f"{state}.{signal_name}", method.__name__
+            axis: Axis = self.states[state][signal_name][axis_name]
+            df.loc[cell] = method(axis.samples)
+        return df
+
     def plot(self, fig: Figure | SubFigure) -> Figure | SubFigure:  # type: ignore
         gs: GridSpec = GridSpec(figure=fig, ncols=1, nrows=len(self.states))  # type: ignore
         for idx, state in enumerate(self.states.values()):
@@ -180,6 +203,7 @@ def main() -> None:
         },
     )
     acrobats.plot(sfig0)
+    print(acrobats.title, acrobats.describe(), sep="\n")
 
     handball: BalanceBoard = BalanceBoard(
         title="Handball",
@@ -211,6 +235,7 @@ def main() -> None:
         },
     )
     handball.plot(sfig1)
+    print(handball.title, handball.describe(), sep="\n")
 
     plt.show()
 
