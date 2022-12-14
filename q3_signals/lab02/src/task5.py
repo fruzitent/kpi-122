@@ -1,45 +1,96 @@
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
+import numpy as np
+import pandas as pd
+from numpy import typing as npt
+from scipy.interpolate import interp1d
 from scipy.io import loadmat
+from seaborn import objects as so
 
-from src.common import Axis, Signal
+PLOT_SIZE: tuple[float, float] = 16, 5
+
+
+def hr_healthy() -> None:
+    sample_rate: float = 1
+
+    df: pd.DataFrame = pd.DataFrame()
+    df["original"] = loadmat("./assets/hr_healthy_7.mat")["hr_norm"].squeeze()[1:]
+    df["timespan"] = df.index.values / sample_rate
+
+    interpolator: interp1d = interp1d(  # type: ignore
+        kind="cubic",
+        x=np.cumsum(df["original"]) / 1000,
+        y=df["original"],
+    )
+    timespan: npt.NDArray[np.float64] = np.arange(
+        start=interpolator.x[0],
+        stop=interpolator.x[-1],
+        step=1 / sample_rate,
+        dtype=np.float64,
+    )
+    df["interpolated"] = pd.Series(interpolator(timespan))
+
+    df = df.melt(
+        id_vars=["timespan"],
+        value_name="samples",
+        value_vars=["original", "interpolated"],
+        var_name="signal",
+    )
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Line(), color="signal")
+
+    plot = plot.label(
+        title="Heart Rate [Healthy]",
+        x="Time, s",
+        y="Time, ms",
+    )
+
+    plot = plot.layout(size=PLOT_SIZE)
+    plot.show()
+
+
+def hr_apnea() -> None:
+    sample_rate: float = 1
+
+    df: pd.DataFrame = pd.DataFrame()
+    df["original"] = loadmat("./assets/hr_apnea_7.mat")["hr_ap"].squeeze()
+    df["timespan"] = df.index.values / sample_rate
+
+    interpolator: interp1d = interp1d(  # type: ignore
+        kind="cubic",
+        x=np.cumsum(df["original"]) / 1000,
+        y=df["original"],
+    )
+    timespan: npt.NDArray[np.float64] = np.arange(
+        start=interpolator.x[0],
+        stop=interpolator.x[-1],
+        step=1 / sample_rate,
+        dtype=np.float64,
+    )
+    df["interpolated"] = pd.Series(interpolator(timespan))
+
+    df = df.melt(
+        id_vars=["timespan"],
+        value_name="samples",
+        value_vars=["original", "interpolated"],
+        var_name="signal",
+    )
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Line(), color="signal")
+
+    plot = plot.label(
+        title="Heart Rate [Apnea]",
+        x="Time, s",
+        y="Time, ms",
+    )
+
+    plot = plot.layout(size=PLOT_SIZE)
+    plot.show()
 
 
 def main() -> None:
-    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
-    fig_rows: int = 2
-    fig_cols: int = 1
-
-    ax0: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 1)  # type: ignore
-    ax1: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 2)  # type: ignore
-
-    hr_healthy: Signal = Signal(
-        title="Heart Rate [Healthy]",
-        xaxis=Axis(label="Time, s"),
-        yaxis=Axis(
-            label="Time, ms",
-            samples=loadmat("./assets/hr_healthy_7.mat")["hr_norm"].squeeze(),
-        ),
-    )
-    hr_healthy_interp: Signal = hr_healthy.interpolate(1, kind="linear")
-    ax0 = hr_healthy.plot(ax0)
-    ax0 = hr_healthy_interp.plot(ax0)
-    ax0.legend(["Original", "Interpolated"])
-
-    hr_apnea: Signal = Signal(
-        title="Heart Rate [Apnea]",
-        xaxis=Axis(label="Time, s"),
-        yaxis=Axis(
-            label="Time, ms",
-            samples=loadmat("./assets/hr_apnea_7.mat")["hr_ap"].squeeze(),
-        ),
-    )
-    hr_apnea_interp: Signal = hr_apnea.interpolate(1, kind="linear")
-    ax1 = hr_apnea.plot(ax1)
-    ax1 = hr_apnea_interp.plot(ax1)
-    ax1.legend(["Original", "Interpolated"])
-
-    plt.show()
+    hr_healthy()
+    hr_apnea()
 
 
 if __name__ == "__main__":
