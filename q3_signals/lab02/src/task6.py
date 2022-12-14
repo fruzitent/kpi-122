@@ -1,243 +1,113 @@
-from dataclasses import dataclass
-from itertools import product
-from typing import Callable, Self
-
-import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from matplotlib.figure import Figure, SubFigure
-from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
-from numpy import typing as npt
+from matplotlib.figure import Figure
+from matplotlib.gridspec import GridSpec
+from seaborn import objects as so
 
-from src.common import Axis, Signal
-
-TIME_S: str = "Time, s"
-OFFSET_CM: str = "Offset, cm"
+PLOT_SIZE: tuple[float, float] = 32, 16
 
 
-@dataclass(frozen=True, kw_only=True)
-class COP(object):
-    """Center of Pressure."""
+def board(filepath: str) -> None:
+    df: pd.DataFrame = pd.read_csv(
+        delimiter=" ",
+        filepath_or_buffer=filepath,
+        header=None,
+        names=[
+            "timespan",
+            "top_left",
+            "top_right",
+            "bottom_left",
+            "bottom_right",
+            "cop_x",
+            "cop_y",
+            "total",
+        ],
+    )
 
-    title: str = ""
+    stats: pd.DataFrame = df.describe()
+    stats = stats.loc[["50%", "mean", "std"]]
+    stats = stats.transpose()
+    stats = stats.loc[["cop_x", "cop_y", "total"]]
+    print(f"{filepath}:", stats, sep="\n")
 
-    bottom_left: Signal
-    bottom_right: Signal
-    top_left: Signal
-    top_right: Signal
-    total: Signal
+    fig: Figure = plt.figure(figsize=PLOT_SIZE)  # type: ignore
+    gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
+    sfig00: plt.Axes = fig.add_subfigure(gs[0, 0])  # type: ignore
+    sfig10: plt.Axes = fig.add_subfigure(gs[1, 0])  # type: ignore
+    sfig01: plt.Axes = fig.add_subfigure(gs[:, 1])  # type: ignore
 
-    cop: Signal
+    raw: pd.DataFrame = df.melt(
+        id_vars=["timespan"],
+        value_name="samples",
+        value_vars=[
+            "bottom_left",
+            "bottom_right",
+            "top_left",
+            "top_right",
+        ],
+        var_name="signal",
+    )
 
-    def __getitem__(self, index: str) -> Signal:
-        return self.__dict__[index]  # type: ignore
+    plot: so.Plot = so.Plot(data=raw, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Lines(), color="signal", legend=None)
 
-    @classmethod
-    def from_csv(cls, filepath: str, title: str = "") -> Self:
-        df: pd.DataFrame = pd.read_csv(
-            delimiter=" ",
-            filepath_or_buffer=filepath,
-            header=None,
-            names=[
-                "timespan",
-                "top_left",
-                "top_right",
-                "bottom_left",
-                "bottom_right",
-                "cop_x",
-                "cop_y",
-                "total",
-            ],
-        )
-        timespan: npt.NDArray[np.float64] = df["timespan"].to_numpy()
-        return cls(
-            title=title,
-            bottom_left=Signal(
-                title="Bottom Left",
-                xaxis=Axis(
-                    label=TIME_S,
-                    samples=timespan,
-                ),
-                yaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["bottom_left"].to_numpy(),
-                ),
-            ),
-            bottom_right=Signal(
-                title="Bottom Right",
-                xaxis=Axis(
-                    label=TIME_S,
-                    samples=timespan,
-                ),
-                yaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["bottom_right"].to_numpy(),
-                ),
-            ),
-            top_left=Signal(
-                title="Top Left",
-                xaxis=Axis(
-                    label=TIME_S,
-                    samples=timespan,
-                ),
-                yaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["top_left"].to_numpy(),
-                ),
-            ),
-            top_right=Signal(
-                title="Top Right",
-                xaxis=Axis(
-                    label=TIME_S,
-                    samples=timespan,
-                ),
-                yaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["top_right"].to_numpy(),
-                ),
-            ),
-            total=Signal(
-                title="Total",
-                xaxis=Axis(
-                    label="Time, ms",
-                    samples=timespan,
-                ),
-                yaxis=Axis(
-                    label="Power, F",
-                    samples=df["total"].to_numpy(),
-                ),
-            ),
-            cop=Signal(
-                title="Center of Pressure",
-                xaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["cop_x"].to_numpy(),
-                ),
-                yaxis=Axis(
-                    label=OFFSET_CM,
-                    samples=df["cop_y"].to_numpy(),
-                ),
-            ),
-        )
+    plot = plot.label(
+        title="Sensors",
+        x="Time, s",
+        y="Offset, cm",
+    )
 
-    def plot(self, fig: Figure | SubFigure) -> Figure | SubFigure:  # type: ignore
-        gs: GridSpec = GridSpec(figure=fig, ncols=2, nrows=1)  # type: ignore
-        gs0: GridSpecFromSubplotSpec = gs[0].subgridspec(ncols=2, nrows=3)  # type: ignore
-        gs1: GridSpecFromSubplotSpec = gs[1].subgridspec(ncols=1, nrows=1)  # type: ignore
-        self.top_left.plot(fig.add_subplot(gs0[0]))
-        self.top_right.plot(fig.add_subplot(gs0[1]))
-        self.bottom_left.plot(fig.add_subplot(gs0[2]))
-        self.bottom_right.plot(fig.add_subplot(gs0[3]))
-        self.total.plot(fig.add_subplot(gs0[4:]))
-        self.cop.plot(fig.add_subplot(gs1[0]))
-        fig.suptitle(self.title)
-        return fig
+    plot = plot.on(sfig00)
+    plot.plot()
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="total")  # type: ignore
+    plot = plot.add(so.Path())
+
+    plot = plot.label(
+        title="Total",
+        x="Time, s",
+        y="Offset, cm",
+    )
+
+    plot = plot.on(sfig10)
+    plot.plot()
+
+    plot: so.Plot = so.Plot(data=df, x="cop_x", y="cop_y")  # type: ignore
+    plot = plot.add(so.Path())
+
+    plot = plot.label(
+        title="Center of Pressure",
+        x="Offset, cm",
+        y="Offset, cm",
+    )
+
+    plot = plot.on(sfig01)
+    plot.plot()
+
+    plot.show()
 
 
-@dataclass(frozen=True, kw_only=True)
-class BalanceBoard(object):
-    title: str = ""
-    states: dict[str, COP]
+def acrobats() -> None:
+    board("./assets/cop_acrobats_base_close_7.csv")
+    board("./assets/cop_acrobats_base_open_7.csv")
+    board("./assets/cop_acrobats_sway_front30_8.csv")
+    board("./assets/cop_acrobats_sway_front60_8.csv")
+    board("./assets/cop_acrobats_sway_left30_8.csv")
+    board("./assets/cop_acrobats_sway_left60_8.csv")
 
-    def describe(self) -> pd.DataFrame:
-        methods: list[Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]]] = [
-            np.mean,
-            np.median,
-            np.std,
-        ]
-        paths: list[str] = [
-            "cop.xaxis",
-            "cop.yaxis",
-            "total.yaxis",
-        ]
-        df: pd.DataFrame = pd.DataFrame()
-        for state, method, path in product(self.states, methods, paths):
-            signal_name, axis_name = path.split(".")
-            cell: tuple[str, str] = f"{state}.{signal_name}", method.__name__
-            axis: Axis = self.states[state][signal_name][axis_name]
-            df.loc[cell] = method(axis.samples)
-        return df
 
-    def plot(self, fig: Figure | SubFigure) -> Figure | SubFigure:  # type: ignore
-        gs: GridSpec = GridSpec(figure=fig, ncols=1, nrows=len(self.states))  # type: ignore
-        for idx, state in enumerate(self.states.values()):
-            sfig: SubFigure = fig.add_subfigure(gs[idx])  # type: ignore
-            state.plot(sfig)
-        fig.suptitle(self.title)
-        return fig
+def handball() -> None:
+    board("./assets/cop_handball_base_close_7.csv")
+    board("./assets/cop_handball_base_open_7.csv")
+    board("./assets/cop_handball_sway_front30_6.csv")
+    board("./assets/cop_handball_sway_front60_7.csv")
+    board("./assets/cop_handball_sway_left30_6.csv")
+    board("./assets/cop_handball_sway_left60_7.csv")
 
 
 def main() -> None:
-    fig: Figure = plt.figure(figsize=(80, 96))  # type: ignore
-    gs: GridSpec = GridSpec(figure=fig, ncols=2, nrows=1)  # type: ignore
-    sfig0: SubFigure = fig.add_subfigure(gs[0])  # type: ignore
-    sfig1: SubFigure = fig.add_subfigure(gs[1])  # type: ignore
-
-    acrobats: BalanceBoard = BalanceBoard(
-        title="Acrobats",
-        states={
-            "base_close": COP.from_csv(
-                filepath="./assets/cop_acrobats_base_close_7.csv",
-                title="Base Close",
-            ),
-            "base_open": COP.from_csv(
-                filepath="./assets/cop_acrobats_base_open_7.csv",
-                title="Base Open",
-            ),
-            "sway_front30": COP.from_csv(
-                filepath="./assets/cop_acrobats_sway_front30_8.csv",
-                title="Sway Front/Back 30",
-            ),
-            "sway_front60": COP.from_csv(
-                filepath="./assets/cop_acrobats_sway_front60_8.csv",
-                title="Sway Front/Back 60",
-            ),
-            "sway_left30": COP.from_csv(
-                filepath="./assets/cop_acrobats_sway_left30_8.csv",
-                title="Sway Left/Right 30",
-            ),
-            "sway_left60": COP.from_csv(
-                filepath="./assets/cop_acrobats_sway_left60_8.csv",
-                title="Sway Left/Right 60",
-            ),
-        },
-    )
-    acrobats.plot(sfig0)
-    print(acrobats.title, acrobats.describe(), sep="\n")
-
-    handball: BalanceBoard = BalanceBoard(
-        title="Handball",
-        states={
-            "base_close": COP.from_csv(
-                filepath="./assets/cop_handball_base_close_7.csv",
-                title="Base Close",
-            ),
-            "base_open": COP.from_csv(
-                filepath="./assets/cop_handball_base_open_7.csv",
-                title="Base Open",
-            ),
-            "sway_front30": COP.from_csv(
-                filepath="./assets/cop_handball_sway_front30_6.csv",
-                title="Sway Front/Back 30",
-            ),
-            "sway_front60": COP.from_csv(
-                filepath="./assets/cop_handball_sway_front60_7.csv",
-                title="Sway Front/Back 60",
-            ),
-            "sway_left30": COP.from_csv(
-                filepath="./assets/cop_handball_sway_left30_6.csv",
-                title="Sway Left/Right 30",
-            ),
-            "sway_left60": COP.from_csv(
-                filepath="./assets/cop_handball_sway_left60_7.csv",
-                title="Sway Left/Right 60",
-            ),
-        },
-    )
-    handball.plot(sfig1)
-    print(handball.title, handball.describe(), sep="\n")
-
-    plt.show()
+    acrobats()
+    handball()
 
 
 if __name__ == "__main__":

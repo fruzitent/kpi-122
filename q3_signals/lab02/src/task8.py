@@ -1,28 +1,28 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
+import pandas as pd
+from seaborn import objects as so
 
-from src.common import Axis, Signal
+PLOT_SIZE: tuple[float, float] = 16, 5
 
 
 def main() -> None:
-    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
-    ax: plt.Axes = fig.add_subplot()  # type: ignore
+    sample_rate: float = 125
 
-    tbi: Signal = Signal(
+    df: pd.DataFrame = pd.DataFrame()
+    df["samples"] = np.loadtxt("./assets/intracranial_pressure.txt")
+    df["timespan"] = df.index.values / sample_rate
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Line())
+
+    plot = plot.label(
         title="Traumatic Brain Injury",
-        xaxis=Axis(
-            label="Time, s",
-            sample_rate=125,
-        ),
-        yaxis=Axis(
-            label="Intracranial Pressure, mmHg",
-            samples=np.loadtxt("./assets/intracranial_pressure.txt"),
-        ),
+        x="Time, s",
+        y="Intracranial Pressure, mmHg",
     )
-    tbi.plot(ax)
 
-    plt.show()
+    plot = plot.layout(size=PLOT_SIZE)
+    plot.show()
 
 
 if __name__ == "__main__":

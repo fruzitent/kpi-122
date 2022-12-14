@@ -1,45 +1,53 @@
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
+import pandas as pd
 from scipy.io import loadmat
+from seaborn import objects as so
 
-from src.common import Axis, Signal
+PLOT_SIZE: tuple[float, float] = 16, 5
+
+
+def eeg_healthy() -> None:
+    sample_rate: float = 256
+
+    df: pd.DataFrame = pd.DataFrame()
+    df["samples"] = loadmat("./assets/eeg_healthy_7.mat")["sig"][0]
+    df["timespan"] = df.index.values / sample_rate
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Line())
+
+    plot = plot.label(
+        title="Electroencephalogram [Healthy]",
+        x="Time, s",
+        y="Voltage, μV",
+    )
+
+    plot = plot.layout(size=PLOT_SIZE)
+    plot.show()
+
+
+def eeg_epilepsy() -> None:
+    sample_rate: float = 256
+
+    df: pd.DataFrame = pd.DataFrame()
+    df["samples"] = loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0]
+    df["timespan"] = df.index.values / sample_rate
+
+    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
+    plot = plot.add(so.Line())
+
+    plot = plot.label(
+        title="Electroencephalogram [Epilepsy]",
+        x="Time, s",
+        y="Voltage, μV",
+    )
+
+    plot = plot.layout(size=PLOT_SIZE)
+    plot.show()
 
 
 def main() -> None:
-    fig: Figure = plt.figure(figsize=(16, 10))  # type: ignore
-    fig_rows: int = 2
-    fig_cols: int = 1
-
-    ax0: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 1)  # type: ignore
-    ax1: plt.Axes = fig.add_subplot(fig_rows, fig_cols, 2)  # type: ignore
-
-    eeg_healthy: Signal = Signal(
-        title="Electroencephalogram [Healthy]",
-        xaxis=Axis(
-            label="Time, s",
-            sample_rate=256,
-        ),
-        yaxis=Axis(
-            label="Voltage, μV",
-            samples=loadmat("./assets/eeg_healthy_7.mat")["sig"][0],
-        ),
-    )
-    eeg_healthy.plot(ax0)
-
-    eeg_epilepsy: Signal = Signal(
-        title="Electroencephalogram [Epilepsy]",
-        xaxis=Axis(
-            label="Time, s",
-            sample_rate=256,
-        ),
-        yaxis=Axis(
-            label="Voltage, μV",
-            samples=loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0],
-        ),
-    )
-    eeg_epilepsy.plot(ax1)
-
-    plt.show()
+    eeg_healthy()
+    eeg_epilepsy()
 
 
 if __name__ == "__main__":
