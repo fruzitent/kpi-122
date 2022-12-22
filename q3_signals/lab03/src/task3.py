@@ -21,5 +21,5 @@ def periods(
     return lags[np.argmax(cors)]  # type: ignore
 
 
-def rms(timespan: npt.NDArray[np.float64] | pd.Series[float]) -> np.float64:
-    return np.sqrt(np.mean(timespan**2))  # type: ignore
+def rms(samples: npt.NDArray[np.float64] | pd.Series[float]) -> np.float64:
+    return np.sqrt(np.mean(samples**2))  # type: ignore
