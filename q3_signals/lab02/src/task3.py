@@ -1,53 +1,60 @@
-import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy import typing as npt
 from scipy.io import loadmat
-from seaborn import objects as so
-
-PLOT_SIZE: tuple[float, float] = 16, 5
-
-
-def eeg_healthy() -> None:
-    sample_rate: float = 256
-
-    df: pd.DataFrame = pd.DataFrame()
-    df["samples"] = loadmat("./assets/eeg_healthy_7.mat")["sig"][0]
-    df["timespan"] = df.index.values / sample_rate
-
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Line())
-
-    plot = plot.label(
-        title="Electroencephalogram [Healthy]",
-        x="Time, s",
-        y="Voltage, μV",
-    )
-
-    plot = plot.layout(size=PLOT_SIZE)
-    plot.show()
-
-
-def eeg_epilepsy() -> None:
-    sample_rate: float = 256
-
-    df: pd.DataFrame = pd.DataFrame()
-    df["samples"] = loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0]
-    df["timespan"] = df.index.values / sample_rate
-
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Line())
-
-    plot = plot.label(
-        title="Electroencephalogram [Epilepsy]",
-        x="Time, s",
-        y="Voltage, μV",
-    )
-
-    plot = plot.layout(size=PLOT_SIZE)
-    plot.show()
 
 
 def main() -> None:
     eeg_healthy()
     eeg_epilepsy()
+
+
+def eeg_healthy() -> None:
+    sample_rate: float = 256
+
+    inp0: npt.NDArray[np.float64] = loadmat("./assets/eeg_healthy_7.mat")["sig"][0]
+    timespan: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
+
+    with plt.style.context("seaborn"):
+        plot_healthy(timespan, inp0)
+
+
+def plot_healthy(
+    timespan: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+) -> None:
+    _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
+
+    ax0.plot(timespan, inp0)
+    ax0.set_title("Electroencephalogram [Healthy]")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Voltage, μV")
+
+    plt.show()
+
+
+def eeg_epilepsy() -> None:
+    sample_rate: float = 256
+
+    inp0: npt.NDArray[np.float64] = loadmat("./assets/eeg_epilepsy_7.mat")["sig"][0]
+    timespan: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
+
+    with plt.style.context("seaborn"):
+        plot_epilepsy(timespan, inp0)
+
+
+def plot_epilepsy(
+    timespan: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+) -> None:
+    _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
+
+    ax0.plot(timespan, inp0)
+    ax0.set_title("Electroencephalogram [Epilepsy]")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Voltage, μV")
+
+    plt.show()
 
 
 if __name__ == "__main__":

@@ -1,96 +1,95 @@
 import numpy as np
-import pandas as pd
+from matplotlib import pyplot as plt
 from numpy import typing as npt
 from scipy.interpolate import interp1d
 from scipy.io import loadmat
-from seaborn import objects as so
-
-PLOT_SIZE: tuple[float, float] = 16, 5
-
-
-def hr_healthy() -> None:
-    sample_rate: float = 1
-
-    df: pd.DataFrame = pd.DataFrame()
-    df["original"] = loadmat("./assets/hr_healthy_7.mat")["hr_norm"].squeeze()[1:]
-    df["timespan"] = df.index.values / sample_rate
-
-    interpolator: interp1d = interp1d(  # type: ignore
-        kind="cubic",
-        x=np.cumsum(df["original"]) / 1000,
-        y=df["original"],
-    )
-    timespan: npt.NDArray[np.float64] = np.arange(
-        start=interpolator.x[0],
-        stop=interpolator.x[-1],
-        step=1 / sample_rate,
-        dtype=np.float64,
-    )
-    df["interpolated"] = pd.Series(interpolator(timespan))
-
-    df = df.melt(
-        id_vars=["timespan"],
-        value_name="samples",
-        value_vars=["original", "interpolated"],
-        var_name="signal",
-    )
-
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Line(), color="signal")
-
-    plot = plot.label(
-        title="Heart Rate [Healthy]",
-        x="Time, s",
-        y="Time, ms",
-    )
-
-    plot = plot.layout(size=PLOT_SIZE)
-    plot.show()
-
-
-def hr_apnea() -> None:
-    sample_rate: float = 1
-
-    df: pd.DataFrame = pd.DataFrame()
-    df["original"] = loadmat("./assets/hr_apnea_7.mat")["hr_ap"].squeeze()
-    df["timespan"] = df.index.values / sample_rate
-
-    interpolator: interp1d = interp1d(  # type: ignore
-        kind="cubic",
-        x=np.cumsum(df["original"]) / 1000,
-        y=df["original"],
-    )
-    timespan: npt.NDArray[np.float64] = np.arange(
-        start=interpolator.x[0],
-        stop=interpolator.x[-1],
-        step=1 / sample_rate,
-        dtype=np.float64,
-    )
-    df["interpolated"] = pd.Series(interpolator(timespan))
-
-    df = df.melt(
-        id_vars=["timespan"],
-        value_name="samples",
-        value_vars=["original", "interpolated"],
-        var_name="signal",
-    )
-
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Line(), color="signal")
-
-    plot = plot.label(
-        title="Heart Rate [Apnea]",
-        x="Time, s",
-        y="Time, ms",
-    )
-
-    plot = plot.layout(size=PLOT_SIZE)
-    plot.show()
 
 
 def main() -> None:
     hr_healthy()
     hr_apnea()
+
+
+def hr_healthy() -> None:
+    sample_rate: float = 1
+
+    inp0: npt.NDArray[np.float64] = loadmat("./assets/hr_healthy_7.mat")["hr_norm"].squeeze()[1:]
+    timespan0: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
+
+    interpolator: interp1d = interp1d(  # type: ignore
+        kind="cubic",
+        x=np.cumsum(inp0) / 1000,
+        y=inp0,
+    )
+
+    timespan1: npt.NDArray[np.float64] = np.arange(
+        start=interpolator.x[0],
+        stop=interpolator.x[-1],
+        step=1 / sample_rate,
+        dtype=np.float64,
+    )
+    inp1: npt.NDArray[np.float64] = interpolator(timespan1)
+
+    with plt.style.context("seaborn"):
+        plot_healthy(timespan0, timespan1, inp0, inp1)
+
+
+def plot_healthy(
+    timespan0: npt.NDArray[np.float64],
+    timespan1: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+    inp1: npt.NDArray[np.float64],
+) -> None:
+    _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
+
+    ax0.plot(timespan0, inp0, label="Original")
+    ax0.plot(timespan1, inp1, label="Interpolated")
+    ax0.set_title("Heart Rate [Healthy]")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Time, ms")
+
+    plt.show()
+
+
+def hr_apnea() -> None:
+    sample_rate: float = 1
+
+    inp0: npt.NDArray[np.float64] = loadmat("./assets/hr_apnea_7.mat")["hr_ap"].squeeze()
+    timespan0: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
+
+    interpolator: interp1d = interp1d(  # type: ignore
+        kind="cubic",
+        x=np.cumsum(inp0) / 1000,
+        y=inp0,
+    )
+
+    timespan1: npt.NDArray[np.float64] = np.arange(
+        start=interpolator.x[0],
+        stop=interpolator.x[-1],
+        step=1 / sample_rate,
+        dtype=np.float64,
+    )
+    inp1: npt.NDArray[np.float64] = interpolator(timespan1)
+
+    with plt.style.context("seaborn"):
+        plot_apnea(timespan0, timespan1, inp0, inp1)
+
+
+def plot_apnea(
+    timespan0: npt.NDArray[np.float64],
+    timespan1: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+    inp1: npt.NDArray[np.float64],
+) -> None:
+    _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
+
+    ax0.plot(timespan0, inp0, label="Original")
+    ax0.plot(timespan1, inp1, label="Interpolated")
+    ax0.set_title("Heart Rate [Apnea]")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Time, ms")
+
+    plt.show()
 
 
 if __name__ == "__main__":

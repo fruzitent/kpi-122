@@ -7,11 +7,10 @@ version = "0.1.0"
 
 [tool.poetry.dependencies]
 matplotlib = "^3.6.2"
-numpy = "^1.23.5"
+numpy = "^1.24.0"
 pandas = "^1.5.2"
 python = ">=3.11,<3.12"
 scipy = "^1.9.3"
-seaborn = { extras = ["stats"], version = "^0.12.1" }
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.12.0" }
@@ -22,7 +21,7 @@ wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-py
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.16.5"
-poetryup = "^0.12.5"
+poetryup = "^0.12.7"
 
 [tool.poetry.group.jupyter]
 optional = true
@@ -172,18 +171,21 @@ ignore = [
     "D105",   # D105 Missing docstring in magic method
     "D107",   # D107 Missing docstring in __init__
     "E203",   # E203 Whitespace before ","
+    "S101",   # S101 Use of assert detected. The enclosed code will be removed when compiling to optimised byte code
     "W503",   # W503 Line break before binary operator
+    "WPS204", # WPS204 Found overused expression
+    "WPS210", # WPS210 Found too many local variables
+    "WPS221", # WPS221 Found line with high Jones Complexity
+    "WPS226", # WPS226 Found string literal over-use
     "WPS305", # WPS305 Found `f` string
     "WPS421", # WPS421 Found wrong function call: print
     "WPS430", # WPS430 Found nested function
+    "WPS432", # WPS432 Found magic number
 ]
 inline-quotes = "double"
 max-complexity = 6
 max-line-length = 120
-per-file-ignores = [
-    "*_test.py:S101",   # S101 Use of assert detected. The enclosed code will be removed when compiling to optimised byte code
-    "*_test.py:WPS432", # WPS432 Found magic number
-]
+per-file-ignores = []
 show-source = true
 statistics = true
 

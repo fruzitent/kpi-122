@@ -1,28 +1,30 @@
 import numpy as np
-import pandas as pd
-from seaborn import objects as so
-
-PLOT_SIZE: tuple[float, float] = 16, 5
+from matplotlib import pyplot as plt
+from numpy import typing as npt
 
 
 def main() -> None:
     sample_rate: float = 125
 
-    df: pd.DataFrame = pd.DataFrame()
-    df["samples"] = np.loadtxt("./assets/intracranial_pressure.txt")
-    df["timespan"] = df.index.values / sample_rate
+    inp0: npt.NDArray[np.float64] = np.loadtxt("./assets/intracranial_pressure.txt")
+    timespan: npt.NDArray[np.float64] = np.arange(inp0.size) / sample_rate
 
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Line())
+    with plt.style.context("seaborn"):
+        plot(timespan, inp0)
 
-    plot = plot.label(
-        title="Traumatic Brain Injury",
-        x="Time, s",
-        y="Intracranial Pressure, mmHg",
-    )
 
-    plot = plot.layout(size=PLOT_SIZE)
-    plot.show()
+def plot(
+    timespan: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+) -> None:
+    _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
+
+    ax0.plot(timespan, inp0)
+    ax0.set_title("Traumatic Brain Injury")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Intracranial Pressure, mmHg")
+
+    plt.show()
 
 
 if __name__ == "__main__":

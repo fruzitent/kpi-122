@@ -1,90 +1,14 @@
+from __future__ import annotations
+
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
-from seaborn import objects as so
-
-PLOT_SIZE: tuple[float, float] = 32, 16
 
 
-def board(filepath: str) -> None:
-    df: pd.DataFrame = pd.read_csv(
-        delimiter=" ",
-        filepath_or_buffer=filepath,
-        header=None,
-        names=[
-            "timespan",
-            "top_left",
-            "top_right",
-            "bottom_left",
-            "bottom_right",
-            "cop_x",
-            "cop_y",
-            "total",
-        ],
-    )
-
-    stats: pd.DataFrame = df.describe()
-    stats = stats.loc[["50%", "mean", "std"]]
-    stats = stats.transpose()
-    stats = stats.loc[["cop_x", "cop_y", "total"]]
-    print(f"{filepath}:", stats, sep="\n")
-
-    fig: Figure = plt.figure(figsize=PLOT_SIZE)  # type: ignore
-    gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
-    sfig00: plt.Axes = fig.add_subfigure(gs[0, 0])  # type: ignore
-    sfig10: plt.Axes = fig.add_subfigure(gs[1, 0])  # type: ignore
-    sfig01: plt.Axes = fig.add_subfigure(gs[:, 1])  # type: ignore
-
-    raw: pd.DataFrame = df.melt(
-        id_vars=["timespan"],
-        value_name="samples",
-        value_vars=[
-            "bottom_left",
-            "bottom_right",
-            "top_left",
-            "top_right",
-        ],
-        var_name="signal",
-    )
-
-    plot: so.Plot = so.Plot(data=raw, x="timespan", y="samples")  # type: ignore
-    plot = plot.add(so.Lines(), color="signal", legend=None)
-
-    plot = plot.label(
-        title="Sensors",
-        x="Time, s",
-        y="Offset, cm",
-    )
-
-    plot = plot.on(sfig00)
-    plot.plot()
-
-    plot: so.Plot = so.Plot(data=df, x="timespan", y="total")  # type: ignore
-    plot = plot.add(so.Path())
-
-    plot = plot.label(
-        title="Total",
-        x="Time, s",
-        y="Offset, cm",
-    )
-
-    plot = plot.on(sfig10)
-    plot.plot()
-
-    plot: so.Plot = so.Plot(data=df, x="cop_x", y="cop_y")  # type: ignore
-    plot = plot.add(so.Path())
-
-    plot = plot.label(
-        title="Center of Pressure",
-        x="Offset, cm",
-        y="Offset, cm",
-    )
-
-    plot = plot.on(sfig01)
-    plot.plot()
-
-    plot.show()
+def main() -> None:
+    acrobats()
+    handball()
 
 
 def acrobats() -> None:
@@ -105,9 +29,78 @@ def handball() -> None:
     board("./assets/cop_handball_sway_left60_7.csv")
 
 
-def main() -> None:
-    acrobats()
-    handball()
+def board(filepath: str) -> None:
+    df: pd.DataFrame = pd.read_csv(
+        delimiter=" ",
+        filepath_or_buffer=filepath,
+        header=None,
+    )
+
+    timespan: pd.Series[float] = df.iloc[:, 0]
+    inp0: pd.Series[float] = df.iloc[:, 1]
+    inp1: pd.Series[float] = df.iloc[:, 2]
+    inp2: pd.Series[float] = df.iloc[:, 3]
+    inp3: pd.Series[float] = df.iloc[:, 4]
+    inp4: pd.Series[float] = df.iloc[:, 5]
+    inp5: pd.Series[float] = df.iloc[:, 6]
+    inp6: pd.Series[float] = df.iloc[:, 7]
+
+    with plt.style.context("seaborn"):
+        plot(timespan, inp0, inp1, inp2, inp3, inp4, inp5, inp6)
+
+    stats(inp4, inp5, inp6, filepath)
+
+
+def plot(
+    timespan: pd.Series[float],
+    inp0: pd.Series[float],
+    inp1: pd.Series[float],
+    inp2: pd.Series[float],
+    inp3: pd.Series[float],
+    inp4: pd.Series[float],
+    inp5: pd.Series[float],
+    inp6: pd.Series[float],
+) -> None:
+    fig: Figure = plt.figure(figsize=(32, 15))  # type: ignore
+    gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
+    ax0: plt.Axes = fig.add_subplot(gs[0, 0])  # type: ignore
+    ax1: plt.Axes = fig.add_subplot(gs[1, 0])  # type: ignore
+    ax2: plt.Axes = fig.add_subplot(gs[:, 1])  # type: ignore
+
+    ax0.plot(timespan, inp0, label="Top Left")
+    ax0.plot(timespan, inp1, label="Top Right")
+    ax0.plot(timespan, inp2, label="Bottom Left")
+    ax0.plot(timespan, inp3, label="Bottom Right")
+    ax0.legend()
+    ax0.set_title("Sensors")
+    ax0.set_xlabel("Time, s")
+    ax0.set_ylabel("Offset, cm")
+
+    ax1.plot(timespan, inp6, label="Total")
+    ax1.set_title("Total")
+    ax1.set_xlabel("Time, s")
+    ax1.set_ylabel("Offset, cm")
+
+    ax2.plot(inp4, inp5, label="Center of Pressure")
+    ax2.set_title("Center of Pressure")
+    ax2.set_xlabel("Offset, cm")
+    ax2.set_ylabel("Offset, cm")
+
+    plt.show()
+
+
+def stats(
+    inp4: pd.Series[float],
+    inp5: pd.Series[float],
+    inp6: pd.Series[float],
+    filepath: str,
+) -> None:
+    methods: list[str] = ["50%", "mean", "std"]
+    df: pd.DataFrame = pd.DataFrame()
+    df["cop_x"] = inp4.describe().loc[methods].transpose()
+    df["cop_y"] = inp5.describe().loc[methods].transpose()
+    df["total"] = inp6.describe().loc[methods].transpose()
+    print(f"{filepath}:", df, sep="\n")
 
 
 if __name__ == "__main__":
