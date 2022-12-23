@@ -3,23 +3,25 @@ from matplotlib import pyplot as plt
 from numpy import typing as npt
 from scipy.signal import lfilter
 
-from src.common import sine
 from src.task1 import get_coefficients
-
-PLOT_SIZE: tuple[float, float] = 16, 24
 
 
 def main() -> None:
-    freq0: int = 3
-    freq1: int = 20
+    amp: float = 1
+    freq0: float = 3
+    freq1: float = 20
+    hshift: float = 0
     sample_rate: int = 256
     scale: int = 3
     time: int = 1
+    vshift: float = 0
 
-    denumerator, numerator = get_coefficients()
+    rng: np.random.Generator = np.random.default_rng()
+    denumerator, numerator = get_coefficients(rng)
+
     timespan: npt.NDArray[np.float64] = np.linspace(0, time, time * sample_rate)
-    inp0: npt.NDArray[np.float64] = sine(2 * np.pi * freq0 * timespan)
-    inp1: npt.NDArray[np.float64] = sine(2 * np.pi * freq1 * timespan)
+    inp0: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq0 * timespan) - hshift) + vshift
+    inp1: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq1 * timespan) - hshift) + vshift
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
     out1: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp1)
 
@@ -32,7 +34,7 @@ def main() -> None:
     out5: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp3)
 
     with plt.style.context("seaborn"):
-        _, (ax0, ax1, ax2, ax3) = plt.subplots(figsize=PLOT_SIZE, ncols=1, nrows=4)
+        _, (ax0, ax1, ax2, ax3) = plt.subplots(figsize=(16, 24), ncols=1, nrows=4)
 
         ax0.plot(timespan, inp0, label="In #0")
         ax0.plot(timespan, out0, label="Out #0")

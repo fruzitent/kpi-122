@@ -1,8 +1,6 @@
 import numpy as np
 from numpy import typing as npt
 
-from src.common import rng
-
 # 3379786959 | max = 0.25, mean = 0.25
 # 899906383  | max = 0.60, mean = 0.25
 # 462902678  | max = 0.75, mean = 0.75
@@ -11,7 +9,7 @@ from src.common import rng
 # 4039093075 | max = 1.50, mean = 1.00
 
 
-def get_coefficients() -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
+def get_coefficients(rng: np.random.Generator) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     d0: int = rng.integers(0, 10)
     d1: int = rng.integers(0, 10)
     m0: int = rng.integers(0, 10)
