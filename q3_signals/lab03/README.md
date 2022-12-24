@@ -11,7 +11,7 @@ $ cd ./q3_signals/lab03
 
 ### Install
 ```shell
-$ poetry install --with main,jupyter
+$ poetry install --with jupyter
 $ poetry shell
 ```
 
