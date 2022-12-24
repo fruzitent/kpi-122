@@ -44,6 +44,7 @@ def plot_healthy(
 
     ax0.plot(timespan0, inp0, label="Original")
     ax0.plot(timespan1, inp1, label="Interpolated")
+    ax0.legend()
     ax0.set_title("Heart Rate [Healthy]")
     ax0.set_xlabel("Time, s")
     ax0.set_ylabel("Time, ms")
@@ -85,6 +86,7 @@ def plot_apnea(
 
     ax0.plot(timespan0, inp0, label="Original")
     ax0.plot(timespan1, inp1, label="Interpolated")
+    ax0.legend()
     ax0.set_title("Heart Rate [Apnea]")
     ax0.set_xlabel("Time, s")
     ax0.set_ylabel("Time, ms")

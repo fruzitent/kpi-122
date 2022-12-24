@@ -46,7 +46,7 @@ def board(filepath: str) -> None:
     inp6: pd.Series[float] = df.iloc[:, 7]
 
     with plt.style.context("seaborn"):
-        plot(timespan, inp0, inp1, inp2, inp3, inp4, inp5, inp6)
+        plot(timespan, inp0, inp1, inp2, inp3, inp4, inp5, inp6, filepath)
 
     stats(inp4, inp5, inp6, filepath)
 
@@ -60,8 +60,9 @@ def plot(
     inp4: pd.Series[float],
     inp5: pd.Series[float],
     inp6: pd.Series[float],
+    filepath: str,
 ) -> None:
-    fig: Figure = plt.figure(figsize=(32, 15))  # type: ignore
+    fig: Figure = plt.figure(figsize=(24, 15))  # type: ignore
     gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
     ax0: plt.Axes = fig.add_subplot(gs[0, 0])  # type: ignore
     ax1: plt.Axes = fig.add_subplot(gs[1, 0])  # type: ignore
@@ -86,6 +87,9 @@ def plot(
     ax2.set_xlabel("Offset, cm")
     ax2.set_ylabel("Offset, cm")
 
+    fig.suptitle(filepath)
+
+    plt.tight_layout()
     plt.show()
 
 
@@ -97,9 +101,10 @@ def stats(
 ) -> None:
     methods: list[str] = ["50%", "mean", "std"]
     df: pd.DataFrame = pd.DataFrame()
-    df["cop_x"] = inp4.describe().loc[methods].transpose()
-    df["cop_y"] = inp5.describe().loc[methods].transpose()
-    df["total"] = inp6.describe().loc[methods].transpose()
+    df["cop_x"] = inp4.describe().loc[methods]
+    df["cop_y"] = inp5.describe().loc[methods]
+    df["total"] = inp6.describe().loc[methods]
+    df = df.transpose()
     print(f"{filepath}:", df, sep="\n")
 
 
