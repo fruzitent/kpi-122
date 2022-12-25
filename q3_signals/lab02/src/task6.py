@@ -60,7 +60,7 @@ def plot(
     inp4: pd.Series[float],
     inp5: pd.Series[float],
     inp6: pd.Series[float],
-    filepath: str,
+    title: str,
 ) -> None:
     fig: Figure = plt.figure(figsize=(24, 15))  # type: ignore
     gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
@@ -87,7 +87,7 @@ def plot(
     ax2.set_xlabel("Offset, cm")
     ax2.set_ylabel("Offset, cm")
 
-    fig.suptitle(filepath)
+    fig.suptitle(title)
 
     plt.tight_layout()
     plt.show()
@@ -97,15 +97,15 @@ def stats(
     inp4: pd.Series[float],
     inp5: pd.Series[float],
     inp6: pd.Series[float],
-    filepath: str,
+    title: str,
 ) -> None:
     methods: list[str] = ["50%", "mean", "std"]
     df: pd.DataFrame = pd.DataFrame()
-    df["cop_x"] = inp4.describe().loc[methods]
-    df["cop_y"] = inp5.describe().loc[methods]
-    df["total"] = inp6.describe().loc[methods]
-    df = df.transpose()
-    print(f"{filepath}:", df, sep="\n")
+    df["cop_x"] = inp4.describe()
+    df["cop_y"] = inp5.describe()
+    df["total"] = inp6.describe()
+    df = df.loc[methods].transpose()
+    print(f"{title}:", df, sep="\n")
 
 
 if __name__ == "__main__":

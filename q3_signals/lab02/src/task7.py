@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 
 def main() -> None:
     window: int = 30
+
     df: pd.DataFrame = pd.read_csv("./assets/Subject7_SpO2Hr.csv")
 
     timespan: pd.Series[float] = df.iloc[:, 1]
