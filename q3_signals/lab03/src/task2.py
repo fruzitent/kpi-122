@@ -8,18 +8,21 @@ from src.task3 import gain, periods
 
 
 def main() -> None:
+    sample_rate: int = 256
+    time: int = 1
+
     amp: float = 1
     freq0: float = 10
     hshift: float = 0
-    sample_rate: int = 256
-    time: int = 1
     vshift: float = 0
+
+    dt: float = 1 / sample_rate
 
     rng: np.random.Generator = np.random.default_rng()
     denumerator, numerator = get_coefficients(rng)
     init: npt.NDArray[np.float64] = rng.random(np.maximum(denumerator.size, numerator.size) - 1)
 
-    timespan: npt.NDArray[np.float64] = np.linspace(0, time, time * sample_rate)
+    timespan: npt.NDArray[np.float64] = np.arange(0, time, dt, dtype=np.float64)
     inp0: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq0 * timespan) - hshift) + vshift
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
     out1: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0, zi=init)[0]

@@ -7,19 +7,22 @@ from src.task1 import get_coefficients
 
 
 def main() -> None:
+    sample_rate: int = 256
+    time: int = 1
+
     amp: float = 1
     freq0: float = 3
     freq1: float = 20
     hshift: float = 0
-    sample_rate: int = 256
     scale: int = 3
-    time: int = 1
     vshift: float = 0
+
+    dt: float = 1 / sample_rate
 
     rng: np.random.Generator = np.random.default_rng()
     denumerator, numerator = get_coefficients(rng)
 
-    timespan: npt.NDArray[np.float64] = np.linspace(0, time, time * sample_rate)
+    timespan: npt.NDArray[np.float64] = np.arange(0, time, dt, dtype=np.float64)
     inp0: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq0 * timespan) - hshift) + vshift
     inp1: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq1 * timespan) - hshift) + vshift
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
