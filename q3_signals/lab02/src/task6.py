@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 
@@ -62,11 +63,11 @@ def plot(
     inp6: pd.Series[float],
     title: str,
 ) -> None:
-    fig: Figure = plt.figure(figsize=(24, 15))  # type: ignore
-    gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)  # type: ignore
-    ax0: plt.Axes = fig.add_subplot(gs[0, 0])  # type: ignore
-    ax1: plt.Axes = fig.add_subplot(gs[1, 0])  # type: ignore
-    ax2: plt.Axes = fig.add_subplot(gs[:, 1])  # type: ignore
+    fig: Figure = plt.figure(figsize=(24, 15))
+    gs: GridSpec = GridSpec(figure=fig, height_ratios=[4, 1], ncols=2, nrows=2)
+    ax0: Axes = fig.add_subplot(gs[0, 0])
+    ax1: Axes = fig.add_subplot(gs[1, 0])
+    ax2: Axes = fig.add_subplot(gs[:, 1])
 
     ax0.plot(timespan, inp0, label="Top Left")
     ax0.plot(timespan, inp1, label="Top Right")

@@ -16,7 +16,7 @@ def hr_healthy() -> None:
     inp0: npt.NDArray[np.float64] = loadmat("./assets/hr_healthy_7.mat")["hr_norm"].squeeze()[1:]
     timespan0: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
 
-    interpolator: interp1d = interp1d(  # type: ignore
+    interpolator: interp1d = interp1d(
         kind="cubic",
         x=np.cumsum(inp0) / 1000,
         y=inp0,
@@ -58,7 +58,7 @@ def hr_apnea() -> None:
     inp0: npt.NDArray[np.float64] = loadmat("./assets/hr_apnea_7.mat")["hr_ap"].squeeze()
     timespan0: npt.NDArray[np.float64] = np.arange(inp0.size, dtype=np.float64) / sample_rate
 
-    interpolator: interp1d = interp1d(  # type: ignore
+    interpolator: interp1d = interp1d(
         kind="cubic",
         x=np.cumsum(inp0) / 1000,
         y=inp0,
