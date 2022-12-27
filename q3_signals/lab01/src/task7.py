@@ -41,9 +41,9 @@ def stats(
     inp0: npt.NDArray[np.float64],
     time: float,
 ) -> None:
-    index: int = round(inp0.size / (time * 2))
-    cut: npt.NDArray[np.float64] = inp0[:index]
-    mean: np.float64 = np.sum(cut) / cut.size
+    upto: int = round(inp0.size / (time * 2))
+    half: npt.NDArray[np.float64] = inp0[:upto]
+    mean: np.float64 = np.sum(half) / half.size
     print("Mean:", mean)
 
 

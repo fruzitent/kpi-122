@@ -1,0 +1,55 @@
+\section{Частина 5}
+\label{sec:task5}
+
+\subsection{Завдання}
+\label{subsec:task5_task}
+
+Наведіть приклади використання функцій, які генерують імпульси. \\
+Форми сигналів: прямокутні імпульси, гаусівські імпульси, трикутні імпульси
+та послідовності імпульси заданої форми.
+
+\begin{enumerate}
+    \item
+          Побудувати одиночний прямокутний імпульс. \\
+          Задати проміжок значень часу 10 секунд, частота дискретизації 256 Гц. \\
+          Побудувати графік одиничного прямокутного імпульсу шириною 300 мс,
+          з центром в момент часу 4 с.
+
+    \item
+          Написати файл-сценарій для побудови графіку прямокутного імпульсу,
+          тривалість та амплітуда якого буде задаватися з клавіатури. \\
+          Розташування імпульсу задавати випадковим числом,
+          але передбачити перевірку, чи не виходить імпульс за межі графіка.
+
+    \item
+          Побудувати послідовності прямокутних імпульсів для випадку,
+          коли інтервали між імпульсами однакові.
+\end{enumerate}
+
+\subsection{Код Программи}
+\label{subsec:task5_code}
+\inputminted{python}{../src/task5.py}
+
+\subsection{Результати}
+\label{subsec:task5_results}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task5_0}
+    \caption{Прямокутна хвиля}
+    \label{fig:square_wave_infinite}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task5_1}
+    \caption{Послідовність прямокутних імпульсів}
+    \label{fig:square_wave_buffer}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task5_2}
+    \caption{Прямокутний імпульс}
+    \label{fig:square_pulse}
+\end{figure}

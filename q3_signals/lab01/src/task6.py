@@ -15,11 +15,15 @@ def main() -> None:
     inp0: npt.NDArray[np.float64] = np.zeros_like(timespan, dtype=np.float64)
 
     temp_file: IO[bytes] = TemporaryFile()
-    np.savez_compressed(temp_file, timespan=timespan, inp0=inp0)
+    np.savez_compressed(
+        temp_file,
+        timespan=timespan,
+        inp0=inp0,
+    )
 
     temp_file.seek(0)
 
-    npz_file = np.load(temp_file)
+    npz_file: dict[str, npt.NDArray[np.float64]] = np.load(temp_file)
     for npz_key, npz_value in npz_file.items():
         print(npz_key, npz_value)
 

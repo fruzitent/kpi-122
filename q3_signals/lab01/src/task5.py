@@ -40,8 +40,8 @@ def plot_square_wave_infinite(
 
 
 def square_wave_buffer() -> None:
-    time: float = 10000
     sample_rate: float = 256
+    time: float = 10000
 
     amp: float = 100
     width: float = 300
@@ -49,7 +49,7 @@ def square_wave_buffer() -> None:
     dt: float = 1 / sample_rate
 
     timespan: npt.NDArray[np.float64] = np.arange(0, time, dt, dtype=np.float64)
-    inp0: npt.NDArray[np.float64] = fill_square_buffer(timespan, sample_rate, width, amp)
+    inp0: npt.NDArray[np.float64] = fill_square_buffer(timespan, sample_rate, amp, width)
 
     with plt.style.context("seaborn"):
         plot_square_wave_buffer(timespan, inp0)
@@ -80,7 +80,7 @@ def square_pulse() -> None:
     dt: float = 1 / sample_rate
 
     timespan: npt.NDArray[np.float64] = np.arange(0, time, dt, dtype=np.float64)
-    inp0: npt.NDArray[np.float64] = make_square_pulse(timespan, sample_rate, center, width, amp)
+    inp0: npt.NDArray[np.float64] = make_square_pulse(timespan, sample_rate, amp, center, width)
 
     with plt.style.context("seaborn"):
         plot_square_pulse(timespan, inp0)
@@ -103,36 +103,41 @@ def plot_square_pulse(
 def make_square_pulse(
     timespan: npt.NDArray[np.float64],
     sample_rate: float,
+    amp: float,
     center: float,
     width: float,
-    amp: float,
 ) -> npt.NDArray[np.float64]:
-    inp0: npt.NDArray[np.float64] = np.zeros_like(timespan, dtype=np.float64)
+    buffer: npt.NDArray[np.float64] = np.zeros_like(timespan, dtype=np.float64)
 
-    inp0_from: int = int(sample_rate * (center - width / 2))
-    inp0_upto: int = int(sample_rate * (center + width / 2))
-    if inp0_from < 0 or inp0_upto > len(timespan):
+    buffer_from: int = round(sample_rate * (center - width / 2))
+    buffer_upto: int = round(sample_rate * (center + width / 2))
+    if buffer_from < 0 or buffer_upto > len(timespan):
         raise ValueError("out of bounds")
 
-    inp0[inp0_from:inp0_upto] = amp  # noqa: WPS362 Found assignment to a subscript slice
-    return inp0
+    buffer[buffer_from:buffer_upto] = amp  # noqa: WPS362 Found assignment to a subscript slice
+    return buffer
 
 
 def fill_square_buffer(
     timespan: npt.NDArray[np.float64],
     sample_rate: float,
-    width: float,
     amp: float,
+    width: float,
 ) -> npt.NDArray[np.float64]:
     buffer: npt.NDArray[np.float64] = np.zeros_like(timespan, dtype=np.float64)
 
-    idx: int = 1
-    while True:
+    offset: int = 1
+    is_overflow: bool = False
+
+    while not is_overflow:
         try:
-            buffer += make_square_pulse(timespan, sample_rate, width * idx, width, amp)
+            buffer += make_square_pulse(timespan, sample_rate, amp, width * offset, width)
         except ValueError:
-            return buffer
-        idx += 2
+            is_overflow = True
+        finally:
+            offset += 2
+
+    return buffer
 
 
 if __name__ == "__main__":

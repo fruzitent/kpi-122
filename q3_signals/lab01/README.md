@@ -17,7 +17,18 @@ $ poetry shell
 
 ### Build
 ```shell
-$ poe lab
+$ python ./src/task1.py
+$ python ./src/task2.py
+$ python ./src/task3.py
+$ python ./src/task4.py
+$ python ./src/task5.py
+$ python ./src/task6.py
+$ python ./src/task7.py
+```
+
+### Docs
+```shell
+$ latexmk -pdflua -file-line-error -halt-on-error -shell-escape -outdir=../out -cd tex/main.tex
 ```
 
 ### Continuous Integration
