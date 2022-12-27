@@ -16,7 +16,7 @@ def main() -> None:
     inp0: npt.NDArray[np.float64] = unit_impulse(samples)
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
 
-    system: TransferFunction = TransferFunction(numerator, denumerator, dt=1)  # type: ignore
+    system: TransferFunction = TransferFunction(numerator, denumerator, dt=1)
     timespan, impulse = dimpulse(system, t=timespan)
     out1: npt.NDArray[np.float64] = np.squeeze(impulse)
 
