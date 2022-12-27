@@ -2,17 +2,38 @@ import asyncio
 import sys
 from types import TracebackType
 from typing import Self
+from unittest.mock import Mock
 
 import numpy as np
-import sounddevice as sd
 from cffi.backend_ctypes import CTypesData
 from matplotlib import pyplot as plt
 from numpy import typing as npt
+from scipy.io import wavfile
+
+is_sd_mocked: bool = False
+
+try:
+    import sounddevice as sd
+except OSError:
+    sd = Mock()
+    is_sd_mocked = True
 
 
-async def main() -> None:
+def main() -> None:
+    if is_sd_mocked:
+        main_file()
+    else:
+        try:
+            with asyncio.Runner() as runner:
+                runner.run(main_record())
+        except KeyboardInterrupt:
+            print("Interrupted")
+            exit(0)
+
+
+async def main_record() -> None:
     channels: int = 2
-    downsample: int = 1
+    downsample: int = 100
     sample_rate: float = 44100
     time: float = 5
 
@@ -32,52 +53,14 @@ async def main() -> None:
         plot(timespan, buffer, downsample)
 
 
-class Recorder(object):
-    def __init__(self: Self, buffer: npt.NDArray[np.float64]) -> None:
-        self.buffer: npt.NDArray[np.float64] = buffer
+def main_file() -> None:
+    downsample: int = 100
 
-        self._idx: int = 0
-        self._event: asyncio.Event = asyncio.Event()
-        self._loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+    sample_rate, buffer = wavfile.read("./assets/HNS4 HiTECH BassLine Loops 39 C 175 BPM.wav")
+    timespan: npt.NDArray[np.float64] = np.arange(buffer.shape[0], dtype=np.float64) / sample_rate
 
-    def __enter__(self: Self) -> Self:
-        return self
-
-    def __exit__(self: Self, error: Exception, message: str, traceback: TracebackType) -> bool:
-        return True
-
-    async def record(
-        self: Self,
-        channels: int,
-        sample_rate: float,
-    ) -> None:
-        with sd.InputStream(
-            callback=self.callback,
-            channels=channels,
-            samplerate=sample_rate,
-        ):
-            await self._event.wait()
-
-    def callback(
-        self: Self,
-        inp: npt.NDArray[np.float64],
-        frames: int,
-        latency: CTypesData,  # https://files.portaudio.com/docs/v19-doxydocs/structPaStreamCallbackTimeInfo.html
-        status: sd.CallbackFlags,
-    ) -> None:
-        if status:
-            print(status, file=sys.stderr)
-
-        remainder: int = self.buffer.shape[0] - self._idx
-        if remainder == 0:
-            self._loop.call_soon_threadsafe(self._event.set)
-            raise sd.CallbackStop
-
-        inp = inp[:remainder]
-        buf_from: int = self._idx
-        buf_upto: int = self._idx + inp.shape[0]
-        self.buffer[buf_from:buf_upto] = inp  # noqa: WPS362 Found assignment to a subscript slice
-        self._idx += inp.shape[0]
+    with plt.style.context("seaborn"):
+        plot(timespan, buffer, downsample)
 
 
 def plot(
@@ -101,15 +84,57 @@ def plot(
     ax0.set_title("Recording")
     ax0.set_xlabel("Time, s")
     ax0.set_ylabel("Amplitude, V")
-    ax0.set_ylim(-1, 1)
 
     plt.show()
 
 
+class Recorder(object):
+    def __init__(self: Self, buffer: npt.NDArray[np.float64]) -> None:
+        self.buffer: npt.NDArray[np.float64] = buffer
+
+        self._idx: int = 0
+        self._event: asyncio.Event = asyncio.Event()
+        self._loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+
+    def __enter__(self: Self) -> Self:
+        return self
+
+    def __exit__(self: Self, error: Exception, message: str, traceback: TracebackType) -> bool:
+        return True
+
+    def callback(
+        self: Self,
+        inp: npt.NDArray[np.float64],
+        frames: int,
+        latency: CTypesData,  # https://files.portaudio.com/docs/v19-doxydocs/structPaStreamCallbackTimeInfo.html
+        status: sd.CallbackFlags,
+    ) -> None:
+        if status:
+            print(status, file=sys.stderr)
+
+        remainder: int = self.buffer.shape[0] - self._idx
+        if remainder == 0:
+            self._loop.call_soon_threadsafe(self._event.set)
+            raise sd.CallbackStop
+
+        inp = inp[:remainder]
+        buf_from: int = self._idx
+        buf_upto: int = self._idx + inp.shape[0]
+        self.buffer[buf_from:buf_upto] = inp  # noqa: WPS362 Found assignment to a subscript slice
+        self._idx += inp.shape[0]
+
+    async def record(
+        self: Self,
+        channels: int,
+        sample_rate: float,
+    ) -> None:
+        with sd.InputStream(
+            callback=self.callback,
+            channels=channels,
+            samplerate=sample_rate,
+        ):
+            await self._event.wait()
+
+
 if __name__ == "__main__":
-    try:
-        with asyncio.Runner() as runner:
-            runner.run(main())
-    except KeyboardInterrupt:
-        print("Interrupted")
-        exit(0)
+    main()
