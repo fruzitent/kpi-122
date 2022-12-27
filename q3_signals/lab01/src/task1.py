@@ -3,36 +3,32 @@ from numpy import typing as npt
 
 
 def main() -> None:
-    arr0: npt.NDArray[np.float64] = np.matrix(
-        [
+    inp0: npt.NDArray[np.float64] = np.matrix(
+        data=[
             [1, 2, 3],
             [4, 5, 6],
         ],
         dtype=np.float64,
     )
 
-    arr1: npt.NDArray[np.float64] = np.matrix(
-        [
+    inp1: npt.NDArray[np.float64] = np.matrix(
+        data=[
             [3, 3, 3],
             [2, 2, 2],
         ],
         dtype=np.float64,
     )
 
-    scaling(arr0)
-    addition(arr0, arr1)
-    subtraction(arr0, arr1)
-
-    arr2: npt.NDArray[np.float64] = np.matrix(
-        [
+    inp2: npt.NDArray[np.float64] = np.matrix(
+        data=[
             [2, 2, 2],
             [1, 1, 1],
         ],
         dtype=np.float64,
     )
 
-    arr3: npt.NDArray[np.float64] = np.matrix(
-        [
+    inp3: npt.NDArray[np.float64] = np.matrix(
+        data=[
             [5, 5],
             [4, 4],
             [3, 3],
@@ -40,33 +36,36 @@ def main() -> None:
         dtype=np.float64,
     )
 
-    multiplication(arr2, arr3)
+    scaling(inp0)
+    addition(inp0, inp1)
+    subtraction(inp0, inp1)
+    multiplication(inp2, inp3)
 
 
-def scaling(arr0: npt.NDArray[np.float64]) -> None:
+def scaling(inp0: npt.NDArray[np.float64]) -> None:
     scale: int = 3
-    print(scale * arr0)
+    print("Scaling:", scale * inp0, sep="\n")
 
 
 def addition(
-    arr0: npt.NDArray[np.float64],
-    arr1: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+    inp1: npt.NDArray[np.float64],
 ) -> None:
-    print(arr0 + arr1)
+    print("Addition:", inp0 + inp1, sep="\n")
 
 
 def subtraction(
-    arr0: npt.NDArray[np.float64],
-    arr1: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+    inp1: npt.NDArray[np.float64],
 ) -> None:
-    print(arr0 - arr1)
+    print("Subtraction:", inp0 - inp1, sep="\n")
 
 
 def multiplication(
-    arr0: npt.NDArray[np.float64],
-    arr1: npt.NDArray[np.float64],
+    inp0: npt.NDArray[np.float64],
+    inp1: npt.NDArray[np.float64],
 ) -> None:
-    print(arr0 * arr1)
+    print("Multiplication:", inp0 * inp1, sep="\n")
 
 
 if __name__ == "__main__":
