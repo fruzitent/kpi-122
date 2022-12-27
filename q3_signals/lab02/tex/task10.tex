@@ -1,5 +1,23 @@
-\section{Завдання 10}
+\section{Частина 10}
 \label{sec:task10}
+
+\subsection{Завдання}
+\label{subsec:task10_task}
+
+Зареєструвати за допомогою реанімаційного монітору багатоканальний сигнал ЕКГ,
+сигнал плетизмограми та сигнал дихання. \\
+Зберегти дані на диск у вигляді бінарного файлу. \\
+Прочитати дані з бінарного файлу. \\
+Вивести графіки всіх сигналів на екран в одному вікні. \\
+Підписати кожний графік назвою відповідного сигналу. \\
+Частота дискретизації сигналів дорівнює 151.51 Гц. \\
+В кожному каналі, формат даних int16. \\
+В бінарному файлі відліки відведень розташовані по рядках. \\
+Кожний рядок відповідає окремому відведенню. \\
+Сигнали відведень розташовані в отриманій матриці в такому порядку:
+ECG I, ECG II, ECG III, ECG AVR, ECG AVL, ECG AVF, ECG V, SpO2, RESP. \\
+Визначити (програмно) тривалість записаних сигналів в секундах. \\
+Зберегти отриманий сигнал в файлі для використання в наступних роботах.
 
 \subsection{Код Программи}
 \label{subsec:task10_code}
@@ -7,3 +25,166 @@
 
 \subsection{Результати}
 \label{subsec:task10_results}
+
+Запис тривав 4521.14 секунд
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_0}
+    \caption{EOG1}
+    \label{fig:task10_eog1}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_1}
+    \caption{EOG2}
+    \label{fig:task10_eog2}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_2}
+    \caption{Fp1}
+    \label{fig:task10_fp1}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_3}
+    \caption{Fp2}
+    \label{fig:task10_fp2}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_4}
+    \caption{F7}
+    \label{fig:task10_f7}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_5}
+    \caption{F3}
+    \label{fig:task10_f3}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_6}
+    \caption{Fz}
+    \label{fig:task10_fz}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_7}
+    \caption{F4}
+    \label{fig:task10_f4}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_8}
+    \caption{F8}
+    \label{fig:task10_f8}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_9}
+    \caption{T3}
+    \label{fig:task10_t3}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_10}
+    \caption{C3}
+    \label{fig:task10_c3}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_11}
+    \caption{Cz}
+    \label{fig:task10_cz}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_12}
+    \caption{C4}
+    \label{fig:task10_c4}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_13}
+    \caption{T4}
+    \label{fig:task10_t4}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_14}
+    \caption{T5}
+    \label{fig:task10_t5}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_15}
+    \caption{P3}
+    \label{fig:task10_p3}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_16}
+    \caption{Pz}
+    \label{fig:task10_pz}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_17}
+    \caption{P4}
+    \label{fig:task10_p4}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_18}
+    \caption{T6}
+    \label{fig:task10_t6}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_19}
+    \caption{O1}
+    \label{fig:task10_o1}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_20}
+    \caption{O2}
+    \label{fig:task10_o2}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_21}
+    \caption{ECG}
+    \label{fig:task10_ecg}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task10_22}
+    \caption{AA}
+    \label{fig:task10_aa}
+\end{figure}
