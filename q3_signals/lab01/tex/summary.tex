@@ -1,0 +1,89 @@
+\section{Висновки}
+\label{sec:summary}
+
+\begin{enumerate}
+    \item
+          Що таке вектор? \\
+          Вектор - послідовність однорідних елементів.
+
+    \item
+          Що таке матриця? \\
+          Матриця - сукупність величин розміщених у прямокутній таблиці.
+
+    \item
+          Які існують цикли в програмуванні?
+          \begin{itemize}
+              \item
+                    Безумовні
+                    \begin{minted}{cpp}
+                        while (true) { }
+                    \end{minted}
+
+              \item
+                    З передумовою
+                    \begin{minted}{cpp}
+                        while (condition) { }
+                    \end{minted}
+
+              \item З післяумовою
+                    \begin{minted}{cpp}
+                        do { } while (condition);
+                    \end{minted}
+
+              \item
+                    З виходом з середини
+                    \begin{minted}{cpp}
+                        break
+                        exit()
+                        goto
+                    \end{minted}
+
+              \item
+                    З лічильником
+                    \begin{minted}{cpp}
+                        for (auto i = 0; i < 10; i++) { }
+                    \end{minted}
+
+              \item
+                    По колекції
+                    \begin{minted}{cpp}
+                        for (auto const& item : collection) { }
+                    \end{minted}
+          \end{itemize}
+
+    \item
+          Як задати масив за допомогою функцій Python,
+          елементи якого є арифметичною прогресією?
+          \begin{minted}{python}
+            sequence: list[int] = range(start=0, stop=10, step=1)
+          \end{minted}
+
+    \item
+          Наведіть приклади функцій Python, які генерують випадкові числа
+          з різними розподілами густини ймовірності.
+          \begin{minted}{python}
+            import random
+            random.random()
+            random.uniform(a, b)
+            random.triangular(low, high, mode)
+            random.betavariate(alpha, beta)
+            random.expovariate(lambd)
+            random.gammavariate(alpha, beta)
+            random.gauss(mu=0.0, sigma=1.0)
+            random.lognormvariate(mu, sigma)
+            random.normalvariate(mu=0.0, sigma=1.0)
+            random.vonmisesvariate(mu, kappa)
+            random.paretovariate(alpha)
+            random.weibullvariate(alpha, beta)
+          \end{minted}
+
+    \item
+          Перелічіть приклади функцій Python, які генерують гаусівські імпульси,
+          трикутні імпульси та прямокутні імпульси.
+          \begin{minted}{python}
+            import scipy
+            scipy.signal.gausspulse(t, fc=1000, bw=0.5, bwr=- 6, tpr=- 60, retquad=False, retenv=False)
+            scipy.signal.sawtooth(t, width=1)
+            scipy.signal.square(t, duty=0.5)
+          \end{minted}
+\end{enumerate}
