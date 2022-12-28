@@ -1,0 +1,131 @@
+\section{Вітальне повідомлення}
+\label{sec:motd}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_mpA7LNKzQd.png}
+    \caption{Вітальне повідомлення}
+    \label{fig:motd}
+\end{figure}
+
+Вітальне повідомлення виводить на екран версію ОС, та ядра,
+посилання на документацію та час останнього входу користувача.
+Після цього стає доступним командний рядок.
+
+\section{Список доступних облікових записів}
+\label{sec:passwd}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_UEAOxaSIio.png}
+    \caption{Список доступних облікових записів}
+    \label{fig:passwd}
+\end{figure}
+
+Файл /etc/passwd зберігає список користувачів у формі розділених двокрапкою полів:
+\begin{enumerate}
+    \item ім'я
+    \item зашифрований пароль
+    \item ідентифікатор користувача
+    \item ідентифікатор групи
+    \item коментар
+    \item початковий каталог
+    \item шлях до оболонки
+\end{enumerate}
+
+\section{Змінні середовища}
+\label{sec:env}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_DF1DZKvLp5.png}
+    \caption{Змінні середовища}
+    \label{fig:env}
+\end{figure}
+
+\begin{itemize}
+    \item HOME - початковий каталог
+    \item MAIL - поштовий клієнт
+    \item PATH - список директорій, в яких шукаються програми
+    \item PWD - поточна директорія
+    \item SHELL - оболонка
+    \item USER - ім'я користувача
+\end{itemize}
+
+\section{Сценарії, що виводять вітальне повідомлення}
+\label{sec:update_motd}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_z3NQAnAk19.png}
+    \caption{Сценарії, що виводять вітальне повідомлення}
+    \label{fig:update_motd}
+\end{figure}
+
+Змінити вітальне повідомлення можна шляхом редагування сценаріїв
+у директорії /etc/update-motd.d
+
+\section{Поточна дата та час}
+\label{sec:date}
+
+Утіліта `date' за замовчуванням виводить поточний час у форматі: \\
+День тижня, місяць, день місяця, години:хвилини:секунди, часовий пояс, рік.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_w3hk3Sb6yo.png}
+    \caption{Поточна дата та час}
+    \label{fig:date}
+\end{figure}
+
+\section{Активні користувачі}
+\label{sec:users}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_QR30ci58qN.png}
+    \caption{Активні користувачі}
+    \label{fig:users}
+\end{figure}
+
+Отримати список користувачів, які зараз працюють у системі, можна за допомогою команди who.
+Ця команда виводить інформацію з файла /var/run/utmp.
+У цьому випадку він пустий, бо SSH-з'єднання оминає його,
+проте можна подивитись у /var/log/wtmp.
+
+\section{Поштовий клієнт}
+\label{sec:mail}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_FacBRAP7yW.png}
+    \caption{Поштовий клієнт}
+    \label{fig:mail}
+\end{figure}
+
+Заблокувати отримування повідомлень можна командою `mesg n',
+а розблокувати - `mesg y'.
+
+\section{Ідентифікатор користувача та групи}
+\label{sec:id}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_TMRQT0zZDA.png}
+    \caption{Ідентифікатор користувача та групи}
+    \label{fig:id}
+\end{figure}
+
+\section{Історія команд}
+\label{sec:history}
+
+Команда `history' виводить історію команд,
+що попередньо були виконані,
+які зберігаються у файлі .bash\_history
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/WindowsTerminal_waXk1Oxde2.png}
+    \caption{Історія команд}
+    \label{fig:history}
+\end{figure}
