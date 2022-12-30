@@ -1,0 +1,74 @@
+\section{Частина 1}
+\label{sec:task1}
+
+\subsection{Завдання}
+\label{subsec:task1_task}
+
+Визначити, яка рівність точніша.
+
+\subsection{Код програми}
+\label{subsec:task1_code}
+\inputminted{python}{../src/task1.py}
+
+\subsection{Результат}
+\label{subsec:task1_result}
+
+Нехай:
+\begin{align}
+    x_0 & =
+    \sqrt{22}
+    \approx 4.69
+    \label{eq:x0_original} \\
+    x_1 & =
+    \frac{2}{21}
+    \approx 0.095
+    \label{eq:x1_original}
+\end{align}
+
+Знайдемо значення даних виразів із більшою кількістю
+десяткових знаків, ніж наявні наближення:
+\begin{align}
+    X_0 & =
+    \sqrt{22}
+    \approx 4.69041575982343
+    \label{eq:x0_expected} \\
+    X_1 & =
+    \frac{2}{21}
+    \approx 0.09523809523809523
+    \label{eq:x1_expected}
+\end{align}
+
+Обчислимо граничні абсолютні похибки:
+\begin{align}
+    \Delta x_0 & =
+    |\hyperref[eq:x0_original]{x_0} - \hyperref[eq:x0_expected]{X_0}|
+    \approx |4.69 - 4.69041575982343|
+    \approx 0.00041575982342934026 <= 0.00042
+    = \overline{\Delta x_0}
+    \label{eq:x0_absolute_rounding_error} \\
+    \Delta x_1 & =
+    |\hyperref[eq:x1_original]{x_1} - \hyperref[eq:x1_expected]{X_1}|
+    \approx |0.095 - 0.09523809523809523|
+    \approx 0.0002380952380952317 <= 0.00024
+    = \overline{\Delta x_1}
+    \label{eq:x1_absolute_rounding_error}
+\end{align}
+
+Звідси, граничні відносні похибки становлять:
+\begin{align}
+    \overline{\delta x_0} & =
+    |\frac{\hyperref[eq:x0_absolute_rounding_error]{\overline{\Delta x_0}}}{\hyperref[eq:x0_original]{x_0}}|
+    \approx \frac{0.00042}{4.69}
+    \approx 0.00008864814998493395 \; (0.00009\%)
+    \label{eq:x0_relative_rounding_error} \\
+    \overline{\delta x_1} & =
+    |\frac{\hyperref[eq:x1_absolute_rounding_error]{\overline{\Delta x_1}}}{\hyperref[eq:x1_original]{x_1}}|
+    \approx \frac{0.00024}{0.095}
+    \approx 0.0025062656641603336 \; (0.00251\%)
+    \label{eq:x1_relative_rounding_error}
+\end{align}
+
+Оскільки
+\hyperref[eq:x0_relative_rounding_error]{$\overline{\delta x_0}$} $<$
+\hyperref[eq:x1_relative_rounding_error]{$\overline{\delta x_1}$}, то рівність
+\hyperref[eq:x0_original]{$x_0$} є більш точною.
