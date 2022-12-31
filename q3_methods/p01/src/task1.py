@@ -1,58 +1,34 @@
-from dataclasses import dataclass
-from math import isclose, sqrt
-from typing import Self
+from decimal import Decimal
+from math import sqrt
 
 
 def main() -> None:
-    x0: Expression = Expression(
-        expected=Fraction(x0=sqrt(22)),
-        original=Fraction(x0=4.69),
-    )
+    x0_expected: Decimal = Decimal(sqrt(22))
+    x0_given: Decimal = Decimal("4.69")
+    stats(x0_expected, x0_given, "x0")
 
-    x1: Expression = Expression(
-        expected=Fraction(x0=2, x1=21),
-        original=Fraction(x0=0.095),
-    )
+    print("---")
 
-    print("Original:", x0.original(), x1.original())
-    print("Expected:", x0.expected(), x1.expected())
-    print("Absolute:", x0.absolute_rounding_error(), x1.absolute_rounding_error())
-    print("Relative:", x0.relative_rounding_error(), x1.relative_rounding_error())
-    print("x0", get_sign(x0.relative_rounding_error(), x1.relative_rounding_error()), "x1")
+    x1_expected: Decimal = Decimal(2 / 21)
+    x1_given: Decimal = Decimal("0.095")
+    stats(x1_expected, x1_given, "x1")
 
 
-@dataclass
-class Fraction(object):
-    x0: float
-    x1: float = 1
-
-    def __call__(self: Self) -> float:
-        return self.x0 if isclose(self.x1, 1) else self.x0 / self.x1
+def get_abs_error(number0: Decimal, number1: Decimal) -> Decimal:
+    return abs(number0 - number1)
 
 
-@dataclass
-class Expression(object):
-    expected: Fraction
-    original: Fraction
-
-    def absolute_rounding_error(self: Self) -> float:
-        return abs(self.original() - self.expected())
-
-    def relative_rounding_error(self: Self) -> float:
-        return self.absolute_rounding_error() / self.original()
+def get_rel_error(number: Decimal, delta: Decimal) -> Decimal:
+    return abs(delta / number)
 
 
-def get_sign(lhs: float, rhs: float) -> str:
-    if isclose(lhs, rhs):
-        return "is as accurate as"
-
-    if lhs < rhs:
-        return "is more accurate than"
-
-    if lhs > rhs:
-        return "is less accurate than"
-
-    raise RuntimeError("Unreachable")
+def stats(expected: Decimal, given: Decimal, label: str) -> None:
+    abs_error: Decimal = get_abs_error(expected, given)
+    rel_error: Decimal = get_rel_error(given, abs_error)
+    print(f"{label} expected: {expected}")
+    print(f"{label} given: {given}")
+    print(f"{label} absolute: {abs_error}")
+    print(f"{label} relative: {rel_error}")
 
 
 if __name__ == "__main__":
