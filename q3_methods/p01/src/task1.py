@@ -25,11 +25,13 @@ def stats(expected: Decimal, given: Decimal, label: str) -> None:
 
 def get_abs_error(number0: Decimal, number1: Decimal) -> Decimal:
     abs_error: Decimal = abs(number0 - number1)
+    print("Δ:", abs_error)
     return round_half_up(abs_error)
 
 
 def get_rel_error(number: Decimal, delta: Decimal) -> Decimal:
     rel_error: Decimal = abs(delta / number)
+    print("δ:", rel_error)
     return round_half_up(rel_error)
 
 
