@@ -1,7 +1,7 @@
 from decimal import ROUND_HALF_UP, Decimal
 from typing import ClassVar, Self
 
-from src.task1 import get_abs_error
+from src.task1 import get_abs_error, round_half_up
 
 
 def main() -> None:
@@ -50,8 +50,7 @@ class Sense(Decimal):
     @property
     def maximum_relative_error(self: Self) -> Decimal:
         rel_error: Decimal = abs(self.maximum_absolute_error / self)
-        exponent: int = rel_error.adjusted() - 1
-        return rel_error.quantize(Decimal(f"1e{exponent}"), rounding=ROUND_HALF_UP)
+        return round_half_up(rel_error)
 
     @property
     def significant_figures(self: Self) -> str:

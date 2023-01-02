@@ -41,4 +41,4 @@ class TestNarrowSense(object):
     def test_round(self: Self) -> None:
         # assert NarrowSense("2.3485").round(Decimal("0.0042")) == (Decimal("2.349"), Decimal("0.0047"))
         assert NarrowSense("4.5037").round(Decimal("0.0014")) == (Decimal("4.5"), Decimal("0.0051"))
-        assert NarrowSense("27.1548").round(Decimal("0.0016")) == (Decimal("27.2"), Decimal("0.0468"))
+        assert NarrowSense("27.1548").round(Decimal("0.0016")) == (Decimal("27.2"), Decimal("0.0466"))
