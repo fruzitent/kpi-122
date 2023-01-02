@@ -24,51 +24,63 @@
     \approx 0.095
     \label{eq:x1_original}
 \end{align}
-
 Знайдемо значення даних виразів із більшою кількістю
 десяткових знаків, ніж наявні наближення:
 \begin{align}
     X_0 & =
     \sqrt{22}
-    \approx 4.6904\textcolor{gray}{1575982342973105687633506022393703460693359375}
+    \approx 4.6904
+    \textcolor{gray}{1575982342973105687633506022393703460693359375}
     \label{eq:x0_expected} \\
     X_1 & =
     \frac{2}{21}
-    \approx 0.09523\textcolor{gray}{809523809523280846178749925456941127777099609375}
+    \approx 0.09523
+    \textcolor{gray}{809523809523280846178749925456941127777099609375}
     \label{eq:x1_expected}
 \end{align}
-
 Обчислимо граничні абсолютні похибки:
 \begin{align}
     \Delta x_0 & =
     |\hyperref[eq:x0_original]{x_0} - \hyperref[eq:x0_expected]{X_0}|
     \approx |4.69 - 4.6904|
-    \approx 0.0004157\textcolor{gray}{598234297310568763350602} <= 0.00042
-    = \overline{\Delta x_0}
+    \approx 0.0004157
+    \textcolor{gray}{598234297310568763350602}
+    <= 0.00042 = \overline{\Delta x_0}
     \label{eq:x0_absolute_rounding_error} \\
     \Delta x_1 & =
     |\hyperref[eq:x1_original]{x_1} - \hyperref[eq:x1_expected]{X_1}|
     \approx |0.095 - 0.09523|
-    \approx 0.0002380\textcolor{gray}{952380952328084617874993} <= 0.00024
-    = \overline{\Delta x_1}
+    \approx 0.0002380
+    \textcolor{gray}{952380952328084617874993}
+    <= 0.00024 = \overline{\Delta x_1}
     \label{eq:x1_absolute_rounding_error}
 \end{align}
-
 Звідси, граничні відносні похибки становлять:
 \begin{align}
     \overline{\delta x_0} & =
-    |\frac{\hyperref[eq:x0_absolute_rounding_error]{\overline{\Delta x_0}}}{\hyperref[eq:x0_original]{x_0}}|
+    |\frac{
+        \hyperref[eq:x0_absolute_rounding_error]{\overline{\Delta x_0}}
+    }{
+        \hyperref[eq:x0_original]{x_0}
+    }|
     \approx \frac{0.00042}{4.69}
-    \approx 0.0000895\textcolor{gray}{5223880597014925373134328} \; (0.00009\%)
+    \approx 0.0000895
+    \textcolor{gray}{5223880597014925373134328}
+    \; (0.00009\%)
     \label{eq:x0_relative_rounding_error} \\
     \overline{\delta x_1} & =
-    |\frac{\hyperref[eq:x1_absolute_rounding_error]{\overline{\Delta x_1}}}{\hyperref[eq:x1_original]{x_1}}|
+    |\frac{
+        \hyperref[eq:x1_absolute_rounding_error]{\overline{\Delta x_1}}
+    }{
+        \hyperref[eq:x1_original]{x_1}
+    }|
     \approx \frac{0.00024}{0.095}
-    \approx 0.002526\textcolor{gray}{315789473684210526315789} \; (0.0025\%)
+    \approx 0.002526
+    \textcolor{gray}{315789473684210526315789}
+    \; (0.0025\%)
     \label{eq:x1_relative_rounding_error}
 \end{align}
-
 Оскільки
-\hyperref[eq:x0_relative_rounding_error]{$\overline{\delta x_0}$} $<$
-\hyperref[eq:x1_relative_rounding_error]{$\overline{\delta x_1}$}, то рівність
-\hyperref[eq:x0_original]{$x_0$} є більш точною.
+$\hyperref[eq:x0_relative_rounding_error]{\overline{\delta x_0}} <$
+$\hyperref[eq:x1_relative_rounding_error]{\overline{\delta x_1}}$, то рівність
+$\hyperref[eq:x0_original]{x_0}$ є більш точною.
