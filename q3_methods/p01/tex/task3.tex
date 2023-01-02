@@ -1,0 +1,64 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+Знайти граничні абсолютні та відносні похибки чисел,
+якщо вони мають лише вірні цифри:
+\begin{itemize}
+    \item у вузькому розумінні;
+    \item у широкому розумінні.
+\end{itemize}
+
+\subsection{Код програми}
+\label{subsec:task3_code}
+\inputminted{python}{../src/task3.py}
+
+\subsection{Результат A}
+\label{subsec:task3_narrow_result}
+
+Нехай:
+\begin{align}
+    x & = 0.374
+    \label{eq:task3_narrow_number}
+\end{align}
+Оскільки, за умовою, всі 4 цифри числа
+\hyperref[eq:task3_narrow_number]{0.374}
+вірні у вузькому розумінні, то
+\begin{align}
+    \overline{\Delta x} & = 0.0005
+    \label{eq:task3_narrow_maximum_absolute_error} \\
+    \overline{\delta x} & =
+    |\frac{
+        \hyperref[eq:task3_narrow_maximum_absolute_error]{\overline{\Delta x}}
+    }{
+        \hyperref[eq:task3_narrow_number]{x}
+    }|
+    = \frac{0.0005}{0.374} = 0.0013 (0.13\%)
+    \label{eq:task3_narrow_maximum_relative_error}
+\end{align}
+
+\subsection{Результат B}
+\label{subsec:task3_broad_result}
+
+Нехай:
+\begin{align}
+    x & = 4.348
+    \label{eq:task3_broad_number}
+\end{align}
+Оскільки, за умовою, всі 4 цифри числа
+\hyperref[eq:task3_broad_number]{4.348}
+вірні у вузькому розумінні, то
+\begin{align}
+    \overline{\Delta x} & = 0.001
+    \label{eq:task3_broad_maximum_absolute_error} \\
+    \overline{\delta x} & =
+    |\frac{
+        \hyperref[eq:task3_broad_maximum_absolute_error]{\overline{\Delta x}}
+    }{
+        \hyperref[eq:task3_broad_number]{x}
+    }|
+    = \frac{0.001}{4.348} = 0.00023 (0.023\%)
+    \label{eq:task3_broad_maximum_relative_error}
+\end{align}

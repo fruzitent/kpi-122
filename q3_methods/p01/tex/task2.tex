@@ -1,0 +1,85 @@
+\section{Частина 2}
+\label{sec:task2}
+
+\subsection{Завдання}
+\label{subsec:task2_task}
+
+Округлити сумнівні цифри числа, залишивши вірні знаки:
+\begin{itemize}
+    \item у вузькому розумінні;
+    \item у широкому розумінні;
+\end{itemize}
+
+\subsection{Код програми}
+\label{subsec:task2_code}
+\inputminted{python}{../src/task2.py}
+
+\subsection{Результат А}
+\label{subsec:task2_narrow_result}
+
+Нехай
+\begin{align}
+    x        & = 2.4543
+    \label{eq:task2_narrow_number} \\
+    \Delta x & = 0.0032
+    \label{eq:task2_narrow_abs_error}
+\end{align}
+Вірними у вузькому розумінні у числі
+$\hyperref[eq:task2_narrow_number]{2.4543}$ є $4$ цифри.
+$\hyperref[eq:task2_narrow_abs_error]{0.0032} < 0.005$
+\begin{align}
+    x^*                        & = 2.454
+    \label{eq:task2_narrow_number_prime}    \\
+    \Delta \textsubscript{окр} & =
+    \hyperref[eq:task2_narrow_number]{x} -
+    \hyperref[eq:task2_narrow_number_prime]{x^*}
+    = 2.4543 - 2.454 = 0.0003
+    \label{eq:task2_narrow_abs_error_round} \\
+    \Delta x^*                 & =
+    \hyperref[eq:task2_narrow_abs_error]{\Delta x} +
+    \hyperref[eq:task2_narrow_abs_error_round]{\Delta \textsubscript{окр}}
+    = 0.0032 + 0.0003 = 0.0035
+    \label{eq:task2_narrow_abs_error_prime}
+\end{align}
+Вірними у вузькому розумінні у числі
+$\hyperref[eq:task2_narrow_number_prime]{2.454}$ є $4$ цифри.
+$\hyperref[eq:task2_narrow_abs_error_prime]{0.0035} < 0.005$
+
+\subsection{Результат B}
+\label{subsec:task2_broad_result}
+
+Нехай
+\begin{align}
+    x        & = 24.5643
+    \label{eq:task2_broad_number} \\
+    \delta x & = 0.001
+    \label{eq:task2_broad_rel_error}
+\end{align}
+Тоді,
+\begin{align}
+    \Delta x =
+    \hyperref[eq:task2_broad_number]{x} *
+    \hyperref[eq:task2_broad_rel_error]{\delta x}
+    = 24.5643 * 0.001 = 0.0245643
+    \label{eq:task2_broad_abs_error}
+\end{align}
+Вірними у широкому розумінні у числі
+$\hyperref[eq:task2_broad_number]{24.5643}$ є $3$ цифри.
+$\hyperref[eq:task2_broad_abs_error]{0.0245643} < 0.1$
+\begin{align}
+    x^*                        & = 24.6
+    \label{eq:task2_broad_number_prime}    \\
+    \Delta \textsubscript{окр} & =
+    \hyperref[eq:task2_broad_number]{x} -
+    \hyperref[eq:task2_broad_number_prime]{x^*}
+    = 24.5643 - 24.6 = 0.036
+    \label{eq:task2_broad_abs_error_round} \\
+    \Delta x^*                 & =
+    \hyperref[eq:task2_broad_abs_error]{\Delta x} +
+    \hyperref[eq:task2_broad_abs_error_round]{\Delta \textsubscript{окр}}
+    = 0.0245643 + 0.036 = 0.0605643
+    \label{eq:task2_broad_abs_error_prime}
+\end{align}
+Вірними у широкому розумінні у числі
+$\hyperref[eq:task2_broad_number_prime]{24.6}$ є $3$ цифри.
+$\hyperref[eq:task2_broad_abs_error_prime]{0.0605643} < 0.1$
