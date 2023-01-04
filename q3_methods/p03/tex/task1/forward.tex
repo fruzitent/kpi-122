@@ -1,0 +1,43 @@
+\subsection{Перша інтерполяційна формула Ньютона}
+\label{subsec:forward_newton}
+
+Нехай:
+$x = 2.75$
+
+Сітка $h = x_1 - x_0 = 2.6 - 2.4 = 0.2$
+
+Фаза $q = \frac{x - x_0}{h} = \frac{2.75 - 2.4}{0.2} = 1.75$
+\begin{align}
+    y'(x) & = \frac{1}{h}
+    ( \Delta                     y_0
+    + \Delta \textsuperscript{2} y_0 * \frac{2q - 1}{2!}
+    + \Delta \textsuperscript{3} y_0 * \frac{3q^2 - 6q + 2}{3!}
+    + \Delta \textsuperscript{4} y_0 * \frac{4q^3 - 18q^2 + 22q - 6}{4!} )  \\
+          & = \frac{1}{0.2}
+    ( 0.256
+    - 0.093 * \frac{2 * 1.75 - 1}{2}
+    + 0.028 * \frac{3 * 1.75^2 - 6 * 1.75 + 2}{6}                           \\
+          & + 0     * \frac{4 * 1.75^3 - 18 * 1.75^2 + 22 * 1.75 - 6}{24} ) \\
+          & = \frac{1}{0.2}
+    ( 0.256
+    - 0.093 * \frac{2.5}{2}
+    + 0.028 * \frac{0.6875}{6}
+    + 0     * \frac{-1.1875}{24} )
+    = 0.7148
+\end{align}
+
+\begin{align}
+    y''(x) & = \frac{1}{h^2}
+    ( \Delta \textsuperscript{2} y_0
+    + \Delta \textsuperscript{3} y_0 * (q - 1)
+    + \Delta \textsuperscript{4} y_0 * \frac{12q^2 - 36q + 22}{24} ) \\
+           & = \frac{1}{0.04} (
+    - 0.093
+    + 0.028 * (1.75 - 1)
+    + 0     * \frac{12 * 1.75^2 - 36 * 1.75 + 22}{22} )              \\
+           & = \frac{1}{0.04} (
+    - 0.093
+    + 0.028 * 0.75
+    + 0     * \frac{-4.25}{24} )
+    = -1.8
+\end{align}

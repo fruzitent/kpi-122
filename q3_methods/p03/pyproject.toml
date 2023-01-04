@@ -2,11 +2,12 @@
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
 name = "q3_methods@p03"
+packages = [{ include = "src" }]
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-numpy = "^1.24.1"
+matplotlib = "^3.6.2"
 python = ">=3.11,<3.12"
 
 [tool.poetry.group.codestyle.dependencies]

@@ -1,0 +1,84 @@
+\section{Висновки}
+\label{seq:summary}
+
+\begin{enumerate}
+    \item Сформулюйте задачу чисельного диференціювання. \\
+          Знайти наближення значень похідних функції $y = f(x)$
+          будь-якого порядку у заданих точках;
+    \item Назвіть похибки чисельного диференціювання.
+          \begin{itemize}
+              \item Похибка апроксимації, що виникає через заміну функції
+                    інтерполяційним багаточленом та її похідної похідною
+                    від інтерполяційного багаточлена
+              \item Похибка округлення, що виникає через неточні значення $y_i$
+                    та бінарна форма зберігання чисел під час комп'ютерних розрахунків;
+          \end{itemize}
+    \item Наведіть геометричну інтерпретацію похибки апроксимації похідної. \\
+          Близькість одна до одної ординат двох кривих не гарантує близькості
+          їхніх похідних (малого розходження кутів);
+    \item Наведіть формули чисельного диференціювання
+          на основі першого інтерполяційного багаточлена Ньютона.
+          \begin{align}
+              y'(x)  & = \frac{1}{h}
+              ( \Delta                     y_0
+              + \Delta \textsuperscript{2} y_0 * \frac{2q - 1}{2!}
+              + \Delta \textsuperscript{3} y_0 * \frac{3q^2 - 6q + 2}{3!}
+              + \Delta \textsuperscript{4} y_0 * \frac{4q^3 - 18q^2 + 22q - 6}{4!} ) \\
+              y''(x) & = \frac{1}{h^2}
+              ( \Delta \textsuperscript{2} y_0
+              + \Delta \textsuperscript{3} y_0 * (q - 1)
+              + \Delta \textsuperscript{4} y_0 * \frac{12q^2 - 36q + 22}{24} )
+          \end{align}
+    \item Наведіть формули чисельного диференціювання
+          на основі другого інтерполяційного багаточлена Ньютона.
+          \begin{align}
+              y'(x)  & = \frac{1}{h}
+              ( \Delta                     y_{n - 1}
+              + \Delta \textsuperscript{2} y_{n - 2} * \frac{2q - 1}{2!}
+              + \Delta \textsuperscript{3} y_{n - 3} * \frac{3q^2 - 6q + 2}{3!}
+              + \Delta \textsuperscript{4} y_{n - 4} * \frac{4q^3 - 18q^2 + 22q - 6}{4!} ) \\
+              y''(x) & = \frac{1}{h^2}
+              ( \Delta \textsuperscript{2} y_{n - 2}
+              + \Delta \textsuperscript{3} y_{n - 3} * (q + 1)
+              + \Delta \textsuperscript{4} y_{n - 4} * \frac{12q^2 + 36q + 22}{24} )
+          \end{align}
+    \item Наведіть формули чисельного диференціювання
+          на основі інтерполяційних багаточленів Ньютона
+          для випадку співпадіння шуканого значення х з одним
+          із вузлів таблиці значень функції.
+          \begin{itemize}
+              \item Перша інтерполяційна формула Ньютона
+                    \begin{align}
+                        y'(x)  & = \frac{1}{h}
+                        (       \Delta                     y_0
+                        - \frac{\Delta \textsuperscript{2} y_0}{2}
+                        + \frac{\Delta \textsuperscript{3} y_0}{3}
+                        - \frac{\Delta \textsuperscript{4} y_0}{4}
+                        + \frac{\Delta \textsuperscript{5} y_0}{5} ) \\
+                        y''(x) & = \frac{1}{h^2}
+                        ( \Delta \textsuperscript{2} y_0
+                        - \Delta \textsuperscript{3} y_0
+                        + \Delta \textsuperscript{4} y_0 * \frac{11}{12}
+                        - \Delta \textsuperscript{5} y_0 * \frac{5}{6} )
+                    \end{align}
+              \item Друга інтерполяційна формула Ньютона
+                    \begin{align}
+                        y'(x)  & = \frac{1}{h}
+                        (       \Delta                     y_{n - 1}
+                        + \frac{\Delta \textsuperscript{2} y_{n - 2}}{2}
+                        + \frac{\Delta \textsuperscript{3} y_{n - 3}}{3}
+                        + \frac{\Delta \textsuperscript{4} y_{n - 4}}{4}
+                        + \frac{\Delta \textsuperscript{5} y_{n - 5}}{5} ) \\
+                        y''(x) & = \frac{1}{h^2}
+                        ( \Delta \textsuperscript{2} y_{n - 2}
+                        + \Delta \textsuperscript{3} y_{n - 3}
+                        + \Delta \textsuperscript{4} y_{n - 4} * \frac{11}{12}
+                        + \Delta \textsuperscript{5} y_{n - 5} * \frac{5}{6} )
+                    \end{align}
+          \end{itemize}
+    \item Наведіть формули чисельного диференціювання для випадку екстраполяції.
+          \begin{itemize}
+              \item $x < x_0$ - перша інтерполяційна формула
+              \item $x > x_n$ - друга інтерполяційна формула
+          \end{itemize}
+\end{enumerate}

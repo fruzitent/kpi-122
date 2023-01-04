@@ -1,0 +1,43 @@
+\subsection{Друга інтерполяційна формула Ньютона}
+\label{subsec:backward_newton}
+
+Нехай:
+$x = 3.76$
+
+Сітка $h = x_1 - x_0 = 2.6 - 2.4 = 0.2$
+
+Фаза $\frac{x - x_0}{h} = \frac{3.76 - 4.6}{0.2} = -4.2$
+\begin{align}
+    y'(x) & = \frac{1}{h}
+    ( \Delta                     y_{n - 1}
+    + \Delta \textsuperscript{2} y_{n - 2} * \frac{2q - 1}{2!}
+    + \Delta \textsuperscript{3} y_{n - 3} * \frac{3q^2 - 6q + 2}{3!}
+    + \Delta \textsuperscript{4} y_{n - 4} * \frac{4q^3 - 18q^2 + 22q - 6}{4!} )  \\
+          & = \frac{1}{0.2}
+    ( 0.524
+    + 0.14  * \frac{2 * (-4.2) + 1}{2}
+    + 0.024 * \frac{3 * (-4.2)^2 + 6 * (-4.2) + 2}{6}                             \\
+          & + 0     * \frac{4 * (-4.2)^3 + 18 * (-4.2)^2 + 22 * (-4.2) + 6}{24} ) \\
+          & = \frac{1}{0.2}
+    ( 0.524
+    + 0.14  * \frac{-7.4}{2}
+    + 0.024 * \frac{29.72}{6}
+    + 0     * \frac{-65.232}{24} )
+    = 0.6244
+\end{align}
+
+\begin{align}
+    y''(x) & = \frac{1}{h^2}
+    ( \Delta \textsuperscript{2} y_{n - 2}
+    + \Delta \textsuperscript{3} y_{n - 3} * (q + 1)
+    + \Delta \textsuperscript{4} y_{n - 4} * \frac{12q^2 + 36q + 22}{24} ) \\
+           & = \frac{1}{0.04}
+    ( 0.14
+    + 0.024 * ((-4.2) + 1)
+    + 0     * \frac{12 * (-4.2)^2 + 36 * (-4.2) + 22}{24} )                \\
+           & = \frac{1}{0.04}
+    ( 0.14
+    + 0.024 * (-3.2)
+    + 0     * \frac{82.48}{24} )
+    = 1.58
+\end{align}
