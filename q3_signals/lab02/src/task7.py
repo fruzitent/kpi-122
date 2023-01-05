@@ -32,15 +32,15 @@ def plot(
     ax0.plot(timespan, out0, label="Rolling")
     ax0.legend()
     ax0.set_title("Arterial blood saturation with oxygen")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("SpO2, %")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel(r"SpO2, $\%$")
 
     ax1.plot(timespan, inp1, label="Original")
     ax1.plot(timespan, out1, label="Rolling")
     ax1.legend()
     ax1.set_title("Heart Rate")
-    ax1.set_xlabel("Time, s")
-    ax1.set_ylabel("Rate, bpm")
+    ax1.set_xlabel("Time, $s$")
+    ax1.set_ylabel("Rate, $bpm$")
 
     plt.show()
 

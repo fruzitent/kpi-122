@@ -27,8 +27,8 @@ def plot_healthy(
 
     ax0.plot(timespan, inp0)
     ax0.set_title("Electroencephalogram [Healthy]")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Voltage, μV")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Voltage, $μV$")
 
     plt.show()
 
@@ -51,8 +51,8 @@ def plot_epilepsy(
 
     ax0.plot(timespan, inp0)
     ax0.set_title("Electroencephalogram [Epilepsy]")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Voltage, μV")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Voltage, $μV$")
 
     plt.show()
 

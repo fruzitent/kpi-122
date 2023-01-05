@@ -75,18 +75,18 @@ def plot(
     ax0.plot(timespan, inp3, label="Bottom Right")
     ax0.legend()
     ax0.set_title("Sensors")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Offset, cm")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Offset, $cm$")
 
     ax1.plot(timespan, inp6, label="Total")
     ax1.set_title("Total")
-    ax1.set_xlabel("Time, s")
-    ax1.set_ylabel("Offset, cm")
+    ax1.set_xlabel("Time, $s$")
+    ax1.set_ylabel("Offset, $cm$")
 
     ax2.plot(inp4, inp5, label="Center of Pressure")
     ax2.set_title("Center of Pressure")
-    ax2.set_xlabel("Offset, cm")
-    ax2.set_ylabel("Offset, cm")
+    ax2.set_xlabel("Offset, $cm$")
+    ax2.set_ylabel("Offset, $cm$")
 
     fig.suptitle(title)
 

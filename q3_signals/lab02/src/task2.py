@@ -82,8 +82,8 @@ def plot(
 
     ax0.legend(loc="upper right")
     ax0.set_title("Recording")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Amplitude, V")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Amplitude, $V$")
 
     plt.show()
 

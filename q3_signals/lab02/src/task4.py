@@ -45,8 +45,8 @@ def plot_healthy(
         )
 
     ax0.set_title("Electrocardiogram [Healthy]")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel(f"Voltage, {units}")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel(f"Voltage, ${units}$")
 
     plt.show()
 
@@ -88,8 +88,8 @@ def plot_anomaly(
         )
 
     ax0.set_title("Electrocardiogram [Anomaly]")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel(f"Voltage, {units}")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel(f"Voltage, ${units}$")
 
     plt.show()
 

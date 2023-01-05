@@ -21,8 +21,8 @@ def plot(
 
     ax0.plot(timespan, inp0)
     ax0.set_title("Traumatic Brain Injury")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Intracranial Pressure, mmHg")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Intracranial Pressure, $mmHg$")
 
     plt.show()
 

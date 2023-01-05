@@ -30,7 +30,7 @@ def plot(
 
     ax0.plot(timespan, inp0)
     ax0.set_title(tag)
-    ax0.set_xlabel("Time, s")
+    ax0.set_xlabel("Time, $s$")
     ax0.set_ylabel("")
 
     plt.show()

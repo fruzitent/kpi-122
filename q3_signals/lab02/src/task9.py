@@ -31,8 +31,8 @@ def plot_apnea(
 
     ax0.plot(timespan, inp0)
     ax0.set_title("Heart Rate [Apnea]")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Time, ms")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Time, $ms$")
 
     plt.show()
 
@@ -84,7 +84,7 @@ def plot_anomaly(
 
     ax0.set_title("Electrocardiogram [Anomaly]")
     ax0.set_xlabel("Time, s")
-    ax0.set_ylabel(f"Voltage, {units}")
+    ax0.set_ylabel(f"Voltage, ${units}$")
 
     plt.show()
 
