@@ -1,0 +1,77 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+Розв'язати систему нелінійних рівнянь з точністю до $0.001$.
+Відокремлення коренів виконати графічно.
+Уточнення коренів провести методом простої ітерації.
+\begin{align*}
+    \begin{cases}
+        sin(x - 1) + y = 1.5 \\
+        x - sin(y + 1) = 1
+    \end{cases}
+\end{align*}
+
+\subsection{Результат}
+\label{subsec:task3_result}
+
+
+Запишемо систему у вигляді:
+\begin{align*}
+    \begin{cases}
+        x = f_1(x, y) = 1 + sin(y + 1) \\
+        y = f_2(x, y) = 1.5 - sin(x - 1)
+    \end{cases}
+\end{align*}
+
+\includegraphics[width=\textwidth]{./images/graph} \\
+
+З графіка бачимо, що $D$:
+\begin{align*}
+    1.9 < & x < 2.0 \\
+    0.6 < & y < 0.7
+\end{align*}
+Оскільки,
+\begin{align*}
+    \frac{df_1}{dx} & = 0           & \frac{df_1}{dy} & = cos(y + 1) \\
+    \frac{df_2}{dx} & = -cos(x - 1) & \frac{df_2}{dy} & = 0
+\end{align*}
+Тоді,
+\begin{align*}
+    |\frac{df_1}{dx} + \frac{df_2}{dx}| & = |cos(x - 1)|  \leq cos(1)   \approx 0.5403 < 1 \\
+    |\frac{df_1}{dy} + \frac{df_2}{dy}| & = |-cos(y + 1)| \leq cos(1.7) \approx 0.1288 < 1
+\end{align*}
+Умова збіжності задоволена.
+
+Ітераційні формули:
+\begin{align*}
+    \begin{cases}
+        x^{(n + 1)} = 1 + sin(y^{(n)} + 1) \\
+        y^{(n + 1)} = 1.5 - sin(x^{(n + 1)} - 1)
+    \end{cases}
+\end{align*}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+    \toprule
+    n
+      & $x_n$
+      & $y_n$
+      & $|x^{(n + 1)} - x^{(n)}|$
+      & $|y^{(n + 1)} - y^{(n)}|$
+      & $max$                                                                         \\
+
+    \midrule
+    0 & 1.90                      & 0.60     & 0.099574 & 0.058759 & 0.099574 > 0.001 \\
+    \hline
+    1 & 1.999574                  & 0.658759 & 0.003440 & 0.001865 & 0.003440 > 0.001 \\
+    \hline
+    2 & 1.996134                  & 0.660624 & 0.000166 & 0.000090 & 0.000166 < 0.001 \\
+
+    \bottomrule
+\end{tabular}
+
+Відповідь: критерій задоволений на 3 ітерації.
+$x \approx 1.996$,
+$y \approx 0.661$.
