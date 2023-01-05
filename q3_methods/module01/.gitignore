@@ -3,14 +3,3 @@
 .vscode
 
 out
-
-.venv
-venv
-__pycache__
-
-.ipynb_checkpoints
-.mypy_cache
-.pytest_cache
-
-.coverage
-coverage
