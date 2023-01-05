@@ -1,0 +1,39 @@
+\section{Частина 9}
+\label{sec:task9}
+
+\subsection{Завдання}
+\label{subsec:task9_task}
+
+Створити функцію для побудови графіка частини сигналу. \\
+Параметри, що потрібно передавати у функцію:
+
+\begin{itemize}
+    \item час початку та кінця частини сигналу (у секундах);
+    \item вектор із відліками сигналу;
+    \item частота дискретизації.
+\end{itemize}
+
+Здійснити перевірку правильності введення точок часу. \\
+Реалізувати можливість отримання вектору з відліками області сигналу
+та відліками часу в якості вихідних аргументів функції.
+
+\subsection{Код Программи}
+\label{subsec:task9_code}
+\inputminted{python}{../src/task9.py}
+
+\subsection{Результати}
+\label{subsec:task9_results}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task9_0}
+    \caption{Кардіоритрограма хворої людини}
+    \label{fig:hr_apnea_slice}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task9_1}
+    \caption{Електрокардіограмма хворої людини}
+    \label{fig:ecg_anomaly_slice}
+\end{figure}

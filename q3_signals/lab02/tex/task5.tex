@@ -1,0 +1,36 @@
+\section{Частина 5}
+\label{sec:task5}
+
+\subsection{Завдання}
+\label{subsec:task5_task}
+
+Прочитати сигнали кардіоритмограм здорової та хворої людини, збережені в mat-файлі. \\
+Навести графіки, позначити вісі. \\
+Значення сигналу записуються в мілісекундах,
+кожен відлік відповідає інтервалу між ударами серця. \\
+Визначити за допомогою спеціальної функції (створити власну) тривалість записаного сигналу,
+враховуючи нерівномірну дискретизацію сигналу. \\
+Потрібно проінтерполювати сигнал, щоб визначити його значення
+на однорідній сітці вузлів для частоти дискретизації 1 Гц. \\
+Зберегти отриманий сигнал для використання в подальшій роботі.
+
+\subsection{Код Программи}
+\label{subsec:task5_code}
+\inputminted{python}{../src/task5.py}
+
+\subsection{Результати}
+\label{subsec:task5_results}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task5_0}
+    \caption{Кардіоритрограма здорової людини}
+    \label{fig:hr_healthy}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task5_1}
+    \caption{Кардіоритрограма хворої людини}
+    \label{fig:hr_apnea}
+\end{figure}

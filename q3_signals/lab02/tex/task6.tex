@@ -1,0 +1,354 @@
+\section{Частина 6}
+\label{sec:task6}
+
+\subsection{Завдання}
+\label{subsec:task6_task}
+
+\begin{enumerate}
+    \item
+          Прочитати сигнали стабілограм людини,
+          що зареєстровані за допомогою платформи Wii Balance Board. \\
+
+    \item
+          Виберіть будь-які два типи сигналів для двох типів спортсменів.
+
+    \item
+          Для кожного сигналу в папці відповідного типу розрахувати статистичні
+          параметри (середнє значення, медіану, стандартне відхилення),
+          окремо по осях X і Y, звести у таблицю та порівняти
+          для спортсменів різних типів.
+
+    \item
+          Записати свої висновки
+\end{enumerate}
+
+\subsection{Код Программи}
+\label{subsec:task6_code}
+\inputminted{python}{../src/task6.py}
+
+\subsection{Результати}
+\label{subsec:task6_results}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_0}
+    \caption{Закритий сигнал стабілограми Акробата}
+    \label{fig:acrobats_base_close}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Закритий сигнал стабілограми Акробата \ref{fig:acrobats_base_close}}
+    \label{tab:acrobats_base_close}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & -1.10 & -1.12 & 0.18 \\
+        \hline
+        cop\_y & 4.41  & 4.39  & 0.52 \\
+
+        \bottomrule
+        total  & 68.57 & 68.57 & 0.14 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_1}
+    \caption{Відкритий сигнал стабілограми Акробата}
+    \label{fig:acrobats_base_open}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Відкритий сигнал стабілограми Акробата \ref{fig:acrobats_base_open}}
+    \label{tab:acrobats_base_open}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & -2.83 & -2.86 & 0.18 \\
+        \hline
+        cop\_y & 4.70  & 4.70  & 0.45 \\
+
+        \bottomrule
+        total  & 68.59 & 68.58 & 0.12 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_2}
+    \caption{Фронт 30 сигнал стабілограми Акробата}
+    \label{fig:acrobats_sway_front30}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Фронт 30 сигнал стабілограми Акробата \ref{fig:acrobats_sway_front30}}
+    \label{tab:acrobats_sway_front30}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 0.78  & 0.80  & 0.67 \\
+        \hline
+        cop\_y & 1.04  & 0.25  & 6.62 \\
+
+        \bottomrule
+        total  & 25.35 & 25.28 & 0.54 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_3}
+    \caption{Фронт 60 сигнал стабілограми Акробата}
+    \label{fig:acrobats_sway_front60}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Фронт 60 сигнал стабілограми Акробата \ref{fig:acrobats_sway_front60}}
+    \label{tab:acrobats_sway_front60}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 1.15  & 1.11  & 1.24 \\
+        \hline
+        cop\_y & -0.42 & 0.10  & 6.76 \\
+
+        \bottomrule
+        total  & 25.32 & 25.30 & 0.70 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_4}
+    \caption{Ліво 30 сигнал стабілограми Акробата}
+    \label{fig:acrobats_sway_left30}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Ліво 30 сигнал стабілограми Акробата \ref{fig:acrobats_sway_left30}}
+    \label{tab:acrobats_sway_left30}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & -3.72 & -1.04 & 9.00 \\
+        \hline
+        cop\_y & 3.90  & 3.76  & 1.49 \\
+
+        \bottomrule
+        total  & 25.63 & 25.64 & 0.32 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_5}
+    \caption{Ліво 60 сигнал стабілограми Акробата}
+    \label{fig:acrobats_sway_left60}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Ліво 60 сигнал стабілограми Акробата \ref{fig:acrobats_sway_left60}}
+    \label{tab:acrobats_sway_left60}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std   \\
+
+        \midrule
+        cop\_x & 1.46  & 0.32  & 10.97 \\
+        \hline
+        cop\_y & 5.10  & 5.16  & 1.68  \\
+
+        \bottomrule
+        total  & 25.67 & 25.70 & 0.53  \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_6}
+    \caption{Закритий сигнал стабілограми Хендболіста}
+    \label{fig:handball_base_close}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Закритий сигнал стабілограми Хендболіста \ref{fig:handball_base_close}}
+    \label{tab:handball_base_close}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 0.60  & 0.60  & 0.09 \\
+        \hline
+        cop\_y & 4.65  & 4.62  & 0.28 \\
+
+        \bottomrule
+        total  & 67.92 & 67.92 & 0.09 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_7}
+    \caption{Відкритий сигнал стабілограми Хендболіста}
+    \label{fig:handball_base_open}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Відкритий сигнал стабілограми Хендболіста \ref{fig:handball_base_open}}
+    \label{tab:handball_base_open}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 0.86  & 0.85  & 0.08 \\
+        \hline
+        cop\_y & 4.55  & 4.54  & 0.24 \\
+
+        \bottomrule
+        total  & 67.91 & 67.91 & 0.09 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_8}
+    \caption{Фронт 30 сигнал стабілограми Хендболіста}
+    \label{fig:handball_sway_front30}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Фронт 30 сигнал стабілограми Хендболіста \ref{fig:handball_sway_front30}}
+    \label{tab:handball_sway_front30}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & -0.14 & -0.12 & 0.46 \\
+        \hline
+        cop\_y & 2.18  & 2.11  & 6.90 \\
+
+        \bottomrule
+        total  & 57.16 & 57.27 & 1.10 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_9}
+    \caption{Фронт 60 сигнал стабілограми Хендболіста}
+    \label{fig:handball_sway_front60}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Фронт 60 сигнал стабілограми Хендболіста \ref{fig:handball_sway_front60}}
+    \label{tab:handball_sway_front60}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 2.15  & 2.19  & 0.85 \\
+        \hline
+        cop\_y & 5.15  & 4.34  & 6.02 \\
+
+        \bottomrule
+        total  & 68.20 & 68.06 & 1.13 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_10}
+    \caption{Ліво 30 сигнал стабілограми Хендболіста}
+    \label{fig:handball_sway_left30}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Ліво 30 сигнал стабілограми Хендболіста \ref{fig:handball_sway_left30}}
+    \label{tab:handball_sway_left30}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 2.69  & 0.84  & 9.49 \\
+        \hline
+        cop\_y & -0.82 & -0.58 & 2.49 \\
+
+        \bottomrule
+        total  & 56.76 & 56.72 & 0.57 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task6_11}
+    \caption{Ліво 60 сигнал стабілограми Хендболіста}
+    \label{fig:handball_sway_left60}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Ліво 60 сигнал стабілограми Хендболіста \ref{fig:handball_sway_left60}}
+    \label{tab:handball_sway_left60}
+
+    \begin{tabular}{|c|c|c|c|}
+        \toprule
+        -      & 50\%  & mean  & std  \\
+
+        \midrule
+        cop\_x & 2.25  & 1.86  & 8.28 \\
+        \hline
+        cop\_y & 5.07  & 4.94  & 0.91 \\
+
+        \bottomrule
+        total  & 67.98 & 67.89 & 0.40 \\
+        \hline
+    \end{tabular}
+\end{table}
