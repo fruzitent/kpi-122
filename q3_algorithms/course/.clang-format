@@ -1,7 +1,7 @@
 DisableFormat: false
 
 BasedOnStyle: Google
-ColumnLimit:  80
+ColumnLimit:  120
 IndentWidth:  4
 Language:     Cpp
 Standard:     Latest

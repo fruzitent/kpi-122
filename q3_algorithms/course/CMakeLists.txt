@@ -50,6 +50,7 @@ target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(myproject::project_options INTERFACE IMPORTED)
 add_library(myproject::project_warnings INTERFACE IMPORTED)
 
+include_directories(${CMAKE_SOURCE_DIR})
 add_executable(main src/main.cpp)
 target_link_libraries(main PUBLIC project_options project_warnings)
 
