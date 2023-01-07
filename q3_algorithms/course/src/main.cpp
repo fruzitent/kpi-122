@@ -1,5 +1,6 @@
 #include <cmath>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 
 #define DEFER_1(x, y) x##y
@@ -86,6 +87,16 @@ struct UserOutput {
     double       abs_error;
 };
 
+static constexpr std::size_t USER_OUTPUT_FIELDS = 5;
+// NOLINTNEXTLINE
+static const char *USER_OUTPUT_HEADER[USER_OUTPUT_FIELDS] = {
+    "x",
+    "f(x)",
+    "series",
+    "members",
+    "Δx",  // TODO: fix misaligned table
+};
+
 void run(UserInput input, UserOutput *output, std::size_t size) {
     for (decltype(size) i = 0; i < size; ++i) {
         double x = input.xbegin + static_cast<double>(i) * input.xstep;
@@ -136,6 +147,7 @@ class FileInput : public Input {
         }
         defer(std::fclose(file));  // NOLINT
 
+        // TODO: ask OS for a file size?
         std::fseek(file, 0, SEEK_END);  // NOLINT
         auto last_byte = std::ftell(file);
         std::fseek(file, 0, SEEK_SET);  // NOLINT
@@ -179,6 +191,8 @@ class FileInput : public Input {
     }
 };
 
+static constexpr auto TABLE_DELIMITER = "  ";
+
 class StandardInput : public Input {
   public:
     UserInput read([[maybe_unused]] const char *path) const override {
@@ -189,7 +203,35 @@ class StandardInput : public Input {
         return UserInput {xbegin, xend, xstep, epsilon};
     }
 
-    void save([[maybe_unused]] const char *path, UserOutput *output, std::size_t size) const override {}
+    void save([[maybe_unused]] const char *path, UserOutput *output, std::size_t size) const override {
+        gsl::owner<int *> widths = new int[USER_OUTPUT_FIELDS];  // NOLINT
+        defer(delete[] widths);
+
+        for (std::remove_const<decltype(USER_OUTPUT_FIELDS)>::type i = 0; i < USER_OUTPUT_FIELDS; ++i) {
+            widths[i] = std::max(widths[i], static_cast<int>(std::strlen(gsl::at(USER_OUTPUT_HEADER, i))));
+        }
+
+        for (decltype(size) i = 0; i < size; ++i) {
+            widths[0] = std::max(widths[0], std::snprintf(nullptr, 0, "%g", output[i].x));                // NOLINT
+            widths[1] = std::max(widths[1], std::snprintf(nullptr, 0, "%g", output[i].fy));               // NOLINT
+            widths[2] = std::max(widths[2], std::snprintf(nullptr, 0, "%g", output[i].series.sigma));     // NOLINT
+            widths[3] = std::max(widths[3], std::snprintf(nullptr, 0, "%lu", output[i].series.members));  // NOLINT
+            widths[4] = std::max(widths[4], std::snprintf(nullptr, 0, "%g", output[i].abs_error));        // NOLINT
+        }
+
+        for (std::remove_const<decltype(USER_OUTPUT_FIELDS)>::type i = 0; i < USER_OUTPUT_FIELDS; ++i) {
+            std::cout << std::setw(widths[i]) << gsl::at(USER_OUTPUT_HEADER, i) << TABLE_DELIMITER;
+        }
+        std::cout << "\n";
+
+        for (decltype(size) i = 0; i < size; ++i) {
+            std::cout << std::setw(widths[0]) << output[i].x << TABLE_DELIMITER;
+            std::cout << std::setw(widths[1]) << output[i].fy << TABLE_DELIMITER;
+            std::cout << std::setw(widths[2]) << output[i].series.sigma << TABLE_DELIMITER;
+            std::cout << std::setw(widths[3]) << output[i].series.members << TABLE_DELIMITER;
+            std::cout << std::setw(widths[4]) << output[i].abs_error << "\n";
+        }
+    }
 };
 
 Input *Input::make_input(InputType type) {
