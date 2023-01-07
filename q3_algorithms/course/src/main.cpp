@@ -119,19 +119,46 @@ class Input {
 
     static Input *make_input(InputType type);
 
-    virtual UserInput read([[maybe_unused]] const char *filepath) const = 0;
+    virtual UserInput read(const char *filepath) const = 0;
 
     virtual void save() const = 0;
 };
 
 class FileInput : public Input {
   public:
-    UserInput read([[maybe_unused]] const char *filepath) const override {
-        static constexpr double xbegin  = -5;
-        static constexpr double xend    = 5;
-        static constexpr double xstep   = 1;
-        static constexpr double epsilon = 0.001;
-        return UserInput {xbegin, xend, xstep, epsilon};
+    UserInput read(const char *filepath) const override {
+        gsl::owner<std::FILE *> file = std::fopen(filepath, "r");
+        if (file == nullptr) {
+            std::cerr << "ERROR: Could not open file\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+        defer(std::fclose(file));  // NOLINT
+
+        std::fseek(file, 0, SEEK_END);  // NOLINT
+        auto last_byte = std::ftell(file);
+        std::fseek(file, 0, SEEK_SET);  // NOLINT
+        auto file_size = static_cast<std::size_t>(last_byte);
+
+        gsl::owner<char *> content = new char[file_size];  // NOLINT
+        if (content == nullptr) {
+            std::cerr << "ERROR: Could not allocate memory\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+        defer(delete[] content);
+
+        auto content_size = std::fread(content, 1, file_size, file);
+        if (content_size != file_size) {
+            std::cerr << "ERROR: Could not read file\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+
+        // TODO: std::strtok is thread unsafe
+        return UserInput {
+            .xbegin  = std::stod(std::strtok(content, ",")),  // NOLINT
+            .xend    = std::stod(std::strtok(nullptr, ",")),  // NOLINT
+            .xstep   = std::stod(std::strtok(nullptr, ",")),  // NOLINT
+            .epsilon = std::stod(std::strtok(nullptr, ",")),  // NOLINT
+        };
     }
 
     void save() const override {}
@@ -210,6 +237,10 @@ int main(int argc, char **argv) {
 
     auto                     output_size = user_input.size();
     gsl::owner<UserOutput *> user_output = new UserOutput[output_size];  // NOLINT
+    if (user_output == nullptr) {
+        std::cerr << "ERROR: Could not allocate memory\n";
+        std::_Exit(EXIT_FAILURE);
+    }
     defer(delete[] user_output);
 
     run(user_input, user_output, output_size);
