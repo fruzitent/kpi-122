@@ -3,6 +3,11 @@
 #include <iomanip>
 #include <iostream>
 
+#define GET_INPUT(type, name)                \
+    type name;                               \
+    std::cout << "Enter " << #name << ":\n"; \
+    std::cin >> name
+
 #define DEFER_1(x, y) x##y
 #define DEFER_2(x, y) DEFER_1(x, y)
 #define DEFER_3(x)    DEFER_2(x, __COUNTER__)
@@ -77,7 +82,32 @@ struct UserInput {
     double xstep;
     double epsilon;
 
+    explicit UserInput(double xbegin, double xend, double xstep, double epsilon) :  // NOLINT
+        xbegin(xbegin),
+        xend(xend),
+        xstep(xstep),
+        epsilon(epsilon) {
+        validate();
+    }
+
     auto size() const { return static_cast<std::size_t>(((xend - xbegin) / xstep) + 1); }
+
+    void validate() const {
+        if (xbegin > xend) {
+            std::cerr << "ERROR: xbegin must be less or equal to xend\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+
+        if (xstep <= 0) {
+            std::cerr << "ERROR: xstep must be greater than 0\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+
+        if (epsilon <= 0) {
+            std::cerr << "ERROR: epsilon must be greater than 0\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+    }
 };
 
 struct UserOutput {
@@ -97,7 +127,8 @@ static const char *USER_OUTPUT_HEADER[USER_OUTPUT_FIELDS] = {
     "Δx",  // TODO: fix misaligned table
 };
 
-void run(UserInput input, UserOutput *output, std::size_t size) {
+// TODO: possible overflow at invalid input?
+void run(const UserInput &input, UserOutput *output, std::size_t size) {
     for (decltype(size) i = 0; i < size; ++i) {
         double x = input.xbegin + static_cast<double>(i) * input.xstep;
 
@@ -169,10 +200,10 @@ class FileInput : public Input {
         // TODO: std::strtok is thread unsafe
         // TODO: extract csv parsing to separate function
         return UserInput {
-            .xbegin  = std::stod(std::strtok(content, CSV_DELIMITER)),  // NOLINT
-            .xend    = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
-            .xstep   = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
-            .epsilon = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
+            std::stod(std::strtok(content, CSV_DELIMITER)),  // NOLINT
+            std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
+            std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
+            std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
         };
     }
 
@@ -196,10 +227,10 @@ static constexpr auto TABLE_DELIMITER = "  ";
 class StandardInput : public Input {
   public:
     UserInput read([[maybe_unused]] const char *path) const override {
-        static constexpr double xbegin  = -5;
-        static constexpr double xend    = 5;
-        static constexpr double xstep   = 1;
-        static constexpr double epsilon = 0.001;
+        GET_INPUT(double, xbegin);
+        GET_INPUT(double, xend);
+        GET_INPUT(double, xstep);
+        GET_INPUT(double, epsilon);
         return UserInput {xbegin, xend, xstep, epsilon};
     }
 
