@@ -43,7 +43,8 @@ dynamic_project_options(
 find_program(CPPLINT "cpplint")
 if(CPPLINT)
   set(CMAKE_CXX_CPPLINT
-      "${CPPLINT};--filter=-legal/copyright,-whitespace/indent;--quiet")
+      "${CPPLINT};--filter=-legal/copyright,-whitespace/indent,-whitespace/line_length;--quiet"
+  )
 endif()
 
 target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
