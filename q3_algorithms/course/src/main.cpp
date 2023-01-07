@@ -119,15 +119,17 @@ class Input {
 
     static Input *make_input(InputType type);
 
-    virtual UserInput read(const char *filepath) const = 0;
+    virtual UserInput read(const char *path) const = 0;
 
-    virtual void save() const = 0;
+    virtual void save(const char *path, UserOutput *output, std::size_t size) const = 0;
 };
+
+static constexpr auto CSV_DELIMITER = ",";
 
 class FileInput : public Input {
   public:
-    UserInput read(const char *filepath) const override {
-        gsl::owner<std::FILE *> file = std::fopen(filepath, "r");
+    UserInput read(const char *path) const override {
+        gsl::owner<std::FILE *> file = std::fopen(path, "r");
         if (file == nullptr) {
             std::cerr << "ERROR: Could not open file\n";
             std::_Exit(EXIT_FAILURE);
@@ -153,20 +155,33 @@ class FileInput : public Input {
         }
 
         // TODO: std::strtok is thread unsafe
+        // TODO: extract csv parsing to separate function
         return UserInput {
-            .xbegin  = std::stod(std::strtok(content, ",")),  // NOLINT
-            .xend    = std::stod(std::strtok(nullptr, ",")),  // NOLINT
-            .xstep   = std::stod(std::strtok(nullptr, ",")),  // NOLINT
-            .epsilon = std::stod(std::strtok(nullptr, ",")),  // NOLINT
+            .xbegin  = std::stod(std::strtok(content, CSV_DELIMITER)),  // NOLINT
+            .xend    = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
+            .xstep   = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
+            .epsilon = std::stod(std::strtok(nullptr, CSV_DELIMITER)),  // NOLINT
         };
     }
 
-    void save() const override {}
+    void save(const char *path, UserOutput *output, std::size_t size) const override {
+        gsl::owner<std::FILE *> file = std::fopen(path, "w");
+        if (file == nullptr) {
+            std::cerr << "ERROR: Could not open file\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+        defer(std::fclose(file));  // NOLINT
+
+        if (std::fwrite(output, sizeof(UserOutput), size, file) != size) {
+            std::cerr << "ERROR: Could not write to file\n";
+            std::_Exit(EXIT_FAILURE);
+        }
+    }
 };
 
 class StandardInput : public Input {
   public:
-    UserInput read([[maybe_unused]] const char *filepath) const override {
+    UserInput read([[maybe_unused]] const char *path) const override {
         static constexpr double xbegin  = -5;
         static constexpr double xend    = 5;
         static constexpr double xstep   = 1;
@@ -174,7 +189,7 @@ class StandardInput : public Input {
         return UserInput {xbegin, xend, xstep, epsilon};
     }
 
-    void save() const override {}
+    void save([[maybe_unused]] const char *path, UserOutput *output, std::size_t size) const override {}
 };
 
 Input *Input::make_input(InputType type) {
@@ -217,23 +232,26 @@ int main(int argc, char **argv) {
         std::_Exit(EXIT_SUCCESS);
     }
 
-    Input    *input = nullptr;
-    UserInput user_input {};
+    Input      *input       = nullptr;
+    const char *input_path  = nullptr;
+    const char *output_path = nullptr;
 
     if (std::strcmp(argv[1], "file") == 0) {
-        input      = Input::make_input(InputType::File);
-        user_input = input->read(argv[2]);
+        input       = Input::make_input(InputType::File);
+        input_path  = argv[2];
+        output_path = argv[3];
     }
 
     if (std::strcmp(argv[1], "standard") == 0) {
-        input      = Input::make_input(InputType::Standard);
-        user_input = input->read(nullptr);
+        input = Input::make_input(InputType::Standard);
     }
 
     if (input == nullptr) {
         usage(std::cerr) << "ERROR: Unknown input type\n";
         std::_Exit(EXIT_FAILURE);
     }
+
+    UserInput user_input = input->read(input_path);
 
     auto                     output_size = user_input.size();
     gsl::owner<UserOutput *> user_output = new UserOutput[output_size];  // NOLINT
@@ -244,15 +262,7 @@ int main(int argc, char **argv) {
     defer(delete[] user_output);
 
     run(user_input, user_output, output_size);
-
-    for (decltype(output_size) i = 0; i < output_size; ++i) {
-        std::cout << user_output[i].x << "\n";
-        std::cout << user_output[i].fy << "\n";
-        std::cout << user_output[i].series.sigma << "\n";
-        std::cout << user_output[i].series.members << "\n";
-        std::cout << user_output[i].abs_error << "\n";
-        std::cout << "\n";
-    }
+    input->save(output_path, user_output, output_size);
 
     return 0;
 }
