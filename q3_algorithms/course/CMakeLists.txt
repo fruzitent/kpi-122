@@ -43,7 +43,7 @@ dynamic_project_options(
 find_program(CPPLINT "cpplint")
 if(CPPLINT)
   set(CMAKE_CXX_CPPLINT
-      "${CPPLINT};--filter=-legal/copyright,-readability/todo,-whitespace/indent,-whitespace/line_length;--quiet"
+      "${CPPLINT};--quiet;--linelength=120;--filter=-legal/copyright,-readability/todo,-runtime/indentation_namespace,-whitespace/indent,-whitespace/line_length"
   )
 endif()
 
