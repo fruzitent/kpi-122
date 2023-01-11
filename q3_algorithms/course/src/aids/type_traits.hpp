@@ -3,7 +3,6 @@
 
 #include "src/aids/type_traits/integral_constant.hpp"
 #include "src/aids/type_traits/is_array.hpp"
-#include "src/aids/type_traits/is_same.hpp"
 #include "src/aids/type_traits/remove_extent.hpp"
 #include "src/aids/type_traits/remove_reference.hpp"
 
