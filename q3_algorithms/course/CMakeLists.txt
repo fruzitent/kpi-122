@@ -47,6 +47,11 @@ if(CPPLINT)
   )
 endif()
 
+find_program(IWYU NAMES include-what-you-use iwyu)
+if(IWYU)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU};-Xiwyu;-w")
+endif()
+
 target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(myproject::project_options INTERFACE IMPORTED)
 add_library(myproject::project_warnings INTERFACE IMPORTED)

@@ -1,60 +1,100 @@
-#ifndef MODELS_H_
-#define MODELS_H_
+#ifndef MODELS_HPP_
+#define MODELS_HPP_
 
-#include <iostream>
+#include <cstddef>
+#include <cstring>
+#include <stdexcept>
 
-struct SeriesReturn {
+#include "src/aids/memory/unique_ptr.hpp"
+
+struct Series {
     double      sigma;
     std::size_t members;
 };
 
 struct UserInput {
-    double xbegin;
-    double xend;
-    double xstep;
+    double start;
+    double stop;
+    double step;
     double epsilon;
 
-    explicit UserInput(double xbegin_, double xend_, double xstep_, double epsilon_) :
-        xbegin(xbegin_),
-        xend(xend_),
-        xstep(xstep_),
+    constexpr UserInput() :
+        start(0),
+        stop(0),
+        step(0),
+        epsilon(0) {}
+
+    constexpr UserInput(double start_, double stop_, double step_, double epsilon_) :
+        start(start_),
+        stop(stop_),
+        step(step_),
         epsilon(epsilon_) {
         validate();
     }
 
-    [[nodiscard]] auto size() const { return static_cast<std::size_t>(((xend - xbegin) / xstep) + 1); }
+    [[nodiscard]] constexpr std::size_t size() const { return static_cast<std::size_t>((stop - start) / step); }
 
-    void validate() const {
-        if (xbegin > xend) {
-            throw std::invalid_argument("ERROR: xbegin must be less or equal to xend");
+    constexpr void validate() const {
+        if (start >= stop) {
+            throw std::invalid_argument("Start must be less than stop");
         }
 
-        if (xstep <= 0) {
-            throw std::invalid_argument("ERROR: xstep must be greater than 0");
+        if (step <= 0) {
+            throw std::invalid_argument("Step must be greater than 0");
         }
 
         if (epsilon <= 0) {
-            throw std::invalid_argument("ERROR: epsilon must be greater than 0");
+            throw std::invalid_argument("Epsilon must be greater than 0");
         }
     }
 };
 
 struct UserOutput {
-    double       x;
-    double       fy;
-    SeriesReturn series;
-    double       abs_error;
+    double x;
+    double y;
+    Series series;
+
+    [[nodiscard]] double abs_error() const { return std::abs(y - series.sigma); }
+
+    static constexpr int         COLUMNS         = 5;
+    static constexpr const char* HEADER[COLUMNS] = {
+        "x",
+        "y",
+        "sigma",
+        "members",
+        "abs_error",
+    };
+
+    static constexpr const char* DELIMITER = "  ";
+
+    static void print(std::FILE* stream, UserOutput* output, const std::size_t& size) {
+        auto widths = aids::unique_ptr<int[]>(new int[COLUMNS]);
+
+        for (auto i = 0; i < COLUMNS; ++i) {
+            widths[i] = std::max(widths[i], static_cast<int>(std::strlen(HEADER[i])));  // NOLINT
+        }
+
+        for (auto i = 0; i < static_cast<int>(size); ++i) {
+            widths[0] = std::max(widths[0], std::snprintf(nullptr, 0, "%g", output[i].x));
+            widths[1] = std::max(widths[1], std::snprintf(nullptr, 0, "%g", output[i].y));
+            widths[2] = std::max(widths[2], std::snprintf(nullptr, 0, "%g", output[i].series.sigma));
+            widths[3] = std::max(widths[3], std::snprintf(nullptr, 0, "%zu", output[i].series.members));
+            widths[4] = std::max(widths[4], std::snprintf(nullptr, 0, "%g", output[i].abs_error()));
+        }
+
+        for (auto i = 0; i < COLUMNS; ++i) {
+            std::fprintf(stream, "%*s%s", widths[i], HEADER[i], DELIMITER);
+        }
+        std::fprintf(stream, "\n");
+
+        for (auto i = 0; i < static_cast<int>(size); ++i) {
+            std::fprintf(stream, "%*g%s", widths[0], output[i].x, DELIMITER);
+            std::fprintf(stream, "%*g%s", widths[1], output[i].y, DELIMITER);
+            std::fprintf(stream, "%*g%s", widths[2], output[i].series.sigma, DELIMITER);
+            std::fprintf(stream, "%*zu%s", widths[3], output[i].series.members, DELIMITER);
+            std::fprintf(stream, "%*g\n", widths[4], output[i].abs_error());
+        }
+    }
 };
 
-static constexpr std::size_t USER_OUTPUT_FIELDS = 5;
-
-// NOLINTNEXTLINE
-static const char *USER_OUTPUT_HEADER[USER_OUTPUT_FIELDS] = {
-    "x",
-    "f(x)",
-    "series",
-    "members",
-    "Δx",
-};
-
-#endif  // MODELS_H
+#endif  // MODELS_HPP
