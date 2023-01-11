@@ -20,10 +20,22 @@ enum class Mode {
     Standard,
 };
 
+void usage(std::FILE* stream) {
+    std::fprintf(stream, "Usage: ./main [OPTIONS]\n");
+    std::fprintf(stream, "Options:\n");
+    flag::options(stream);
+}
+
 int main(int argc, char** argv) try {
+    const auto* help     = flag::Bool("-help", false, "Print this message and exit");
     const auto* inp_path = flag::CStr("i", "", "Input filepath");
     const auto* out_path = flag::CStr("o", "", "Output filepath");
     flag::parse(argc, argv);
+
+    if (*help) {
+        usage(stdout);
+        return 0;
+    }
 
     Mode      mode = std::strlen(*inp_path) == 0 && std::strlen(*out_path) == 0 ? Mode::Standard : Mode::File;
     UserInput user_input {};
