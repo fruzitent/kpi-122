@@ -68,31 +68,33 @@ struct UserOutput {
     static constexpr const char* DELIMITER = "  ";
 
     static void print(std::FILE* stream, UserOutput* output, const std::size_t& size) {
-        auto widths = aids::unique_ptr<int[]>(new int[COLUMNS]);
+        auto widths = aids::make_unique<std::size_t[]>(std::size_t(COLUMNS));
 
         for (auto i = 0; i < COLUMNS; ++i) {
-            widths[i] = std::max(widths[i], static_cast<int>(std::strlen(HEADER[i])));  // NOLINT
+            widths[i] = std::max(widths[i], std::strlen(HEADER[i]));
         }
 
         for (auto i = 0; i < static_cast<int>(size); ++i) {
-            widths[0] = std::max(widths[0], std::snprintf(nullptr, 0, "%g", output[i].x));
-            widths[1] = std::max(widths[1], std::snprintf(nullptr, 0, "%g", output[i].y));
-            widths[2] = std::max(widths[2], std::snprintf(nullptr, 0, "%g", output[i].series.sigma));
-            widths[3] = std::max(widths[3], std::snprintf(nullptr, 0, "%zu", output[i].series.members));
-            widths[4] = std::max(widths[4], std::snprintf(nullptr, 0, "%g", output[i].abs_error()));
+            // clang-format off
+            widths[0] = std::max(widths[0], static_cast<std::size_t>(std::snprintf(nullptr, 0, "%g", output[i].x)));
+            widths[1] = std::max(widths[1], static_cast<std::size_t>(std::snprintf(nullptr, 0, "%g", output[i].y)));
+            widths[2] = std::max(widths[2], static_cast<std::size_t>(std::snprintf(nullptr, 0, "%g", output[i].series.sigma)));
+            widths[3] = std::max(widths[3], static_cast<std::size_t>(std::snprintf(nullptr, 0, "%zu", output[i].series.members)));
+            widths[4] = std::max(widths[4], static_cast<std::size_t>(std::snprintf(nullptr, 0, "%g", output[i].abs_error())));
+            // clang-format on
         }
 
         for (auto i = 0; i < COLUMNS; ++i) {
-            std::fprintf(stream, "%*s%s", widths[i], HEADER[i], DELIMITER);
+            std::fprintf(stream, "%*s%s", static_cast<int>(widths[i]), HEADER[i], DELIMITER);
         }
         std::fprintf(stream, "\n");
 
         for (auto i = 0; i < static_cast<int>(size); ++i) {
-            std::fprintf(stream, "%*g%s", widths[0], output[i].x, DELIMITER);
-            std::fprintf(stream, "%*g%s", widths[1], output[i].y, DELIMITER);
-            std::fprintf(stream, "%*g%s", widths[2], output[i].series.sigma, DELIMITER);
-            std::fprintf(stream, "%*zu%s", widths[3], output[i].series.members, DELIMITER);
-            std::fprintf(stream, "%*g\n", widths[4], output[i].abs_error());
+            std::fprintf(stream, "%*g%s", static_cast<int>(widths[0]), output[i].x, DELIMITER);
+            std::fprintf(stream, "%*g%s", static_cast<int>(widths[1]), output[i].y, DELIMITER);
+            std::fprintf(stream, "%*g%s", static_cast<int>(widths[2]), output[i].series.sigma, DELIMITER);
+            std::fprintf(stream, "%*zu%s", static_cast<int>(widths[3]), output[i].series.members, DELIMITER);
+            std::fprintf(stream, "%*g\n", static_cast<int>(widths[4]), output[i].abs_error());
         }
     }
 };

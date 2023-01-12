@@ -79,6 +79,10 @@ int main(int argc, char** argv) try {
             user_output->print(stdout, user_output.get(), user_input.size());
             break;
         }
+
+        default: {
+            throw std::runtime_error("Unreachable\n");
+        }
     }
 } catch (const std::exception& error) {
     std::cerr << "ERROR: " << error.what();
