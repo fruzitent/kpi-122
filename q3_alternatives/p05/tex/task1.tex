@@ -1,0 +1,68 @@
+\section{Частина 1}
+\label{sec:task1}
+
+\subsection{Завдання}
+\label{subsec:task1_task}
+
+Необхідно знайти оптимальні значення неперервних змінних
+$x_1$, $x_2$ за двома критеріями $z_1 \succ z_2$,
+які визначають наступним чином:
+\begin{align}
+    z_1 & = 31x_1 + 24x_2 \rightarrow max      \\
+    z_2 & = -8x_1 - 7x_2 + 328 \rightarrow min
+\end{align}
+за умови обмежень:
+\begin{align}
+    \begin{cases}
+        4x_1 + 3x_2 \leq 144 \\
+        2x_1 + x_2 \leq 64   \\
+        2x_1 + 3x_2 \leq 120
+    \end{cases}
+    x_1 \geq 0, x_2 \geq 0
+\end{align}
+з кроком $1.5\%$.
+
+\subsection{Результат}
+\label{subsec:task1_result}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/qWt8IPgpNv.png}
+    \caption{Задаємо початкові значення}
+    \label{fig:graph4}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/iBLzv3swQl.png}
+    \caption{Максимізуємо критерій $z_1$}
+    \label{fig:graph2}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/s7DYKaBILQ.png}
+    \caption{Оптимальні значення $x_1 = 24$ та $x_2 = 16$, з $z_1^{max} = 1200$}
+    \label{fig:graph}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/qxf2aRdpUW.png}
+    \caption{За похибки $1.5\%$ максимальне значення $z_1$ можна зменшити до 1182}
+    \label{fig:graph5}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/ez6NeV3eeQ.png}
+    \caption{Вводимо додаткове обмеження та мінімізуємо критерій $z_2$}
+    \label{fig:graph1}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/QMjEVUd4Iz.png}
+    \caption{Нові оптимальні значення $x_1 = 15$ та $x_2 = 28$, з $z_2^{min} = 12$}
+    \label{fig:graph3}
+\end{figure}
