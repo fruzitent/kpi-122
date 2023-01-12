@@ -1,0 +1,32 @@
+---
+Checks: "*,
+        -abseil-*,
+        -altera-*,
+        -android-*,
+        -bugprone-easily-swappable-parameters,
+        -cert-err33-c,
+        -cppcoreguidelines-avoid-c-arrays,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -cppcoreguidelines-pro-bounds-constant-array-index,
+        -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+        -cppcoreguidelines-pro-type-union-access,
+        -cppcoreguidelines-pro-type-vararg,
+        -fuchsia-*,
+        -google-*,
+        -hicpp-avoid-c-arrays,
+        -hicpp-use-auto,
+        -hicpp-vararg,
+        -llvm*,
+        -misc-non-private-member-variables-in-classes,
+        -modernize-avoid-c-arrays,
+        -modernize-use-auto,
+        -modernize-use-trailing-return-type,
+        -readability-avoid-const-params-in-decls,
+        -readability-else-after-return,
+        -readability-identifier-length,
+        -readability-static-accessed-through-instance,
+        -zircon-*,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle: none
