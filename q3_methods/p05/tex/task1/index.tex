@@ -1,0 +1,54 @@
+\section{Частина 1}
+\label{sec:task1}
+
+\subsection{Завдання}
+\label{subsec:task1_task}
+
+Розв'язати нелінійне алгебраїчне рівняння
+$f(x) = x^4 + 2x^3 + 2x^2 + 6x -5 = 0$ з точністю до $0.0001$.
+Відокремлення коренів виконати аналітично.
+Уточнення коренів провести методом Ньютона (дотичних)
+та методом бісекції.
+
+\subsection{Код программи}
+\label{subsec:task1_code}
+\inputminted{python}{../src/task1.py}
+
+\subsection{Результати}
+\label{subsec:task1_results}
+
+Для аналітичного відокремлення коренів знаходимо похідну:
+\begin{align}
+    f'(x) = 4x^3 + 6x^2 + 4x + 6
+\end{align}
+та її корені:
+\begin{align}
+    f'x() & = 2 (2x + 3) (x^2 + 1) \\
+    x     & = \frac{-3}{2} = -1.5
+\end{align}
+
+Складаємо таблицю знаків: \\
+\begin{tabular}{|c|c|c|c|}
+    \toprule
+    $x$         & $-\inf$ & -1.5 & $+\int$ \\
+
+    \midrule
+    $sign f(x)$ & +       & -    & +       \\
+
+    \bottomrule
+\end{tabular}
+
+Оскільки відбувається дві зміни знаків,
+то рівняння має два дійсних кореня:
+\begin{align}
+    x_1 & \in (-\inf, -1.5] \\
+    x_2 & \in [-1.5, +\inf]
+\end{align}
+Зменшимо проміжки, в яких знаходяться корені:
+\begin{align}
+    x_1 & \in (-3, -1.5] \\
+    x_2 & \in [-1.5, 1]
+\end{align}
+
+\input{task1/newton}
+\input{task1/bisect}
