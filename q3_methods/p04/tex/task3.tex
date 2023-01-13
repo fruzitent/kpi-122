@@ -1,0 +1,29 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+З точністю до $0.0001$ обчислити значення інтегралу
+$\int_{1.3}^{2.5} \frac{dx}{\sqrt{0.2x^2 + 1}}$
+методом трапеюцій, $n = 20$
+
+\subsection{Код програми}
+\label{subsec:task3_code}
+\inputminted{python}{../src/task3.py}
+
+\subsection{Результат}
+\label{subsec:task3_result}
+
+Розіб'ємо відрізок інтегрування на $n = 20$ рівних частин з кроком:
+\begin{align}
+    h = \frac{b - a}{n} = \frac{2.5 - 1.3}{20} = 0.06
+\end{align}
+За формулою маємо:
+\begin{align}
+    \int_{a}^{b} f(x) dx
+     & = h (\frac{y_0 + y_{20}}{2} + \sum_{i = 1}^{n - 1} y_i) \\
+     & = \int_{1.3}^{2.5} \frac{dx}{\sqrt{0.2x^2 + 1}}
+    \approx 0.9159725492357449
+    \approx 0.9160
+\end{align}
