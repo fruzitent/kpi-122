@@ -1,0 +1,43 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+Програмна реалізація статистичного експерименту,
+що забезпечує оцінювання властивостей модифікованого
+методу оптимальної зупинки.
+
+\subsection{Код програми}
+\label{subsec:task3_code}
+\inputminted{python}{../src/task1.py}
+
+\subsection{Результат}
+\label{subsec:task3_result}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1.png}
+    \caption{Результати статистичного експерименту}
+    \label{fig:graphs}
+\end{figure}
+
+\begin{tabular}{|c|c|}
+    \toprule
+    $\Delta$ & $P$   \\
+
+    \midrule
+    0        & 0.409 \\
+    \hline
+    0.02     & 0.675 \\
+    \hline
+    0.04     & 0.796 \\
+    \hline
+    0.06     & 0.856 \\
+    \hline
+    0.08     & 0.898 \\
+    \hline
+    0.1      & 0.915 \\
+
+    \bottomrule
+\end{tabular}
