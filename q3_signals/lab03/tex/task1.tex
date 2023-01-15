@@ -1,0 +1,43 @@
+\section{Частина 1}
+\label{sec:task1}
+
+\subsection{Завдання}
+\label{subsec:task1_task}
+
+На основі власної дати народження записати різницеве рівняння
+\begin{align}
+      & y[n]
+    + y[n - 1] \frac{D_1 + D_2}{150}
+    + y[n - 2] \frac{P_2 - D_1}{140}
+    - y[n - 4] \frac{D_2}{130}
+    - y[n - 5] \frac{M_2 - D_1}{150}
+    =                         \\
+    = & x[n] \frac{M_1}{20}
+    + x[n - 1] \frac{P_3 - D_2}{10}
+    - x[n - 2] \frac{M_2 - M_1}{20}
+    - x[n - 3] \frac{P_4}{20}
+    + x[n - 4] \frac{D_2}{30}
+    - x[n - 5] \frac{M_2}{20} \\
+    a & = [
+    1,
+    \frac{D_1 + D_2}{150},
+    \frac{P_2 - D_1}{140},
+    0,
+    \frac{-D_2}{130},
+    \frac{-M_2 + D_1}{150}
+    ]                         \\
+    b & = [
+    \frac{M_1}{20},
+    \frac{P_3 - D_2}{10},
+    \frac{-M_2 + M_1}{20},
+    \frac{-P_4}{20},
+    \frac{D_2}{30},
+    \frac{-M_2}{20}
+    ]
+\end{align}
+
+\subsection{Код программи}
+\label{subsec:task1_code}
+
+\subsection{Результати}
+\label{subsec:task1_results}

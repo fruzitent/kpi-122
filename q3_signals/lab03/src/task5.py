@@ -1,12 +1,13 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from numpy import typing as npt
-from scipy.signal import TransferFunction, dimpulse, lfilter, unit_impulse
+from scipy.signal import lfilter, unit_impulse
 
 from src.task1 import get_coefficients
+from src.task6 import get_system
 
 
-def main() -> None:
+def main() -> npt.NDArray[np.float64]:
     samples: int = 30
 
     rng: np.random.Generator = np.random.default_rng()
@@ -15,13 +16,12 @@ def main() -> None:
     timespan: npt.NDArray[np.float64] = np.arange(samples, dtype=np.float64)
     inp0: npt.NDArray[np.float64] = unit_impulse(samples)
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
-
-    system: TransferFunction = TransferFunction(numerator, denumerator, dt=1)
-    timespan, impulse = dimpulse(system, t=timespan)
-    out1: npt.NDArray[np.float64] = np.squeeze(impulse)
+    out1: npt.NDArray[np.float64] = get_system(numerator, denumerator, timespan)
 
     with plt.style.context("seaborn"):
         plot(timespan, inp0, out0, out1)
+
+    return out0
 
 
 def plot(
@@ -37,8 +37,8 @@ def plot(
     ax0.stem(timespan, out1, linefmt="--r", label="Output: Dimpulse")
     ax0.legend()
     ax0.set_title("Impulse Response")
-    ax0.set_xlabel("Samples, n")
-    ax0.set_ylabel("x[n], y[n]")
+    ax0.set_xlabel("Samples, $n$")
+    ax0.set_ylabel("$x[n]$, $y[n]$")
 
     plt.show()
 
