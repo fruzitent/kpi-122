@@ -1,0 +1,56 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+Сформувати вектор відліків часу тривалістю 15 с для частоти
+дискретизації 128 Гц. Сформувати сигнали:
+\begin{enumerate}
+    \item синусоїди частотою 40 Гц;
+    \item випадкового сигналу (шумова складова);
+    \item прямокутного імпульсу шириною 1 с у момент часу 10 с;
+    \item Побудувати спектрограми сигналів за допомогою першого вікна згідно з
+          варіантом тривалістю 0,2 с без використання перекриття вікон.
+          Зробити висновки щодо вигляду спектрограм та відповідності часових,
+          спектральних та спектрально-часових властивостей сигналів.
+\end{enumerate}
+
+\subsection{Код программи}
+\label{subsec:task3_code}
+\inputminted{python}{../src/task3.py}
+
+\subsection{Результати}
+\label{subsec:task3_results}
+
+Завдяки спектрограмі можна оцінити частоту та тривалість хвилі.
+Шум виглядає як нерозбірливий сигнал.
+Інші сигнали виділяються на його фоні.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_2.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_3.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
