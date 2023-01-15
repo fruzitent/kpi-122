@@ -10,7 +10,7 @@ def main() -> None:
     sample_rate: float = 256
     time: float = 1
 
-    duty: float = 30
+    duty: float = 0.3
     freq: float = 5
 
     dt: float = 1 / sample_rate

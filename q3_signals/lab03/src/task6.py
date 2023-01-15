@@ -6,7 +6,7 @@ from scipy.signal import TransferFunction, dimpulse, lfilter, unit_impulse
 from src.task1 import get_coefficients
 
 
-def main() -> npt.NDArray[np.float64]:
+def main() -> None:
     samples: int = 30
 
     rng: np.random.Generator = np.random.default_rng()
@@ -22,8 +22,6 @@ def main() -> npt.NDArray[np.float64]:
 
     with plt.style.context("seaborn"):
         plot(timespan, inp0, out0, out1)
-
-    return out0
 
 
 def plot(
