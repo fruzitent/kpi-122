@@ -1,0 +1,72 @@
+\section{Частина 1}
+\label{sec:task1}
+
+\subsection{Завдання}
+\label{subsec:task1_task}
+
+Сформувати вектор відліків часу тривалістю 1 с для частоти
+дискретизації 128 Гц. Сформувати сигнали ділянки синусоїди частотою 2, 2,5,
+40, 100, 600 Гц. Врахувати необхідність дотримання періодичності дискретного
+сигналу для отримання адекватного спектру. Побудувати за допомогою функції
+plot графіки сигналів та за допомогою функції stem їх амплітудні спектри. Зробити висновки щодо відповідності отриманих спектрів тим, які
+повинні бути отримані згідно теоретичних міркувань.
+
+\subsection{Код программи}
+\label{subsec:task1_code}
+\inputminted{python}{../src/task1.py}
+
+\subsection{Результати}
+\label{subsec:task1_results}
+
+\begin{enumerate}
+    \item Спектральна складова відповідає очікуваним $2 Hz$ з амплітудою $1 V$
+    \item Маємо розсіювання спектра на $2.5 Hz$ з амплітудою $1 V$
+          через відсутність кроку ($\frac{1}{t}$) спектральних складових у базисі.
+          Треба збільшити тривалість сигналу до 2 секунд, щоб отримати крок $0.5 Hz$
+    \item Спектральна складова відповідає очікуваним $40 Hz$ з амплітудою $1 V$
+    \item За теоремою Котельникова, спектральні складові
+          знаходяться в діапазоні від 0 до частоти Найквеста
+          (половина частоти дискретизації).
+          Частота сигналу $100 Hz$, а частота Найквеста $64 Hz$,
+          тобто спектр некоректно дискретизовано.
+          Отриманий пік знаходиться симметрично відносно частоти дискретизації,
+          $128 Hz - 100 Hz = 28 Hz$.
+          Для корректної дискретизації потрібно збільшити її хоча б до $200 Hz$
+    \item Неправильно вибрана частота дискретизації, як і у попередньому випадку.
+          $640 - (5 * 128) = 40 Hz$
+\end{enumerate}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1_2.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1_3.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task1_4.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}

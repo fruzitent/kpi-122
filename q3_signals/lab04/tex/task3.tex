@@ -1,0 +1,37 @@
+\section{Частина 3}
+\label{sec:task3}
+
+\subsection{Завдання}
+\label{subsec:task3_task}
+
+Сформувати вектор відліків часу тривалістю 3 с для частоти
+дискретизації 128 Гц. Сформувати сигнал ділянки синусоїди частотою 20 Гц.
+Створити розрив (вставити 10 нульових відліків замість відліків сигналу) в
+сигналі у момент часу 1,05 с. Отримати спектр сигналу. Перемістити розрив в
+момент часу 2 c, розрахувати спектр. Побудувати графіки двох сигналів з
+розривами та їх амплітудні спектри. Зробити висновки щодо
+того, чи можливо визначити наявність та точне розташування розриву в
+сигналі, аналізуючи спектр сигналу.
+
+\subsection{Код программи}
+\label{subsec:task3_code}
+\inputminted{python}{../src/task3.py}
+
+\subsection{Результати}
+\label{subsec:task3_results}
+
+Через розрив у сигналі бачимо розсіювання спетра навколо піка $20 Hz$.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task3_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}

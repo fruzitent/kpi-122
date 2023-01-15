@@ -1,0 +1,52 @@
+\section{Частина 2}
+\label{sec:task2}
+
+\subsection{Завдання}
+\label{subsec:task2_task}
+
+Сформувати вектор відліків часу тривалістю 10 с для частоти
+дискретизації 256 Гц. Сформувати сигнали ділянки синусоїди частотою 10 Гц
+(S1) та 100 Гц (S2). Сформувати на їх основі три сигнали:
+\begin{enumerate}
+    \item Cигнал (тривалістю 10 с), що дорівнює сумі цих двох сигналів;
+    \item Cигнал, який спочатку містить сигнал 2*S1, а потім сигнал 2*S2
+          (матиме тривалість 20 секунд);
+    \item Cигнал, який спочатку містить сигнал 2*S2, а потім сигнал 2*S1
+          (матиме тривалість 20 секунд).
+\end{enumerate}
+Побудувати графіки сигналів (функція plot) та їх амплітудні
+спектри (функція stem) Зробити висновки щодо можливості
+розрізнити коливання, присутні у сигналі, за їх спектральним складом, а також
+щодо відповідності властивостей сигналів у часі та їх спектрів.
+
+\subsection{Код программи}
+\label{subsec:task2_code}
+\inputminted{python}{../src/task2.py}
+
+\subsection{Результати}
+\label{subsec:task2_results}
+
+Недоліком спектрального аналізу є відсутність інформації про зміну
+частотних складових у часі, через що бачимо ідентичні 2 та 3 графіки.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task2_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task2_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task2_2.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+

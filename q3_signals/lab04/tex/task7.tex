@@ -1,0 +1,99 @@
+\section{Частина 7}
+\label{sec:task7}
+
+\subsection{Завдання}
+\label{subsec:task7_task}
+
+Сформувати сигнал синусоїди частоти 20 Гц амплітуди 1 В та
+тривалості 0,5 с для частоти дискретизації 128 Гц. Додати до цього сигналу
+шумову складову амплітуди 10 В з нульовим середнім значенням (функція
+randn). Розрахувати амплітудний спектр даного зашумленого сигналу.
+Побудувати за допомогою функції plot графік сигналу та за допомогою функції
+stem його амплітудний спектр.
+
+Збільшувати тривалість зашумленого сигналу (1, 10, 100, 1000 сек.),
+отримуючи для кожного сигналу його амплітудний спектр. Побудувати за
+допомогою функції plot графіки сигналів та за допомогою функції stem їх
+амплітудних спектрів, зробити висновки щодо впливу
+тривалості сигналу на роздільну здатність в частотній області та на якість
+визначення наявності синусоїдального коливання в шумі за спектральними
+характеристиками.
+
+Збільшувати частоту дискретизації зашумленого сигналу тривалості 0,5 с
+(1280, 12800, 128000 Гц), отримуючи для кожного сигналу його амплітудний
+спектр. На графік кожного разу виводити спектр у межах від 0 до 100 Гц.
+Побудувати за допомогою функції plot графіки сигналів та за допомогою
+функції stem їх амплітудні спектри, зробити висновки щодо
+впливу частоти дискретизації сигналу на роздільну здатність у частотній
+області та на якість визначення наявності синусоїдального коливання у шумі за
+спектральними характеристиками
+
+\subsection{Код программи}
+\label{subsec:task7_code}
+\inputminted{python}{../src/task7.py}
+
+\subsection{Результати}
+\label{subsec:task7_results}
+
+\begin{enumerate}
+    \item Шум замаскував корисний сигнал
+    \item Збільшення тривалості запису збільшило роздільну здатність,
+          очікуємий пік $20 Hz$ добре розрізняється
+    \item Зі збільшенням частоти дискретизації збільшується роздільна здатність сигналу
+\end{enumerate}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_2.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_3.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_4.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_5.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_6.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task7_7.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
