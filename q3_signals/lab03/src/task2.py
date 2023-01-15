@@ -46,8 +46,8 @@ def plot(
     ax0.plot(timespan, out1, label="Output: Rand", linestyle="dashed")
     ax0.legend()
     ax0.set_title("System Response")
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Voltage, V")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Voltage, $V$")
 
     plt.show()
 

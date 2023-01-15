@@ -4,7 +4,6 @@ from numpy import typing as npt
 from scipy.signal import lfilter, unit_impulse
 
 from src.task1 import get_coefficients
-from src.task6 import get_system
 
 
 def main() -> npt.NDArray[np.float64]:
@@ -16,10 +15,9 @@ def main() -> npt.NDArray[np.float64]:
     timespan: npt.NDArray[np.float64] = np.arange(samples, dtype=np.float64)
     inp0: npt.NDArray[np.float64] = unit_impulse(samples)
     out0: npt.NDArray[np.float64] = lfilter(numerator, denumerator, inp0)
-    out1: npt.NDArray[np.float64] = get_system(numerator, denumerator, timespan)
 
     with plt.style.context("seaborn"):
-        plot(timespan, inp0, out0, out1)
+        plot(timespan, inp0, out0)
 
     return out0
 
@@ -28,13 +26,11 @@ def plot(
     timespan: npt.NDArray[np.float64],
     inp0: npt.NDArray[np.float64],
     out0: npt.NDArray[np.float64],
-    out1: npt.NDArray[np.float64],
 ) -> None:
     _, (ax0) = plt.subplots(figsize=(16, 5), ncols=1, nrows=1)
 
     ax0.stem(timespan, inp0, linefmt="--b", label="Input")
-    ax0.stem(timespan, out0, linefmt="--g", label="Output: Lfilter")
-    ax0.stem(timespan, out1, linefmt="--r", label="Output: Dimpulse")
+    ax0.stem(timespan, out0, linefmt="--g", label="Impulse")
     ax0.legend()
     ax0.set_title("Impulse Response")
     ax0.set_xlabel("Samples, $n$")
