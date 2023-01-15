@@ -5,17 +5,23 @@ from scipy.fft import fft, fftfreq
 
 
 def main() -> None:
-    sample_rate: int = 128
-    time: int = 1
+    sample_rate: float = 128
+    time: float = 3
 
     amp: float = 1
-    freq0: float = 2
-    freq1: float = 2.5
-    freq2: float = 40
-    freq3: float = 100
-    freq4: float = 600
+    freq0: float = 20
+    freq1: float = 20
     hshift: float = 0
     vshift: float = 0
+
+    null_samples: int = 10
+    null0: float = 1.05
+    null1: float = 2
+
+    null0_from: int = round(null0 * sample_rate - null_samples / 2)
+    null0_upto: int = round(null0 * sample_rate + null_samples / 2)
+    null1_from: int = round(null1 * sample_rate - null_samples / 2)
+    null1_upto: int = round(null1 * sample_rate + null_samples / 2)
 
     dt: float = 1 / sample_rate
 
@@ -25,27 +31,17 @@ def main() -> None:
 
     inp0: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq0 * timespan) - hshift) + vshift
     inp1: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq1 * timespan) - hshift) + vshift
-    inp2: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq2 * timespan) - hshift) + vshift
-    inp3: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq3 * timespan) - hshift) + vshift
-    inp4: npt.NDArray[np.float64] = amp * np.sin((2 * np.pi * freq4 * timespan) - hshift) + vshift
+    inp0[null0_from:null0_upto] = 0  # noqa: WPS362 Found assignment to a subscript slice
+    inp1[null1_from:null1_upto] = 0  # noqa: WPS362 Found assignment to a subscript slice
 
     out0: npt.NDArray[np.float64] = (2 * np.abs(fft(inp0)) / timespan.size)[:half]
     out1: npt.NDArray[np.float64] = (2 * np.abs(fft(inp1)) / timespan.size)[:half]
-    out2: npt.NDArray[np.float64] = (2 * np.abs(fft(inp2)) / timespan.size)[:half]
-    out3: npt.NDArray[np.float64] = (2 * np.abs(fft(inp3)) / timespan.size)[:half]
-    out4: npt.NDArray[np.float64] = (2 * np.abs(fft(inp4)) / timespan.size)[:half]
 
     with plt.style.context("seaborn"):
-        title0: str = f"Sine {freq0} $Hz$"
-        title1: str = f"Sine {freq1} $Hz$"
-        title2: str = f"Sine {freq2} $Hz$"
-        title3: str = f"Sine {freq3} $Hz$"
-        title4: str = f"Sine {freq4} $Hz$"
+        title0: str = f"Sine {freq0} $Hz$, null at {null0} $s$"
+        title1: str = f"Sine {freq1} $Hz$, null at {null1} $s$"
         plot(timespan, freqs, inp0, out0, title0)
         plot(timespan, freqs, inp1, out1, title1)
-        plot(timespan, freqs, inp2, out2, title2)
-        plot(timespan, freqs, inp3, out3, title3)
-        plot(timespan, freqs, inp4, out4, title4)
 
 
 def plot(

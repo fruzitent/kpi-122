@@ -1,0 +1,67 @@
+\section{Частина 8}
+\label{sec:task8}
+
+\subsection{Завдання}
+\label{subsec:task8_task}
+
+Сформувати сигнал синусоїди частоти 20,5 Гц амплітуди 1 В та
+тривалості 1 с для частоти дискретизації 1000 Гц. Отримати амплітудний
+спектр даного сигналу.
+
+Дописати в кінці сигналу нульові відліки (10, 100, 1000 та 10000
+відліків), отримуючи для кожного сигналу його амплітудний спектр.
+
+На графік кожного разу виводити спектр за допомогою функції stem в
+межах від 19 до 22 Гц. Зробити висновки щодо впливу доповнення сигналу
+нулями на роздільну здатність у частотній області та на якість визначення
+наявності синусоїдального коливання за спектральними характеристиками.
+
+\subsection{Код программи}
+\label{subsec:task8_code}
+\inputminted{python}{../src/task8.py}
+
+\subsection{Результати}
+\label{subsec:task8_results}
+
+\begin{enumerate}
+    \item Пік $20 Hz$ розсіявся, бо ця частота не є складовою базиса з кроком $1 Hz$
+    \item Збільшення тривалості сигналу зменшує крок, та збільшує роздільну здатність
+          На графіку піки зсунулися, їх амплітуди також зазнали змін
+    \item Зі збільшенням тривалості визначити амплітуду сигналу, через
+          нескінечну кількість спектральних складових, стає важче
+\end{enumerate}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task8_0.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task8_1.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task8_2.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task8_3.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task8_4.png}
+    % \caption{}
+    % \label{fig:}
+\end{figure}

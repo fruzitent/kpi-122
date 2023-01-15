@@ -39,9 +39,9 @@ def main() -> None:
     out2: npt.NDArray[np.float64] = (2 * np.abs(fft(inp2)) / timespan1.size)[:half1]
 
     with plt.style.context("seaborn"):
-        title0: str = f"Sine {freq0} Hz + Sine {freq1} Hz"
-        title1: str = f"Sine {amp1} * {freq0} Hz | Sine {amp1} * {freq1} Hz"
-        title2: str = f"Sine {amp1} * {freq1} Hz | Sine {amp1} * {freq0} Hz"
+        title0: str = f"Sine {freq0} $Hz$ + Sine {freq1} $Hz$"
+        title1: str = f"Sine {amp1} * {freq0} $Hz$ | Sine {amp1} * {freq1} $Hz$"
+        title2: str = f"Sine {amp1} * {freq1} $Hz$ | Sine {amp1} * {freq0} $Hz$"
         plot(timespan0, freqs0, inp0, out0, title0)
         plot(timespan1, freqs1, inp1, out1, title1)
         plot(timespan1, freqs1, inp2, out2, title2)
@@ -58,13 +58,13 @@ def plot(
 
     ax0.plot(timespan, inp)
     ax0.set_title(title)
-    ax0.set_xlabel("Time, s")
-    ax0.set_ylabel("Amplitude, V")
+    ax0.set_xlabel("Time, $s$")
+    ax0.set_ylabel("Amplitude, $V$")
 
     ax1.stem(freqs, out)
     ax1.set_title("Amplitude Spectrum")
-    ax1.set_xlabel("Frequency, Hz")
-    ax1.set_ylabel("Amplitude, V")
+    ax1.set_xlabel("Frequency, $Hz$")
+    ax1.set_ylabel("Amplitude, $V$")
 
     plt.show()
 
