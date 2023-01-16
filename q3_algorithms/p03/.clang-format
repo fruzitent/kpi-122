@@ -1,14 +1,13 @@
 DisableFormat: false
 
 BasedOnStyle: Google
-ColumnLimit:  80
+ColumnLimit:  120
 IndentWidth:  4
 Language:     Cpp
 Standard:     Latest
 UseCRLF:      false
 UseTab:       Never
 
-# Align arguments
 AlignAfterOpenBracket:                     BlockIndent
 AllowAllParametersOfDeclarationOnNextLine: false
 BinPackArguments:                          false
@@ -17,7 +16,6 @@ IndentWrappedFunctionNames:                false
 LambdaBodyIndentation:                     Signature
 PackConstructorInitializers:               Never
 
-# Align declarations
 AlignArrayOfStructures:       Left
 AlignConsecutiveAssignments:  Consecutive
 AlignConsecutiveBitFields:    Consecutive
@@ -28,12 +26,10 @@ AlignOperands:                AlignAfterOperator
 AlignTrailingComments:        true
 BitFieldColonSpacing:         Both
 
-# Align qualifiers
 PointerAlignment:             Left
 ReferenceAlignment:           Left
 SpaceAroundPointerQualifiers: Before
 
-# Sort includes
 IncludeBlocks:         Regroup
 SortIncludes:          CaseInsensitive
 SortUsingDeclarations: true
@@ -41,7 +37,7 @@ SortUsingDeclarations: true
 AllowShortBlocksOnASingleLine:       Empty
 AllowShortCaseLabelsOnASingleLine:   false
 AllowShortEnumsOnASingleLine:        false
-AllowShortFunctionsOnASingleLine:    Empty
+AllowShortFunctionsOnASingleLine:    Inline
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLambdasOnASingleLine:      Empty
 
