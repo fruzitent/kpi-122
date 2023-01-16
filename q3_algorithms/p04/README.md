@@ -11,11 +11,11 @@ $ cd ./q3_algorithms/p04
 
 ### Install
 ```shell
-$ cmake --preset "x64-debug" -S "." -B "./out/build/x64-debug"
+$ cmake --preset unix-gcc-debug
 ```
 
 ### Build
 ```shell
-$ cmake --build --preset "x64-debug"
-$ ./out/build/x64-debug/task1
+$ cmake --build --preset unix-gcc-debug
+$ ./out/build/unix-gcc-debug/task1
 ```
