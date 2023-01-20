@@ -1,0 +1,45 @@
+%!TEX program = lualatex
+
+\documentclass[11pt]{article}
+
+\usepackage[fleqn,tbtags]{amsmath}
+\usepackage[ukrainian]{babel}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage[cache=false, outputdir=../out]{minted}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[parfill]{parskip}
+\usepackage[sfdefault]{roboto}
+
+\newcommand{\TITLE}{Комп'ютерний практикум №8}
+\newcommand{\DISCIPLINE}{Алгоритмізація та програмування}
+\newcommand{\SUBJECT}{Структури}
+\newcommand{\STUDENT}{}
+\newcommand{\TEACHER}{}
+
+\emergencystretch 5em
+\geometry{
+    a4paper,
+    left=1.5cm,
+    right=1.5cm,
+    top=1.5cm,
+    bottom=2cm,
+}
+
+\setmonofont{Roboto}
+\setminted{fontsize=\footnotesize}
+
+\newtheorem{theorem}{Теорема}
+
+\begin{document}
+\clearpage\input{./title}
+\clearpage\tableofcontents
+\clearpage\input{./task1}
+\clearpage\input{./summary}
+\end{document}
