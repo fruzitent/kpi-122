@@ -11,13 +11,13 @@ $ cd ./q3_methods/p06
 
 ### Install
 ```shell
-$ poetry install
+$ poetry install --with jupyter
 $ poetry shell
 ```
 
 ### Build
 ```shell
-$ python ./src/task1.py
+$ poe lab
 ```
 
 ### Docs

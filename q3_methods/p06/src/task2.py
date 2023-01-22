@@ -1,18 +1,18 @@
 from decimal import Decimal
-from math import cos
+from math import sin, sqrt
 from typing import Callable, Generator
 
 from matplotlib import pyplot as plt
 
 
 def main() -> None:
-    x0: Decimal = Decimal("1.4")
-    y0: Decimal = Decimal("2.5")
-    xn: Decimal = Decimal("2.4")
+    x0: Decimal = Decimal("0.5")
+    y0: Decimal = Decimal("0.6")
+    xn: Decimal = Decimal("1.5")
 
     step: Decimal = Decimal("0.1")
 
-    xs, ys = zip(*euler(func, x0, y0, xn, step))
+    xs, ys = zip(*cauchy(func, x0, y0, xn, step))
 
     with plt.style.context("seaborn"):
         plot(xs, ys)
@@ -26,7 +26,7 @@ def plot(
 
     ax0.plot(xs, ys)
     ax0.scatter(xs, ys, color="red")
-    ax0.set_title("Euler's method")
+    ax0.set_title("Cauchy's method")
     ax0.set_xlabel("$x$")
     ax0.set_ylabel("$y$")
 
@@ -34,10 +34,10 @@ def plot(
 
 
 def func(xi: Decimal, yi: Decimal) -> Decimal:
-    return xi + Decimal(cos(yi / Decimal("2.25")))
+    return xi + Decimal(sin(yi / Decimal(sqrt(7))))
 
 
-def euler(
+def cauchy(
     callback: Callable[[Decimal, Decimal], Decimal],
     x0: Decimal,
     y0: Decimal,
@@ -46,7 +46,9 @@ def euler(
 ) -> Generator[tuple[Decimal, Decimal], None, None]:
     while x0 <= xn:
         yield x0, y0
-        y0 += step * callback(x0, y0)
+        current: Decimal = callback(x0, y0)
+        succeeding: Decimal = callback(x0 + step, y0 + step * current)
+        y0 += step * (current + succeeding) / 2
         x0 += step
 
 

@@ -2,11 +2,12 @@
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
 name = "q3_methods@p06"
+packages = [{ include = "src" }]
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-numpy = "^1.24.1"
+matplotlib = "^3.6.3"
 python = ">=3.11,<3.12"
 
 [tool.poetry.group.codestyle.dependencies]
@@ -17,7 +18,7 @@ flake8-pyproject = "^1.2.2"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.17.1"
+poethepoet = "^0.18.1"
 poetry-plugin-up = "^0.2.1"
 
 [tool.poetry.group.jupyter]
