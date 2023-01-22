@@ -1,0 +1,67 @@
+\section{Частина 2}
+\label{sec:task2}
+
+\subsection{Завдання}
+\label{subsec:task2_task}
+
+З точністю до $0.0001$ методом Ейлера-Коші скласти розв'язок задачі Коші
+для звичайного диференційного рівняння першого порядку
+$y' = f(x, y)$ на відрізку $[a, b]$ з кроком $h = 0.1$
+за початкових умов $y(x_0) = y_0$.
+Побудувати ламану Ейлера для знайденого розв'язку.
+\begin{align}
+    x      & \in [0.5; 1.5]                \\
+    y(0.5) & = 0.6                         \\
+    y'     & = x + sin(\frac{y}{\sqrt{7}})
+\end{align}
+
+\subsection{Код програми}
+\label{subsec:task2_code}
+\inputminted{python}{../src/task2.py}
+
+\subsection{Результат}
+\label{subsec:task2_result}
+
+Розрахункові формули методу Коші:
+\begin{align}
+    x_{i+1} & = x_i + h                                                            \\
+    y_{i+1} & = y_i + \frac{h}{2}[f(x_i, y_i) + f(x_{i + 1}, y_i + h f(x_i, y_i))]
+\end{align}
+Складемо таблицю результатів обчислень:
+
+\begin{tabular}{|c|c|c|}
+    \toprule
+    $i$ & $x_i$ & $y_i$  \\
+
+    \midrule
+    0   & 0.5   & 0.6000 \\
+    \hline
+    1   & 0.6   & 0.6788 \\
+    \hline
+    2   & 0.7   & 0.7707 \\
+    \hline
+    3   & 0.8   & 0.8762 \\
+    \hline
+    4   & 0.9   & 0.9958 \\
+    \hline
+    5   & 1.0   & 1.1297 \\
+    \hline
+    6   & 1.1   & 1.2785 \\
+    \hline
+    7   & 1.2   & 1.4426 \\
+    \hline
+    8   & 1.3   & 1.6222 \\
+    \hline
+    9   & 1.4   & 1.8175 \\
+    \hline
+    10  & 1.5   & 2.0288 \\
+
+    \bottomrule
+\end{tabular}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/task2.png}
+    \caption{Метод Коші}
+    \label{fig:cauchy}
+\end{figure}
