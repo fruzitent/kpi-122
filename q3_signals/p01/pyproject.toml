@@ -1,16 +1,15 @@
 [tool.poetry]
 authors = ["fruzitent <fruzit@gmail.com>"]
 description = ""
-name = "q3_signal@lab04"
-packages = [{ include = "src" }]
+name = "q3_signal@p01"
 repository = "https://github.com/fruzitent/kpi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-matplotlib = "^3.6.3"
+matplotlib = "^3.6.2"
 numpy = "^1.24.1"
 python = ">=3.11,<3.12"
-scipy = "^1.10.0"
+scipy = "^1.9.3"
 
 [tool.poetry.group.codestyle.dependencies]
 black = { extras = ["d", "jupyter"], version = "^22.12.0" }
@@ -20,7 +19,7 @@ flake8-pyproject = "^1.2.2"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.18.0"
+poethepoet = "^0.17.1"
 poetry-plugin-up = "^0.2.1"
 
 [tool.poetry.group.jupyter]
@@ -204,13 +203,12 @@ disallow_any_decorated = true
 disallow_any_explicit = true
 disallow_any_expr = false
 disallow_any_generics = true
-disallow_any_unimported = false
+disallow_any_unimported = true
 disallow_incomplete_defs = true
 disallow_subclassing_any = true
 disallow_untyped_calls = true
 disallow_untyped_decorators = true
 disallow_untyped_defs = true
-enable_incomplete_feature = ["Unpack"]
 explicit_package_bases = true
 files = ["src"]
 incremental = true

@@ -3,10 +3,10 @@
 $ git clone -n https://github.com/fruzitent/kpi
 $ cd ./kpi
 
-$ git sparse-checkout set q3_signals/lab02
+$ git sparse-checkout set q3_signals/p02
 $ git checkout
 
-$ cd ./q3_signals/lab02
+$ cd ./q3_signals/p02
 ```
 
 ### Install
