@@ -1,0 +1,21 @@
+---
+Checks: "*,
+        -abseil-*,
+        -altera-*,
+        -android-*,
+        -bugprone-easily-swappable-parameters,
+        -cppcoreguidelines-avoid-magic-numbers,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -fuchsia-*,
+        -google-*,
+        -llvm*,
+        -misc-non-private-member-variables-in-classes,
+        -readability-avoid-const-params-in-decls,
+        -readability-identifier-length,
+        -readability-magic-numbers,
+        -readability-static-accessed-through-instance,
+        -zircon-*,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle: none
