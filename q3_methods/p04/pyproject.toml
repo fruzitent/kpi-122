@@ -24,7 +24,7 @@ poetry-plugin-up = "^0.2.1"
 optional = true
 
 [tool.poetry.group.jupyter.dependencies]
-ipywidgets = "^8.0.2"
+ipywidgets = "^8.0.6"
 jupyterlab = "^3.5.0"
 jupyterlab-git = "^0.39.3"
 nbdime = "^3.1.1"
