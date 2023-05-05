@@ -1,0 +1,64 @@
+{
+  /** c++ */
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.fallbackFlags": ["-I${workspaceFolder}", "-std=c++20"],
+  "cmake.configureOnOpen": false,
+  "cmakeFormat.args": [
+    "--config-file",
+    "${workspaceFolder}/.cmake-format.json"
+  ],
+  /** formatting */
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+  "[c][cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "[dockercompose][html][javascript][javascriptreact][json][jsonc][typescript][typescriptreact][yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  /** jupyter */
+  "jupyter.askForKernelRestart": false,
+  /** latex */
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/out",
+  "latex-workshop.latex.recipes": [{ "name": "latexmk", "tools": ["latexmk"] }],
+  "latex-workshop.latex.tools": [
+    {
+      "args": ["-pdflua", "-shell-escape", "-outdir=%OUTDIR%", "-cd", "%DOC%"],
+      "command": "latexmk",
+      "name": "latexmk"
+    }
+  ],
+  /** python */
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  /** remote development */
+  "docker.dockerPath": "docker",
+  "docker.languageserver.formatter.ignoreMultilineInstructions": true,
+  "remote.SSH.remoteServerListenOnSocket": false,
+  /** telemetry */
+  "dotnetAcquisitionExtension.enableTelemetry": false,
+  "gitlens.telemetry.enabled": false,
+  "redhat.telemetry.enabled": false,
+  "telemetry.telemetryLevel": "off",
+  /** ui */
+  "editor.accessibilitySupport": "off",
+  "editor.fontLigatures": true,
+  "editor.inlayHints.enabled": "on",
+  "editor.inlineSuggest.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.openEditors.visible": 9,
+  "gitlens.views.searchAndCompare.files.layout": "tree",
+  "scm.defaultViewMode": "tree",
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.startupEditor": "none",
+  /** vsc */
+  "git.autofetch": true,
+  "git.confirmSync": false
+}

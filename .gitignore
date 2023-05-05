@@ -1,6 +1,10 @@
-.idea
-.vs
-.vscode
+.fleet/*
+.idea/*
+.vs/*
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 .tmp.drivedownload
 .tmp.driveupload
