@@ -16,7 +16,7 @@ scikit-learn = "^1.1.3"
 black = { extras = ["d", "jupyter"], version = "^22.10.0" }
 cohesion = "^1.0.0"
 dlint = "^0.13.0"
-flake8-pyproject = "^1.2.1"
+flake8-pyproject = "^1.2.3"
 wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git" }
 
 [tool.poetry.group.dev.dependencies]
