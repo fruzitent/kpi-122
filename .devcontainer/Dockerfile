@@ -206,8 +206,10 @@ EOF
 # Install TeXLive
 # Reference: https://tug.org/texlive/doc/install-tl.html
 
+ENV PATH="/opt/texlive/bin:${PATH}"
+
 RUN <<EOF
-    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/usr/local/bin|" | sh
+    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/opt/texlive/bin|" | sh
 EOF
 
 # OCI metadata
