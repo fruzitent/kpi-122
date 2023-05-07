@@ -75,7 +75,7 @@ EOF
 # Install LLVM
 # Reference: https://llvm.org/docs/GettingStarted.html
 
-ARG LLVM_VERSION="16"
+ARG LLVM_VERSION="18"
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     apt-get update
