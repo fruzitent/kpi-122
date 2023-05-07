@@ -70,18 +70,34 @@ jobs:
             pattern={{version}},type=semver
             format=long,type=sha
 
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
-          cache-from: type=gha
-          cache-to: ignore-error=true,mode=max,type=gha
+          cache-from: src=/tmp/.buildx-cache,type=local
+          cache-to: dest=/tmp/.buildx-cache-new,type=local
           context: ${{ matrix.directory }}
           file: ${{ matrix.directory }}/${{ matrix.dockerfile }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}
+          provenance: true
           push: ${{ github.event_name != 'pull_request' }}
+          sbom: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+      # TODO: https://github.com/docker/build-push-action/issues/252
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Sign the published Docker image
         if: github.event_name != 'pull_request'
