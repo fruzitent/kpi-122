@@ -83,7 +83,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           cache-from: src=/tmp/.buildx-cache,type=local
-          cache-to: dest=/tmp/.buildx-cache-new,type=local
+          cache-to: dest=/tmp/.buildx-cache-new,mode=max,type=local
           context: ${{ matrix.directory }}
           file: ${{ matrix.directory }}/${{ matrix.dockerfile }}
           labels: ${{ steps.meta.outputs.labels }}
