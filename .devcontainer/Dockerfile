@@ -9,7 +9,7 @@ RUN <<EOF
 EOF
 
 RUN <<EOF
-    idonotexist
+    idonotexist2
 EOF
 
 CMD sleep infinity
