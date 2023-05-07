@@ -1,297 +1,219 @@
-# syntax=docker/dockerfile:1.4-labs
+# syntax=docker/dockerfile:1.5-labs
 
-ARG VARIANT="kinetic"
+ARG VARIANT="jammy"
 
-FROM ubuntu:$VARIANT
+FROM ubuntu:${VARIANT}
 
-RUN yes | unminimize
+ARG DEBIAN_FRONTEND="noninteractive"
 
-ARG USERNAME="user"
-ARG PASSWORD="password"
-ARG USER_GID=1000
-ARG USER_UID=1000
+# Let apt cache packages
+# Reference: https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypecache
 
 RUN <<EOF
-    groupadd --gid $USER_GID $USERNAME
-    useradd --create-home $USERNAME --gid $USER_GID --shell /bin/bash --uid $USER_UID
-    echo "$USERNAME:$PASSWORD" | chpasswd
+    rm -rf "/etc/apt/apt.conf.d/docker-clean"
 EOF
 
-COPY <<EOF /etc/sudoers.d/$USERNAME
-$USERNAME ALL=(root) NOPASSWD: ALL
+COPY <<EOF "/etc/apt/apt.conf.d/keep-cache"
+Binary::apt::APT::Keep-Downloaded-Packages "true";
 EOF
 
-RUN <<EOF
+# Some mirrors may use HTTPS
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     apt-get update
-    apt-get install -y --no-install-recommends apt-utils coreutils lsb-release software-properties-common sudo
-    apt-get install -y --no-install-recommends build-essential ca-certificates curl git git-lfs gnupg2 libssl-dev openssl pkg-config rsync unzip wget zip
-    apt-get install -y --no-install-recommends htop iproute2 less lsof ncdu neovim net-tools procps psmisc strace tree
-    apt-get autoremove -y
-    apt-get clean -y
-    rm -rf /var/lib/apt/lists/*
-EOF
+    apt-get -y install --no-install-recommends ca-certificates
 
-ARG SSHD_PORT=22
+    mirror_url="mirror://mirrors.ubuntu.com/mirrors.txt"
+    ubuntu_url="http://archive.ubuntu.com/ubuntu"
+    sed -e "s%${ubuntu_url}%${mirror_url}%" -i "/etc/apt/sources.list"
 
-RUN <<EOF
     apt-get update
-    apt-get install -y --no-install-recommends openssh-client openssh-server
-    apt-get autoremove -y
-    apt-get clean -y
-    rm -rf /var/lib/apt/lists/*
+    apt-get -y install --no-install-recommends gnupg2 wget
 EOF
 
-COPY <<EOF /etc/pam.d/sshd
-session optional pam_loginuid.so
-EOF
+# Setup locales and timezones
 
-COPY <<EOF /etc/ssh/sshd_config
-PermitRootLogin yes
-Port            $SSHD_PORT
-UsePAM          yes
-EOF
+ENV TZ="UTC"
 
-RUN <<EOF
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     apt-get update
-    apt-get install -y --no-install-recommends locales
-    apt-get autoremove -y
-    apt-get clean -y
-    rm -rf /var/lib/apt/lists/*
+    apt-get -y install --no-install-recommends locales tzdata
+
+    sed -e "/en_US.UTF-8/s/^# //g" -i "/etc/locale.gen"
+    locale-gen
+
+    ln -fs "/usr/share/zoneinfo/${TZ}" "/etc/localtime"
+    dpkg-reconfigure tzdata
 EOF
 
 ENV LANG="en_US.UTF-8"
-ENV LANGUAGE="en_US.UTF-8"
-ENV LC_ALL="C.UTF-8"
+ENV LANGUAGE="en_US:en"
+ENV LC_ALL="en_US.UTF-8"
 
-COPY <<EOF /etc/locale.gen
-$LANG UTF-8
+# Install GCC
+# Reference: https://gcc.gnu.org/install
+
+ARG GCC_VERSION="12"
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    . /etc/os-release
+
+    filename="ubuntu-toolchain-r-ubuntu-ppa-${VERSION_CODENAME}"
+    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/ubuntu-toolchain-r/ppa/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+
+    filename="ubuntu-toolchain-r-ubuntu-test-${VERSION_CODENAME}"
+    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+
+    apt-get update
+    apt-get -y install --no-install-recommends g++-${GCC_VERSION} gcc-${GCC_VERSION} gdb make
+    update-alternatives --install "/usr/local/bin/gcc" gcc "/usr/bin/gcc-${GCC_VERSION}" 1
+    update-alternatives --install "/usr/local/bin/g++" g++ "/usr/bin/g++-${GCC_VERSION}" 1
 EOF
 
-RUN <<EOF
-    locale-gen
+# Install LLVM
+# Reference: https://llvm.org/docs/GettingStarted.html
+
+ARG LLVM_VERSION="16"
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    apt-get update
+    apt-get -y install --no-install-recommends gnupg lsb-release software-properties-common wget
+
+    wget -O - "https://apt.llvm.org/llvm.sh" | bash -s ${LLVM_VERSION} all
+    echo "update-alternatives --install /usr/local/bin/clang       clang       /usr/bin/clang-${LLVM_VERSION}       1 $(find -L "/usr/lib/llvm-${LLVM_VERSION}/bin" -type f -executable -not -name "clang"       -not -name "llvm*" -printf "--slave /usr/local/bin/%f %f /usr/bin/%f-${LLVM_VERSION} ")" | sh
+    echo "update-alternatives --install /usr/local/bin/llvm-config llvm-config /usr/bin/llvm-config-${LLVM_VERSION} 1 $(find -L "/usr/lib/llvm-${LLVM_VERSION}/bin" -type f -executable -not -name "llvm-config"      -name "llvm*" -printf "--slave /usr/local/bin/%f %f /usr/bin/%f-${LLVM_VERSION} ")" | sh
 EOF
 
-USER $USERNAME
+# Install Python
+# Reference: https://docs.python.org/3/using/index.html
+# Reference: https://pip.pypa.io/en/stable/installation
+# Reference: https://python-poetry.org/docs/#installation
 
-ARG FONTS_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
+ARG PYTHON_VERSION="3.11"
 
-RUN <<EOF
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends fontconfig
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-EOF
+ENV PYTHONUNBUFFERED="1"
 
-RUN <<EOF
-    curl -L $FONTS_URL -o    /tmp/fonts.zip
-    mkdir -p                 /home/$USERNAME/.local/share/fonts
-    unzip  /tmp/fonts.zip -d /home/$USERNAME/.local/share/fonts
-    rm -rf /tmp/fonts.zip
-    fc-cache -fv
-EOF
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    . /etc/os-release
 
-RUN <<EOF
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends exa fish fzf
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo chsh $USERNAME -s /usr/bin/fish
-EOF
+    filename="deadsnakes-ubuntu-nightly-${VERSION_CODENAME}"
+    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/deadsnakes/nightly/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
 
-SHELL ["/usr/bin/fish", "-c"]
+    filename="deadsnakes-ubuntu-ppa-${VERSION_CODENAME}"
+    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
 
-ARG FISHER_URL="https://git.io/fisher"
+    apt-get update
+    apt-get -y install --no-install-recommends python${PYTHON_VERSION}-dev
+    update-alternatives --install "/usr/local/bin/python3" python3 "/usr/bin/python${PYTHON_VERSION}" 1
 
-RUN <<EOF
-    curl -L $FISHER_URL | source
-    fisher install "edc/bass"
-    fisher install "gazorby/fish-abbreviation-tips"
-    fisher install "jethrokuan/fzf"
-    fisher install "jethrokuan/z"
-    fisher install "jorgebucaran/fisher"
-    fisher install "joseluisq/gitnow"
-    fisher install "laughedelic/pisces"
-    fisher install "markcial/upto"
-    fisher install "meaningful-ooo/sponge"
-    fisher install "nickeb96/puffer-fish"
-EOF
+    wget -O - "https://bootstrap.pypa.io/get-pip.py" | python3
+    python3 -m pip install --upgrade pip setuptools tk virtualenv wheel
 
-ARG STARSHIP_URL="https://starship.rs/install.sh"
-
-RUN <<EOF
-    sh -c "$(curl -L $STARSHIP_URL)" -s --yes
-    mkdir -p                              /home/$USERNAME/.config
-    starship preset pastel-powerline    > /home/$USERNAME/.config/starship.toml
-    mkdir -p                              /home/$USERNAME/.config/fish/conf.d
-    echo "starship init fish | source" >> /home/$USERNAME/.config/fish/conf.d/config.fish
-EOF
-
-ARG NODE_VER="19.x"
-ARG YARN_VER="stable"
-
-RUN <<EOF
-    curl -L https://deb.nodesource.com/setup_$NODE_VER | sudo sh
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends nodejs
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo corepack enable
-    corepack prepare yarn@$YARN_VER --activate
-EOF
-
-ARG PYTHON_VER="3.11"
-
-RUN <<EOF
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends python$PYTHON_VER python$PYTHON_VER-dev python$PYTHON_VER-venv
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo update-alternatives --install /usr/local/bin/python3 python3 /usr/bin/python$PYTHON_VER 1
-EOF
-
-ARG PIP_URL="https://bootstrap.pypa.io/get-pip.py"
-
-RUN <<EOF
-    mkdir -p      /home/$USERNAME/.local/bin
-    fish_add_path /home/$USERNAME/.local/bin
-    curl -L $PIP_URL | python3 -
-    python3 -m pip install --upgrade --user pip setuptools virtualenv wheel
-EOF
-
-ARG POETRY_URL="https://install.python-poetry.org"
-
-RUN <<EOF
-    curl -L $POETRY_URL | python3 -
-    mkdir -p                  /home/$USERNAME/.config/fish/completions
-    poetry completions fish > /home/$USERNAME/.config/fish/completions/poetry.fish
+    python3 -m pip install poetry
+    mkdir -p                   "${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions"
+    poetry completions bash >> "${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions/poetry"
     poetry config virtualenvs.in-project true
 EOF
 
-RUN <<EOF
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends ccache cmake cmake-curses-gui cppcheck make ninja-build
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
+# Install common
+# Reference: https://github.com/git/git/blob/master/INSTALL
+# Reference: https://github.com/git-lfs/git-lfs#installing
+# Reference: https://github.com/neovim/neovim/wiki/Installing-Neovim
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    apt-get update
+    apt-get -y install --no-install-recommends bash-completion git git-lfs neovim
 EOF
 
-ARG GCC_VER="12"
+# Install C++ tooling
+# Reference: https://cmake.org/install
+# Reference: https://ninja-build.org
+# Reference: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+# Reference: https://github.com/danmar/cppcheck
+# Reference: https://doxygen.nl/manual/install.html
+# Reference: https://graphviz.org/download
+# Reference: https://github.com/cheshirekow/cmake_format#installation
+# Reference: https://google.github.io/styleguide/cppguide.html#cpplint
 
-RUN <<EOF
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends g++-$GCC_VER gcc-$GCC_VER gdb
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo update-alternatives --install /usr/local/bin/g++ g++ /usr/bin/g++-$GCC_VER 1
-    sudo update-alternatives --install /usr/local/bin/gcc gcc /usr/bin/gcc-$GCC_VER 1
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    wget -O - "https://apt.kitware.com/kitware-archive.sh" | sh -s -- --rc
+
+    apt-get update
+    apt-get -y install --no-install-recommends cmake cmake-curses-gui ninja-build
+    apt-get -y install --no-install-recommends ccache cppcheck doxygen graphviz
+
+    python3 -m pip install --upgrade cmakelang cpplint
 EOF
 
-ARG LLVM_URL="https://apt.llvm.org/llvm.sh"
-ARG LLVM_VER="16"
+# Install IWYU
+# Reference: https://github.com/include-what-you-use/include-what-you-use/tree/master#instructions-for-users
 
 RUN <<EOF
-    curl -L $LLVM_URL | sudo bash -s $LLVM_VER all
-    echo "update-alternatives --install /usr/local/bin/clang       clang       /usr/bin/clang-$LLVM_VER       1 $(find -L "/usr/lib/llvm-$LLVM_VER/bin" -type f -executable -not -name "clang"       -not -name "llvm*" -printf "--slave /usr/local/bin/%f %f /usr/bin/%f-$LLVM_VER ")" | sudo sh
-    echo "update-alternatives --install /usr/local/bin/llvm-config llvm-config /usr/bin/llvm-config-$LLVM_VER 1 $(find -L "/usr/lib/llvm-$LLVM_VER/bin" -type f -executable -not -name "llvm-config"      -name "llvm*" -printf "--slave /usr/local/bin/%f %f /usr/bin/%f-$LLVM_VER ")" | sudo sh
+    git clone --branch "clang_${LLVM_VERSION}" --depth 1 "https://github.com/include-what-you-use/include-what-you-use" "/usr/src/iwyu"
+
+    CC="clang-${LLVM_VERSION}"
+    CXX="clang++-${LLVM_VERSION}"
+
+    mkdir -p        "/usr/src/iwyu/build"
+    cmake -B        "/usr/src/iwyu/build" -S "/usr/src/iwyu" -DCMAKE_PREFIX_PATH="/usr/lib/llvm-${LLVM_VERSION}" -G "Ninja"
+    cmake --build   "/usr/src/iwyu/build" -j $(nproc --all)
+    cmake --install "/usr/src/iwyu/build"
+    rm -rf "/usr/src/iwyu"
+
+    iwyu_resources="$(include-what-you-use  --print-resource-dir 2>/dev/null)"
+    llvm_resources="$(clang-${LLVM_VERSION} --print-resource-dir 2>/dev/null)"
+
+    mkdir -p "${iwyu_resources}"
+    ln -s    "${llvm_resources}/include" "${iwyu_resources}/include"
 EOF
+
+# Install Rust
+# Reference: https://rust-lang.github.io/rustup/installation/index.html
+# Reference: https://rust-analyzer.github.io/manual.html#installation
+# Reference: https://github.com/rust-lang/miri#using-miri
+
+ARG RUST_VERSION="1.69"
+
+ENV CARGO_HOME="/opt/cargo"
+ENV RUSTUP_HOME="/opt/rustup"
+ENV PATH="${CARGO_HOME}/bin:${PATH}"
 
 RUN <<EOF
-    python3 -m pip install --user cmakelang cpplint
+    wget -O - "https://sh.rustup.rs" | sh -s -- -y --default-toolchain "${RUST_VERSION}"
+    rustup          component add rust-analyzer rust-src
+    rustup +nightly component add miri
 EOF
 
-ARG RUSTUP_URL="https://sh.rustup.rs"
+# Install SCCache
+# Reference: https://github.com/mozilla/sccache#installation
+
+ARG SCCACHE_VERSION="0.4.2"
 
 RUN <<EOF
-    curl -L $RUSTUP_URL | sh -s -- -y --default-toolchain nightly
-    fish_add_path /home/user/.cargo/bin
-    rustup component add miri rust-analyzer rust-src
-    cargo install sccache
+    filename="sccache-v${SCCACHE_VERSION}-$(uname -m)-unknown-linux-musl"
+    wget -O - "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/${filename}.tar.gz" | tar --directory "/usr/local/bin" --extract --gzip --strip-components 1 "${filename}/sccache"
 EOF
 
-COPY <<EOF /home/$USERNAME/.cargo/config.toml
+COPY <<EOF "${CARGO_HOME}/config.toml"
 [build]
 rustc-wrapper = "sccache"
 EOF
 
-ARG TEXLIVE_URL="https://github.com/TeX-Live/installer/archive/refs/heads/master.zip"
-ARG TEXLIVE_SCHEME="infraonly"
-
-COPY <<EOF /tmp/texlive.profile
-# https://tug.org/texlive/doc/install-tl.html
-binary_x86_64-linux 1
-selected_scheme   scheme-$TEXLIVE_SCHEME
-TEXDIR            /usr/local/texlive/texdir
-TEXMFLOCAL        /usr/local/texlive/texmf-local
-TEXMFSYSCONFIG    /usr/local/texlive/texdir/texmf-config
-TEXMFSYSVAR       /usr/local/texlive/texdir/texmf-var
-TEXMFCONFIG       /home/$USERNAME/texlive/texmf-config
-TEXMFVAR          /home/$USERNAME/texlive/texmf-var
-TEXMFHOME         /home/$USERNAME/texmf
-tlpdbopt_sys_bin  /usr/local/bin
-tlpdbopt_sys_info /usr/local/share/info
-tlpdbopt_sys_man  /usr/local/share/man
-EOF
+# Install TeXLive
+# Reference: https://tug.org/texlive/doc/install-tl.html
 
 RUN <<EOF
-    curl -L $TEXLIVE_URL -o /tmp/texlive.zip
-    unzip                   /tmp/texlive.zip -d /tmp
-    sudo perl               /tmp/installer-master/install-tl --no-interaction --profile /tmp/texlive.profile
-    rm -rf                  /tmp/installer-master
-    sudo chown -R $USERNAME:$USERNAME /usr/local/texlive
-    fish_add_path                     /usr/local/texlive/texdir/bin/x86_64-linux
+    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/usr/local/bin|" | sh
 EOF
 
-ARG TEXLIVEONFLY_URL="https://raw.githubusercontent.com/maphy-psd/texliveonfly/master/texliveonfly.py"
+# OCI metadata
+# Reference: https://github.com/opencontainers/image-spec/blob/main/annotations.md
 
-RUN <<EOF
-    curl -L $TEXLIVEONFLY_URL -o /home/$USERNAME/texliveonfly.py
-    tlmgr install biber biblatex chktex epstopdf-pkg infwarerr latex-bin latexindent latexmk tools xkeyval
-    tlmgr install babel babel-ukrainian collection-fontsrecommended collection-fontutils fontaxes fontspec roboto ukrhyph
-    tlmgr install amsmath booktabs geometry graphics hyperref mathtools microtype minted multirow parskip
-    sudo ln -s /usr/local/texlive/texdir/texmf-var/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf
-    fc-cache -fv
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends cpanminus
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-    sudo cpanm install File::HomeDir YAML::Tiny
-EOF
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.source="https://github.com/fruzitent/kpi"
 
-ARG GITLFS_URL="https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh"
-
-RUN <<EOF
-    curl -L $GITLFS_URL | sudo bash
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends cpanminus
-    sudo apt-get autoremove -y
-    sudo apt-get clean -y
-    sudo rm -rf /var/lib/apt/lists/*
-EOF
-
-ARG GIT_EMAIL=""
-ARG GIT_USERNAME=""
-
-RUN <<EOF
-    sudo mkdir -p                            /workspaces
-    sudo chown -R $USERNAME:$USERNAME        /workspaces
-EOF
-
-COPY <<EOF /home/$USERNAME/.gitconfig
-[safe]
-    directory = /workspaces
-[user]
-    email = $GIT_EMAIL
-    name = $GIT_USERNAME
-EOF
-
-WORKDIR /workspaces
-
-EXPOSE $SSHD_PORT
-
-CMD sudo service ssh start -D
+CMD sleep infinity

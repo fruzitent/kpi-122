@@ -18,7 +18,6 @@ x-wslg: &wslg
 
 x-base: &base
   <<: [*ptrace, *wslg]
-  command: sleep infinity
   init: true
   volumes:
     - /etc/localtime:/etc/localtime:ro
