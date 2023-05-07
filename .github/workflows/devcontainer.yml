@@ -9,6 +9,8 @@ on:
     paths:
       - ".devcontainer/**"
 
+  workflow_dispatch:
+
 env:
   registry: ghcr.io
 
@@ -73,7 +75,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           cache-from: type=gha
-          cache-to: mode=max,type=gha
+          cache-to: ignore-error=true,mode=max,type=gha
           context: ${{ matrix.directory }}
           file: ${{ matrix.directory }}/${{ matrix.dockerfile }}
           labels: ${{ steps.meta.outputs.labels }}
