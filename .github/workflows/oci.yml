@@ -1,0 +1,31 @@
+name: Build OCI
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        type: string
+      registry:
+        type: string
+      username:
+        type: string
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Extract Docker metadata
+        id: docker_meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.image }}
