@@ -1,13 +1,13 @@
 name: Devcontainer
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
+      image:
+        type: string
       registry:
         type: string
       username:
-        type: string
-      image:
         type: string
 
 jobs:
@@ -29,3 +29,5 @@ jobs:
         with:
           images: |
             ${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.image }}
+          flavor: |
+            latest=true
