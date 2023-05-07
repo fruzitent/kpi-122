@@ -203,19 +203,4 @@ COPY <<EOF "${CARGO_HOME}/config.toml"
 rustc-wrapper = "sccache"
 EOF
 
-# Install TeXLive
-# Reference: https://tug.org/texlive/doc/install-tl.html
-
-ENV PATH="/opt/texlive/bin:${PATH}"
-
-RUN <<EOF
-    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/opt/texlive/bin|" | sh
-EOF
-
-# OCI metadata
-# Reference: https://github.com/opencontainers/image-spec/blob/main/annotations.md
-
-LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.source="https://github.com/fruzitent/kpi"
-
 CMD sleep infinity
