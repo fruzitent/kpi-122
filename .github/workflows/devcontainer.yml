@@ -1,6 +1,14 @@
-name: Devcontainer
+name: Build Development Environment
 
 on:
+  pull_request:
+    paths:
+      - ".devcontainer/**"
+
+  push:
+    paths:
+      - ".devcontainer/**"
+
   workflow_call:
     inputs:
       image:
