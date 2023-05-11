@@ -201,4 +201,14 @@ COPY <<EOF "${CARGO_HOME}/config.toml"
 rustc-wrapper = "sccache"
 EOF
 
+# Install TeXLive
+# Reference: https://tug.org/texlive/doc/install-tl.html
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
+    apt-get update
+    apt-get -y install --no-install-recommends fontconfig perl
+
+    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/usr/local/bin|" | sh
+EOF
+
 CMD sleep infinity
