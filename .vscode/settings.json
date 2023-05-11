@@ -16,11 +16,17 @@
   "[dockercompose][html][javascript][javascriptreact][json][jsonc][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
+  },
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
   /** jupyter */
   "jupyter.askForKernelRestart": false,
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "jupyter.themeMatplotlibPlots": true,
+  "notebook.outline.showCodeCells": true,
   /** latex */
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/out",
@@ -32,6 +38,9 @@
       "name": "latexmk"
     }
   ],
+  /** markdown */
+  "markdown.updateLinksOnFileMove.enabled": "prompt",
+  "markdown.validate.enabled": true,
   /** python */
   "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true,
@@ -50,12 +59,14 @@
   "editor.fontLigatures": true,
   "editor.inlayHints.enabled": "on",
   "editor.inlineSuggest.enabled": true,
+  "editor.minimap.enabled": false,
   "editor.stickyScroll.enabled": true,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.openEditors.visible": 9,
   "gitlens.views.searchAndCompare.files.layout": "tree",
   "scm.defaultViewMode": "tree",
+  "window.commandCenter": true,
   "workbench.colorTheme": "GitHub Dark Default",
   "workbench.startupEditor": "none",
   /** vsc */
