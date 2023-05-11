@@ -204,11 +204,22 @@ EOF
 # Install TeXLive
 # Reference: https://tug.org/texlive/doc/install-tl.html
 
+ENV PATH="/usr/local/texlive:${PATH}"
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     apt-get update
     apt-get -y install --no-install-recommends fontconfig perl
 
-    wget -O - "https://yihui.org/tinytex/install-bin-unix.sh" | sed "s|BINDIR=.*|BINDIR=/usr/local/bin|" | sh
+    mkdir -p "/opt/texlive"
+    wget -O - "https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz" | tar --directory "/opt/texlive" --extract --gzip --strip-components 1
+    perl  "/opt/texlive/install-tl" --no-interaction --scheme "scheme-minimal" --texdir="/opt/texlive"
+    ln -s "/opt/texlive/bin/$(uname -m)-linux" "/usr/local/texlive"
+
+    tlmgr update --all --self
+    tlmgr install latexmk
+
+    apt-get -y install --no-install-recommends cpanminus
+    cpanm install File::HomeDir YAML::Tiny
 EOF
 
 CMD sleep infinity
