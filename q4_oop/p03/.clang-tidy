@@ -1,0 +1,16 @@
+Checks: "*,
+  -abseil-*,
+  -altera-*,
+  -android-*,
+  -fuchsia-*,
+  -google-*,
+  -llvm*,
+  -zircon-*,
+  -*-non-private-member-variables-in-classes,
+  "
+
+CheckOptions:
+  - key: readability-identifier-length.IgnoredParameterNames
+    value: "is|os|x|y|z"
+  - key: readability-identifier-length.IgnoredVariableNames
+    value: "is|os|x|y|z"
