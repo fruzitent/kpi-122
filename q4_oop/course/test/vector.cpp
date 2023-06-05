@@ -107,9 +107,9 @@ TEST_CASE("member_functions", "[vector]") {
     constexpr size_type  size  = 3;
     constexpr value_type value = 42;
 
-    SECTION("assign.input_iterator") {
+    SECTION("assign.iterator") {
         // NOLINTBEGIN(cppcoreguidelines-owning-memory,cppcoreguidelines-pro-bounds-pointer-arithmetic)
-        auto *arr = new value_type[size]{1, 2, 3};
+        const auto *arr = new value_type[size]{1, 2, 3};
 
         myproject::vector<value_type> vec;
         vec.assign(arr, arr + size);
