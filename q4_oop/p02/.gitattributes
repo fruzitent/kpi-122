@@ -1,0 +1,5 @@
+* text=auto eol=lf
+
+*.{bat,[bB][aA][tT]}        text eol=crlf
+*.{cmd,[cC][mM][dD]}        text eol=crlf
+*.{vcxproj,vcxproj.filters} text eol=crlf

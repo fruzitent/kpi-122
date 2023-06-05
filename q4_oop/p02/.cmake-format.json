@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/voidei/cmake_format/master/cmakelang/vscode_extension/schema/cmake-format.schema.json",
+  "encode": {},
+  "format": {
+    "autosort": true,
+    "dangle_parens": true,
+    "line_width": 120
+  },
+  "lint": {},
+  "markup": {},
+  "misc": {},
+  "parse": {}
+}
