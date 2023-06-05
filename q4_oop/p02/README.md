@@ -1,4 +1,4 @@
-# course
+# p02
 
 ```shell
 cmake --list-presets=all
