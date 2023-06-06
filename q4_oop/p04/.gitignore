@@ -1,0 +1,13 @@
+# IDE files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Build directories and binary files
+out
+.clangd
+
+# User spesific settings
+CMakeUserPresets.json
