@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.5-labs
 
-ARG VARIANT="jammy"
+# [18.04]: bionic, [20.04]: focal, [22.04]: jammy, [22.10]: kinetic, [23.04]: lunar, [23.10]: mantic
+ARG VARIANT="lunar"
 
 FROM ubuntu:${VARIANT}
 
@@ -53,18 +54,30 @@ ENV LC_ALL="en_US.UTF-8"
 # Install GCC
 # Reference: https://gcc.gnu.org/install
 
-ARG GCC_VERSION="12"
+ARG GCC_VERSION="13"
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     . /etc/os-release
 
-    filename="ubuntu-toolchain-r-ubuntu-ppa-${VERSION_CODENAME}"
-    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
-    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/ubuntu-toolchain-r/ppa/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+    {
+        filename="ubuntu-toolchain-r-ubuntu-ppa-${VERSION_CODENAME}"
+        key="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f"
+        url="https://ppa.launchpadcontent.net/ubuntu-toolchain-r/ppa/ubuntu"
+        if wget --spider "${url}/dists/${VERSION_CODENAME}"; then
+            wget -O - "${key}" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+            echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] ${url} ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+        fi
+    }
 
-    filename="ubuntu-toolchain-r-ubuntu-test-${VERSION_CODENAME}"
-    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
-    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+    {
+        filename="ubuntu-toolchain-r-ubuntu-test-${VERSION_CODENAME}"
+        key="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x60c317803a41ba51845e371a1e9377a2ba9ef27f"
+        url="https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu"
+        if wget --spider "${url}/dists/${VERSION_CODENAME}"; then
+            wget -O - "${key}" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+            echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] ${url} ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+        fi
+    }
 
     apt-get update
     apt-get -y install --no-install-recommends g++-${GCC_VERSION} gcc-${GCC_VERSION} gdb make
@@ -75,7 +88,7 @@ EOF
 # Install LLVM
 # Reference: https://llvm.org/docs/GettingStarted.html
 
-ARG LLVM_VERSION="16"
+ARG LLVM_VERSION="17"
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     apt-get update
@@ -98,22 +111,34 @@ ENV PYTHONUNBUFFERED="1"
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
     . /etc/os-release
 
-    filename="deadsnakes-ubuntu-nightly-${VERSION_CODENAME}"
-    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
-    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/deadsnakes/nightly/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+    {
+        filename="deadsnakes-ubuntu-nightly-${VERSION_CODENAME}"
+        key="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776"
+        url="https://ppa.launchpadcontent.net/deadsnakes/nightly/ubuntu"
+        if wget --spider "${url}/dists/${VERSION_CODENAME}"; then
+            wget -O - "${key}" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+            echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] ${url} ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+        fi
+    }
 
-    filename="deadsnakes-ubuntu-ppa-${VERSION_CODENAME}"
-    wget -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
-    echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+    {
+        filename="deadsnakes-ubuntu-ppa-${VERSION_CODENAME}"
+        key="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf23c5a6cf475977595c89f51ba6932366a755776"
+        url="https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu"
+        if wget --spider "${url}/dists/${VERSION_CODENAME}"; then
+            wget -O - "${key}" | gpg --batch --dearmor --no-tty --output "/usr/share/keyrings/${filename}.gpg"
+            echo "deb [signed-by=/usr/share/keyrings/${filename}.gpg] ${url} ${VERSION_CODENAME} main" >> "/etc/apt/sources.list.d/${filename}.list"
+        fi
+    }
 
     apt-get update
     apt-get -y install --no-install-recommends python${PYTHON_VERSION}-dev
     update-alternatives --install "/usr/local/bin/python3" python3 "/usr/bin/python${PYTHON_VERSION}" 1
 
-    wget -O - "https://bootstrap.pypa.io/get-pip.py" | python3
-    python3 -m pip install --upgrade pip setuptools tk virtualenv wheel
+    wget -O - "https://bootstrap.pypa.io/get-pip.py" | python3 -        --break-system-packages
+    python3 -m pip install --upgrade pip setuptools tk virtualenv wheel --break-system-packages
 
-    python3 -m pip install poetry
+    python3 -m pip install poetry --break-system-packages
     poetry config virtualenvs.in-project true
 EOF
 
@@ -138,20 +163,26 @@ EOF
 # Reference: https://google.github.io/styleguide/cppguide.html#cpplint
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked <<EOF
-    wget -O - "https://apt.kitware.com/kitware-archive.sh" | sh -s -- --rc
+    {
+        wget -O - "https://apt.kitware.com/kitware-archive.sh" | sh -s -- --rc
+    } || true
 
     apt-get update
     apt-get -y install --no-install-recommends cmake cmake-curses-gui ninja-build
     apt-get -y install --no-install-recommends ccache cppcheck doxygen graphviz
 
-    python3 -m pip install --upgrade cmakelang cpplint
+    python3 -m pip install --upgrade cmakelang cpplint --break-system-packages
 EOF
 
 # Install IWYU
 # Reference: https://github.com/include-what-you-use/include-what-you-use/tree/master#instructions-for-users
 
 RUN <<EOF
-    git clone --branch "clang_${LLVM_VERSION}" --depth 1 "https://github.com/include-what-you-use/include-what-you-use" "/usr/src/iwyu"
+    {
+        mkdir -p "/usr/src/iwyu"
+        wget -O - "https://github.com/include-what-you-use/include-what-you-use/archive/refs/heads/clang_${LLVM_VERSION}.tar.gz" ||
+        wget -O - "https://github.com/include-what-you-use/include-what-you-use/archive/refs/heads/master.tar.gz"
+    } | tar --directory "/usr/src/iwyu" --extract --gzip --strip-components 1
 
     CC="clang-${LLVM_VERSION}"
     CXX="clang++-${LLVM_VERSION}"
@@ -174,7 +205,7 @@ EOF
 # Reference: https://rust-analyzer.github.io/manual.html#installation
 # Reference: https://github.com/rust-lang/miri#using-miri
 
-ARG RUST_VERSION="1.69"
+ARG RUST_VERSION="1.70.0"
 
 ENV CARGO_HOME="/opt/cargo"
 ENV RUSTUP_HOME="/opt/rustup"
@@ -189,7 +220,7 @@ EOF
 # Install SCCache
 # Reference: https://github.com/mozilla/sccache#installation
 
-ARG SCCACHE_VERSION="0.4.2"
+ARG SCCACHE_VERSION="0.5.3"
 
 RUN <<EOF
     filename="sccache-v${SCCACHE_VERSION}-$(uname -m)-unknown-linux-musl"
